@@ -5,12 +5,11 @@ import java.sql.*;
 
 public class SQLiteDBI {
 	private Connection conn;
-	private String dbName;
-	private String tableName;
+	//TODO: standardize the dbName and tableName or load them from a config file
+	private static final String dbName = "my.db";
+	private static final String tableName = "maven_p2";
 	
-	public SQLiteDBI (String dbName, String tableName) throws SQLException {
-		this.dbName = dbName;
-		this.tableName = tableName;
+	public SQLiteDBI () throws SQLException {
 		
 		//make sure driver is loaded
 		try {
@@ -19,7 +18,7 @@ public class SQLiteDBI {
 			throw new SQLException("SQLite Driver wasn't loaded");
 		}
 		//make sure DB exists
-		if( ! new File(dbName).exists()) {
+		if(!new File(dbName).exists()) {
 			throw new SQLException("Database does not exist");
 		}
 		
@@ -28,7 +27,7 @@ public class SQLiteDBI {
 	}
 	
 	public void closeDB() throws SQLException {
-		if( !conn.isClosed()) {
+		if(!conn.isClosed()) {
 			conn.close();
 		}
 	}
