@@ -1,10 +1,12 @@
 package mavenp2versionmatch.main;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 
 import mavenp2versionmatch.db.MavenP2Col;
+import mavenp2versionmatch.db.SQLiteDBI;
 
 public class MavenP2VersionMatch {
 	
@@ -14,10 +16,10 @@ public class MavenP2VersionMatch {
 	 * @param map database column names and values
 	 */
 	private static boolean isValidInput(Map<String, String> map) {
-		return map.containsKey(MavenP2Col.GIT_REPO.toString()) &&
-				map.containsKey(MavenP2Col.GIT_COMMIT.toString()) &&
-				(map.containsKey(MavenP2Col.MAVEN_VERSION.toString()) ||
-						map.containsKey(MavenP2Col.P2_VERSION.toString()));
+		return map.containsKey(MavenP2Col.GIT_REPO.getColName()) &&
+				map.containsKey(MavenP2Col.GIT_COMMIT.getColName()) &&
+				(map.containsKey(MavenP2Col.MAVEN_VERSION.getColName()) ||
+						map.containsKey(MavenP2Col.P2_VERSION.getColName()));
 	}
 	
 	/**
@@ -31,13 +33,14 @@ public class MavenP2VersionMatch {
 			//substring for dash in commandline
 			//TODO: is there a better way?
 			String val = args[++i];
-
-			if (MavenP2Col.findByStr(key) == null) {
+			MavenP2Col e  = MavenP2Col.findByStr(key);
+			
+			if (e == null) {
 				System.err.println("Invalid argument. No entry for " + key);
 				System.exit(-1);
 			}
 			else {
-				map.put(key, val);
+				map.put(e.getColName(), val);
 			}
 		}
 			
@@ -47,7 +50,13 @@ public class MavenP2VersionMatch {
 				System.exit(-1);
 			}
 			else {
-			//make sqlitedbi object	
+			try {
+				SQLiteDBI dbi = new SQLiteDBI();
+				dbi.addRecord(map);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 			}
 		
 		
