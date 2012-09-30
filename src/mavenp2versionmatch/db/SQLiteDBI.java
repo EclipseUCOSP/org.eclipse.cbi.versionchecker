@@ -2,6 +2,8 @@ package mavenp2versionmatch.db;
 
 import java.io.File;
 import java.sql.*;
+import java.util.Iterator;
+import java.util.Map;
 
 public class SQLiteDBI {
 	private Connection conn;
@@ -32,14 +34,35 @@ public class SQLiteDBI {
 		}
 	}
 	
-	public void addRecord(String commit, String p2, String maven, String tag) throws SQLException{
-		if(!conn.isClosed())
-			throw new SQLException("Connection is closed cannot add Record");
+	public void addRecord(Map<String, String> colMap) throws SQLException{
+		if(conn.isClosed())
+			throw new SQLException("Connection is closed, cannot add record");
 		
-		//TODO: redo query to eliminate sql inection
-		String query = "INSERT INTO "+ this.tableName + "VALUES(" + commit + ", " +tag + ", " + p2 + ", " + maven + ")";
+		String colString = "";
+		String valString = "";
+		Iterator<String> cols = colMap.keySet().iterator();
 		
-		Statement stmt = this.conn.createStatement();
-		stmt.executeUpdate(query);
+		//Dynamically create the column string for inserting and
+		//add the proper amount of IN variables for the query
+		while( cols.hasNext()) {
+			colString += cols.next();
+			valString += "?"; //IN variable for statement
+			
+			if( cols.hasNext()) {
+				colString += ", ";
+				valString += ", ";
+			}
+		}
+		
+		String query = "INSERT INTO "+ tableName + "("+colString+")" + "VALUES ("+valString+");";
+		
+		PreparedStatement stmt = this.conn.prepareStatement(query);
+		
+		//add the values to the prepared statement
+		for( int i = 1; i < colMap.size() + 1; i++ ) {
+			stmt.setString( i, colMap.values().iterator().next());
+		}
+			
+		stmt.executeUpdate();
 	}
 }
