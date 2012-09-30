@@ -40,15 +40,15 @@ public class SQLiteDBI {
 		
 		String colString = "";
 		String valString = "";
-		Iterator<String> cols = colMap.keySet().iterator();
+		Iterator<String> colIter = colMap.keySet().iterator();
 		
 		//Dynamically create the column string for inserting and
 		//add the proper amount of IN variables for the query
-		while( cols.hasNext()) {
-			colString += cols.next();
+		while( colIter.hasNext()) {
+			colString += colIter.next();
 			valString += "?"; //IN variable for statement
 			
-			if( cols.hasNext()) {
+			if( colIter.hasNext()) {
 				colString += ", ";
 				valString += ", ";
 			}
@@ -58,9 +58,10 @@ public class SQLiteDBI {
 		
 		PreparedStatement stmt = this.conn.prepareStatement(query);
 		
+		Iterator<String> valueIter = colMap.values().iterator();
 		//add the values to the prepared statement
 		for( int i = 1; i < colMap.size() + 1; i++ ) {
-			stmt.setString( i, colMap.values().iterator().next());
+			stmt.setString( i, valueIter.next());
 		}
 			
 		stmt.executeUpdate();
