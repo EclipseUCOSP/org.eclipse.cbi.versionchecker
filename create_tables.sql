@@ -4,6 +4,7 @@ DROP TABLE maven_p2;
 
 CREATE TABLE maven_p2
 (
+  git_repo varchar NOT NULL,
   git_commit varchar NOT NULL,
   git_tag varchar,
   p2_version varchar,
