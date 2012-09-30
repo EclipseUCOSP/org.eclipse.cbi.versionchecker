@@ -35,7 +35,7 @@ public enum MavenP2Col {
 	
 	public static MavenP2Col findByStr(String str){
 	    for(MavenP2Col e : MavenP2Col.values()){
-	        if( e.equals(str)){
+	        if( e.toString().equals(str)){
 	            return e;
 	        }
 	    }
