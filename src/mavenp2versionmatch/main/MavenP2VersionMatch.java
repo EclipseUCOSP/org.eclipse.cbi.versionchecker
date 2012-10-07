@@ -52,6 +52,11 @@ public class MavenP2VersionMatch {
 			else {
 			try {
 				SQLiteDBI dbi = new SQLiteDBI();
+				//TODO: For debugging. Add to log or usr msg 
+				for (String key : map.keySet()) {
+					System.out.print(key + ": ");
+					System.out.println(map.get(key));
+				}
 				dbi.addRecord(map);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
