@@ -8,7 +8,7 @@ import java.util.Map;
 import mavenp2versionmatch.db.MavenP2Col;
 import mavenp2versionmatch.db.SQLiteDBI;
 
-public class MavenP2VersionMatch {
+public class MvnP2Util {
 	
 	/*
 	 * Input must contain git repo and commit and one of p2 version
