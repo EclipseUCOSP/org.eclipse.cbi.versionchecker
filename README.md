@@ -3,22 +3,22 @@ db
 Maven P2 Version Matcher
 ------------------------
 ### Command line syntax
--Command line syntax is "command -opt0 value0 -opt1 value1 ...". 
+- Command line syntax is "command -opt0 value0 -opt1 value1 ...". 
 
 The recognized commands are:
--add
--find
--update
+- add
+- find
+- update
 
 The recognized options are:
--repo
--cmt
--p
--gtag
--p2v
--mvnv
+- -repo
+- -cmt
+- -p
+- -gtag
+- -p2v
+- -mvnv
 
--Currently there is an ant script that does all the compile/jar/run operations. Calling 'ant' in the root dir will prompt you for the command line sequence. Or you can run "ant -Dargs='command command -opt0 value0 -opt1 value1 ..." We will change this to Maven if needed.
+- Currently there is an ant script that does all the compile/jar/run operations. Calling 'ant' in the root dir will prompt you for the command line sequence. Or you can run "ant -Dargs='command command -opt0 value0 -opt1 value1 ..." We will change this to Maven if needed.
 
 ### Database schema notes:
  
