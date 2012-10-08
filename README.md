@@ -2,12 +2,30 @@ db
 ==
 Maven P2 Version Matcher
 ------------------------
+### Command line syntax
+-Command line syntax is "command -opt0 value0 -opt1 value1 ...". 
+
+The recognized commands are:
+-add
+-find
+-update
+
+The recognized options are:
+-repo
+-cmt
+-p
+-gtag
+-p2v
+-mvnv
+
+-Currently there is an ant script that does all the compile/jar/run operations. Calling 'ant' in the root dir will prompt you for the command line sequence. Or you can run "ant -Dargs='command command -opt0 value0 -opt1 value1 ..." We will change this to Maven if needed.
 
 ### Database schema notes:
  
-- git_commit is required and at least one of p2_qualifier or maven_version. Currently only git_commit is required because of the limitations of sqlite. The second rule will have to be handled in the application only for now.
+- git_commit is required and at least one of p2_qualifier or maven_version. Currently this is being handled on the application
+side because of the limitations of Sqlite.
 
-- There is no project name or description currently. The plan is to link with a foreign key in the project mamangement datadase on Eclipse's end.
+- We plan is to link our table with a foreign key in the project mamangement datadase on Eclipse's end.
 
 - We are storing both the maven version and the p2 version as single strings. It might be advantageous to break these out to major, minor, qualifier in the future, but for now we cannot see the necessity.
 
