@@ -1,4 +1,4 @@
-package org.eclipse.mtop2.mojo;
+package mvn.p2.vt.mojo;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -14,12 +14,5 @@ public class GreetingMojo extends AbstractMojo
         getLog().info( "Hello, world." );
     }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }
