@@ -1,13 +1,8 @@
 package mvn.p2.vt.mojo;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -18,15 +13,31 @@ import org.apache.maven.plugin.MojoExecutionException;
  */
 public class CheckVersion extends AbstractMojo
 {
+	/**
+     * The query to send the version checker.
+     *
+     * @parameter expression="${callVC.query}""
+     */
+    private String query;
+	
     public void execute() throws MojoExecutionException
     {
-    	int rand = (int)(100*Math.random());
-        getLog().info("Adding rows to VC with random value: " + rand);
+    	if (query == null || query.isEmpty()) {
+    		BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); 
+    		getLog().info("Please enter your query:");
+    		try {
+				query = in.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    	}
+        System.out.println("query: "+ query);
+        getLog().info("Executing the following query: " + query);
         // Run a version checker in a separate process
         Process proc;
 		try {
 			// execute the process with preset arguments (for now)
-			proc = Runtime.getRuntime().exec("java -jar VersionChecker.jar add -repo test1:" + rand + " -p2v test2:" + rand + " -cmt test3:" + rand);
+			proc = Runtime.getRuntime().exec("java -jar VersionChecker.jar " + query);
 	        BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 	        BufferedReader err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 	        // wait for the process to terminate

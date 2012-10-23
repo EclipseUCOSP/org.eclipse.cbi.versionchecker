@@ -1,0 +1,16 @@
+To call the plugin with user inputed query either:
+- mvn clean install
+- mvn mvn-p2-vt:callVC -DcallVC.query="your query"
+
+Adding <pluginGroup>mvn.p2.vt</pluginGroup> under <pluginGroups> in your Maven settings.xml will allow you to call the plugin like this: mvn mvn.p2.vt:goal
+
+If you get the error:
+Unbound classpath variable: 'M2_REPO/...' in project '...' it means you have not setup your M2_REPO variable as a classpath variable in Eclipse. To fix this:
+
+- Open Eclipse Preferences
+- Go to Java -> Build Path -> Classpath Variables
+- Add a variable named M2_REPO
+- Click Folder... and select your repository folder. This will be in user home directory under .m2, ie /Users/AUser/.m2/repository
+
+You can also do this by running the following maven command:
+mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo

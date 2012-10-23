@@ -3,12 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>mvn.p2.vt</groupId>
   <artifactId>mvn-p2-vt-plugin</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>maven-plugin</packaging>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <getUserInput></getUserInput>
   </properties>
   
   <dependencies>
@@ -18,24 +19,67 @@
       <version>2.0</version>
     </dependency>
   </dependencies>
-<!--   <build> -->
-<!--     To use the plugin goals in your POM or parent POM -->
-<!--     <plugins> -->
-<!--       <plugin> -->
-<!--             <plugin> -->
-<!--                 <groupId>org.codehaus.mojo</groupId> -->
-<!--                 <artifactId>exec-maven-plugin</artifactId> -->
-<!--                 <version>1.2.1</version> -->
-<!--                 <configuration> -->
-<!--                     <mainClass>mavenp2versionmatch.main.MvnP2Util</mainClass> -->
-<!--                     <arguments> -->
-<!--                         <argument>argument1</argument> -->
-<!--                     </arguments> -->
-<!--                 </configuration> -->
-<!--             </plugin> -->
-
-<!--       </plugin> -->
-<!--     </plugins> -->
-<!--   </build> -->
-  
+  <!-- leaving this in for now in case we want to go back to it. 
+  <profiles>
+   <profile>
+    <activation>
+      <property>
+        <name>!skipGetQuery</name>
+      </property>
+    </activation> 
+    <id>callVC</id>
+    <build>
+      <defaultGoal>mvn-p2-vt:callVC</defaultGoal>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.7</version>
+                    <executions>
+                        <execution>
+                            <id>get-query</id>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <phase>validate</phase>
+                            <configuration>
+                                <target>
+                                    <input
+                                        message="Please enter your query: "
+                                        addproperty="query" />
+                                </target>
+                                <exportAntProperties>true</exportAntProperties>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.ant</groupId>
+                            <artifactId>ant</artifactId>
+                            <version>1.8.4</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>mvn.p2.vt</groupId>
+                    <artifactId>mvn-p2-vt-plugin</artifactId>
+                    <version>1.0</version>
+                    <executions>
+                        <execution>
+                            <id>set-query</id>
+                            <goals>
+                                <goal>callVC</goal>
+                            </goals>
+                            <phase>validate</phase>
+                            <configuration>
+                                <generateBackupPoms>false</generateBackupPoms>
+                                <query>${query}</query>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    </profile>
+</profiles>-->
 </project>
