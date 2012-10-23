@@ -1,6 +1,8 @@
+TODO: need to remove the VersionChecker.jar and my.db from the repo once the version checker is hosted on nexus.
+
 To call the plugin with user inputed query either:
-- mvn clean install
 - mvn mvn-p2-vt:callVC -DcallVC.query="your query"
+- mvn mvn-p2-vt:callVC (will prompt for query)
 
 Adding <pluginGroup>mvn.p2.vt</pluginGroup> under <pluginGroups> in your Maven settings.xml will allow you to call the plugin like this: mvn mvn.p2.vt:goal
 
