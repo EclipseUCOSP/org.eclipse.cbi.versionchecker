@@ -33,14 +33,14 @@ public class CheckVersion extends AbstractMojo
 				e.printStackTrace();
 			}
     	}
+    	String[] query_arr = query.split(" ");
         System.out.println("query: "+ query);
-        getLog().info("Executing the following query: " + query);
+        getLog().info("Executing the following  query: " + query);
         // Run a version checker in a separate process
         Process proc;
 		try {
 			// execute the process with preset arguments (for now)
-			String[] params = {"TEST COMMAND PLEASE IGNORE"}; // set up commands to pass to the MvnP2Util. you'll probably want to do this some differenty way.
-			mavenp2versionmatch.main.MvnP2Util.main(params); // call the MvnP2Util with given commands. This just starts the main method, set up your array of strings accordingly.
+			mavenp2versionmatch.main.MvnP2Util.main(query_arr); // call the MvnP2Util with given commands. This just starts the main method, set up your array of strings accordingly.
 
 			/* Shouldn't need these anymore. I'm not totally sure so I've just commented them out -Mike
 			proc = Runtime.getRuntime().exec("java -jar MvnP2Util-0.1-SNAPSHOT.jar " + query);
