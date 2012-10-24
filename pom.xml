@@ -9,7 +9,7 @@
 
 	<groupId>org.ucosp.eclipse</groupId>
 	<artifactId>MvnP2Util</artifactId>
-	<version>0.1</version>
+	<version>0.1-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.xerial</groupId>
@@ -45,4 +45,30 @@
 		<sourceDirectory>${basedir}/src/</sourceDirectory>
 		<outputDirectory>${basedir}/target/</outputDirectory>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>ucosp</id>
+			<name>UCOSP Repository - Releases</name>
+			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<snapshotRepository>
+			<id>ucosp</id>
+			<name>UCOSP Repository - Snapshots</name>
+			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>ucosp</id>
+			<name>UCOSP Repository</name>
+			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
