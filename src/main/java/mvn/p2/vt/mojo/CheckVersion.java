@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
+import mavenp2versionmatch.main.MvnP2Util; // import the MvnP2Util (Version Checker). Maven includes it in our classpath so this should be all gravy
+
 /**
  * Call the Version Checker (with a default "add" operation for now)
  * @goal callVC
@@ -37,7 +39,11 @@ public class CheckVersion extends AbstractMojo
         Process proc;
 		try {
 			// execute the process with preset arguments (for now)
-			proc = Runtime.getRuntime().exec("java -jar VersionChecker.jar " + query);
+			String[] params = {"TEST COMMAND PLEASE IGNORE"}; // set up commands to pass to the MvnP2Util. you'll probably want to do this some differenty way.
+			mavenp2versionmatch.main.MvnP2Util.main(params); // call the MvnP2Util with given commands. This just starts the main method, set up your array of strings accordingly.
+
+			/* Shouldn't need these anymore. I'm not totally sure so I've just commented them out -Mike
+			proc = Runtime.getRuntime().exec("java -jar MvnP2Util-0.1-SNAPSHOT.jar " + query);
 	        BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 	        BufferedReader err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 	        // wait for the process to terminate
@@ -50,6 +56,7 @@ public class CheckVersion extends AbstractMojo
 	        while (err.ready()){
 	        	getLog().info(err.readLine());
 	        }
+	        */
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
