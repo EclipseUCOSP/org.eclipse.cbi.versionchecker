@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
-import mavenp2versionmatch.main.MvnP2Util; // import the MvnP2Util (Version Checker). Maven includes it in our classpath so this should be all gravy
-
 /**
- * Call the Version Checker (with a default "add" operation for now)
+ * Calls the Version Checker, prompting the user to enter a query to run.
+ * The given query is then passed as arguments to the main method in MvnP2Util,
+ * which executes the query (valid syntax specified in the 'db' README).
  * @goal callVC
  */
 public class CheckVersion extends AbstractMojo
@@ -25,6 +25,7 @@ public class CheckVersion extends AbstractMojo
     public void execute() throws MojoExecutionException
     {
     	if (query == null || query.isEmpty()) {
+    		// prompt the user to enter a query
     		BufferedReader in = new BufferedReader(new InputStreamReader(System.in)); 
     		getLog().info("Please enter your query:");
     		try {
@@ -34,29 +35,10 @@ public class CheckVersion extends AbstractMojo
 			}
     	}
     	String[] query_arr = query.split(" ");
-        System.out.println("query: "+ query);
         getLog().info("Executing the following  query: " + query);
-        // Run a version checker in a separate process
-        Process proc;
 		try {
-			// execute the process with preset arguments (for now)
-			mavenp2versionmatch.main.MvnP2Util.main(query_arr); // call the MvnP2Util with given commands. This just starts the main method, set up your array of strings accordingly.
-
-			/* Shouldn't need these anymore. I'm not totally sure so I've just commented them out -Mike
-			proc = Runtime.getRuntime().exec("java -jar MvnP2Util-0.1-SNAPSHOT.jar " + query);
-	        BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-	        BufferedReader err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-	        // wait for the process to terminate
-	        proc.waitFor();
-	        // print the output of the process
-	        getLog().info("Version Checker output:");
-	        while (in.ready()){
-	        	getLog().info(in.readLine());
-	        }
-	        while (err.ready()){
-	        	getLog().info(err.readLine());
-	        }
-	        */
+			// call the MvnP2Util with the given commands. This just starts the main method, set up your array of strings accordingly.
+			mavenp2versionmatch.main.MvnP2Util.main(query_arr); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
