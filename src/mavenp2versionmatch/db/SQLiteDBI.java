@@ -2,7 +2,9 @@ package mavenp2versionmatch.db;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class SQLiteDBI {
@@ -63,7 +65,47 @@ public class SQLiteDBI {
 		for( int i = 1; i < colMap.size() + 1; i++ ) {
 			stmt.setString( i, valueIter.next());
 		}
+		
 			
 		stmt.executeUpdate();
 	}
+
+    public List<MavenP2Version> find(Map<String, String> map) throws SQLException {
+		if(conn.isClosed())
+			throw new SQLException("Connection is closed, cannot find record");
+        
+        String where = "";
+        String col;
+        
+        Iterator<String> colIter = map.keySet().iterator();
+
+        for( int i = 0; i < map.size(); i++ ) {
+        	col = colIter.next();
+            where += col+" LIKE '%"+map.get(col)+"%'"; //quick fix
+            if( i < map.size() - 1 )
+                where += ",";
+        }
+
+        String query = "SELECT * FROM " + tableName + " WHERE " + where;
+        
+        PreparedStatement stmt = this.conn.prepareStatement(query);
+        
+
+        //I can't get this to work for the life of me, the result set is always empty
+        //but it needs to be figured out before it goes live due to SQLinjection
+        /*for( int i = 1; i < (map.size() * 2) + 1; i++) {
+            col = colIter.next();
+			stmt.setString( i++, col);
+            stmt.setString( i, map.get(col) );
+        }*/
+        
+        ResultSet rs = stmt.executeQuery();
+        
+		List<MavenP2Version> mpvList = MavenP2Version.convertFromResultSet(rs);
+		
+		rs.close();
+		
+		return mpvList;
+
+    }
 }

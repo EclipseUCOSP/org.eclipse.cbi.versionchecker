@@ -2,10 +2,12 @@ package mavenp2versionmatch.main;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 import mavenp2versionmatch.db.MavenP2Col;
+import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.SQLiteDBI;
 
 public class MvnP2Util {
@@ -78,7 +80,18 @@ public class MvnP2Util {
 	 * @param map of db column name and input value
 	 */
 	private static void doFind(Map<String, String> map) {
-			//TODO: not built in dbi yet
+		try {
+			SQLiteDBI dbi = new SQLiteDBI();
+			List<MavenP2Version> mpvList = dbi.find(map);
+			
+			for(MavenP2Version v: mpvList) {
+				System.out.println(v);
+			}
+			dbi.closeDB();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/*
@@ -106,7 +119,7 @@ public class MvnP2Util {
 			System.exit(-1);
 		}
 		Map<String, String> map = getOptions(args);
-		doAdd(map);
+		//doAdd(map);
 		
 		switch (command) {
 		case ADD:
