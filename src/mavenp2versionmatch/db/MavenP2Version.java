@@ -8,6 +8,7 @@ import java.util.List;
 public class MavenP2Version {
 	private String gitRepo;
 	private String gitCommit;
+	private String gitBranch;
 	private String project;
 	private String gitTag;
 	
@@ -30,6 +31,7 @@ public class MavenP2Version {
 			mpv = new MavenP2Version();
 			mpv.setGitRepo(rs.getString(MavenP2Col.GIT_REPO.toString()));
 			mpv.setGitCommit(rs.getString(MavenP2Col.GIT_COMMIT.toString()));
+			mpv.setGitBranch(rs.getString(MavenP2Col.GIT_BRANCH.toString()));
 			mpv.setProject(rs.getString(MavenP2Col.PROJECT.toString()));
 			mpv.setGitTag(rs.getString(MavenP2Col.GIT_TAG.toString()));
 			mpv.setP2Version(rs.getString(MavenP2Col.P2_VERSION.toString()));
@@ -100,6 +102,14 @@ public class MavenP2Version {
 
 	public void setMavenVersion(String mavenVersion) {
 		this.mavenVersion = mavenVersion;
+	}
+
+	public String getGitBranch() {
+		return gitBranch;
+	}
+
+	public void setGitBranch(String gitBranch) {
+		this.gitBranch = gitBranch;
 	}
 	
 	

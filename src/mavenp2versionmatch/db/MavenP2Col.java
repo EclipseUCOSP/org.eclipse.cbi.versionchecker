@@ -3,6 +3,7 @@ package mavenp2versionmatch.db;
 public enum MavenP2Col {
 	GIT_REPO("git_repo", "-repo"),
 	GIT_COMMIT("git_commit", "-cmt"),
+	GIT_BRANCH("git_branch", "-br"),
 	PROJECT("project", "-p"),
 	GIT_TAG("git_tag", "-gtag"),
 	P2_VERSION("p2_version", "-p2v"),
