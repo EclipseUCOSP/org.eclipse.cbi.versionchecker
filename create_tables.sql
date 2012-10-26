@@ -6,6 +6,7 @@ CREATE TABLE maven_p2
 (
   git_repo varchar NOT NULL,
   git_commit varchar NOT NULL,
+  git_branch varchar,
   project varchar(100),
   git_tag varchar,
   p2_version varchar,
