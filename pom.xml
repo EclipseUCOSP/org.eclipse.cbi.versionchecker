@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+						http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<properties>
+		<java.version>1.6</java.version>
+	</properties>
+
+	<groupId>org.ucosp.eclipse</groupId>
+	<artifactId>MvnP2Util</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<dependencies>
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.7.2</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>mavenp2versionmatch.main.MvnP2Util</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+		<sourceDirectory>${basedir}/src/</sourceDirectory>
+		<outputDirectory>${basedir}/target/</outputDirectory>
+	</build>
+	<distributionManagement>
+		<repository>
+			<id>ucosp</id>
+			<name>UCOSP Repository - Releases</name>
+			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		<snapshotRepository>
+			<id>ucosp</id>
+			<name>UCOSP Repository - Snapshots</name>
+			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>ucosp</id>
+			<name>UCOSP Repository</name>
+			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+</project>
