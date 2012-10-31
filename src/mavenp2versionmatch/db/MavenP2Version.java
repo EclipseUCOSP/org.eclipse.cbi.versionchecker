@@ -47,6 +47,7 @@ public class MavenP2Version {
 		String str;
 		str = "Repo: \t\t"+this.gitRepo +
 				"\nCommit: \t" + this.gitCommit +
+				"\nBranch: \t" + this.gitBranch +
 				"\nTag: \t\t" + this.gitTag +
 				"\nProject: \t" + this.project +
 				"\nP2 Version:\t"+ this.p2Version +

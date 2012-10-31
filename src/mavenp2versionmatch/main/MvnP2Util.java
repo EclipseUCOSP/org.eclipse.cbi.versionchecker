@@ -21,6 +21,7 @@ public class MvnP2Util {
 	private static boolean isValidAdd(Map<String, String> map) {
 		return map.containsKey(MavenP2Col.GIT_REPO.getColName()) &&
 				map.containsKey(MavenP2Col.GIT_COMMIT.getColName()) &&
+				map.containsKey(MavenP2Col.GIT_BRANCH.getColName()) &&
 				(map.containsKey(MavenP2Col.MAVEN_VERSION.getColName()) ||
 						map.containsKey(MavenP2Col.P2_VERSION.getColName()));
 	}
@@ -61,7 +62,7 @@ public class MvnP2Util {
 	private static void doAdd(Map<String, String> map) {
 			
 			if (!isValidAdd(map)) {
-				System.err.println("Invalid input. Must include git repo, " +
+				System.err.println("Invalid input. Must include git repo, branch, " +
 						"commit and one of maven version and p2 version.");
 				System.exit(-1);
 			}
