@@ -91,12 +91,10 @@ public class SQLiteDBI {
         }
         
         String query = "SELECT * FROM " + tableName + " WHERE " + where;
-        System.out.println(query);
         
         PreparedStatement stmt = this.conn.prepareStatement(query);
         
         for(int i = 0; i < values.length; i++) {
-        	System.out.println(i);
 			stmt.setString( i + 1, values[i]);
         }
 

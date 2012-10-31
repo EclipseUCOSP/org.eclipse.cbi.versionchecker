@@ -39,9 +39,23 @@
 							<mainClass>mavenp2versionmatch.main.MvnP2Util</mainClass>
 						</manifest>
 					</archive>
-					<outputDirectory>${basedir}/jar/</outputDirectory>
+					<outputDirectory>${basedir}/bin/jar/</outputDirectory>
 				</configuration>
 			</plugin>
+			<plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>mavenp2versionmatch.main.MvnP2Util</mainClass>
+                    </manifest>
+                </archive>
+                <outputDirectory>${basedir}/bin/jar/</outputDirectory>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+        </plugin>
 		</plugins>
 		<sourceDirectory>${basedir}/src/</sourceDirectory>
 		<outputDirectory>${basedir}/target/</outputDirectory>
