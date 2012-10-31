@@ -17,6 +17,7 @@ The recognized options are:
 - -gtag
 - -p2v
 - -mvnv
+- -br
 
 - Currently there is an ant script that does all the compile/jar/run operations. Calling 'ant' in the root dir will prompt you for the command line sequence. Or you can run "ant -Dargs='command command -opt0 value0 -opt1 value1 ..." We will change this to Maven if needed.
 

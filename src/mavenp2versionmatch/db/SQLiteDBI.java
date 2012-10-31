@@ -25,9 +25,10 @@ public class SQLiteDBI {
 		if(!new File(dbName).exists()) {
 			throw new SQLException("Database does not exist");
 		}
-		
+	}
+	
+	public void openDB() throws SQLException {
 		conn = DriverManager.getConnection("jdbc:sqlite:" + dbName);
-		
 	}
 	
 	public void closeDB() throws SQLException {
@@ -35,7 +36,7 @@ public class SQLiteDBI {
 			conn.close();
 		}
 	}
-	
+	//TODO duplicate records are added
 	public void addRecord(Map<String, String> colMap) throws SQLException{
 		if(conn.isClosed())
 			throw new SQLException("Connection is closed, cannot add record");

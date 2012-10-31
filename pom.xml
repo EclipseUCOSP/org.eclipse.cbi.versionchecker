@@ -39,6 +39,7 @@
 							<mainClass>mavenp2versionmatch.main.MvnP2Util</mainClass>
 						</manifest>
 					</archive>
+					<outputDirectory>${basedir}/jar/</outputDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

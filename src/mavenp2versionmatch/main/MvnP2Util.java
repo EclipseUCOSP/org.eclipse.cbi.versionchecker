@@ -11,6 +11,7 @@ import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.SQLiteDBI;
 
 public class MvnP2Util {
+	private static SQLiteDBI dbi;
 	
 	/*
 	 * Input must contain git repo and commit and one of p2 version
@@ -66,8 +67,12 @@ public class MvnP2Util {
 			}
 			else {
 			try {
-				SQLiteDBI dbi = new SQLiteDBI();
+				if (MvnP2Util.dbi == null) {
+					dbi = new SQLiteDBI();
+				}
+				dbi.openDB();
 				dbi.addRecord(map);
+				dbi.closeDB();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -81,7 +86,10 @@ public class MvnP2Util {
 	 */
 	private static void doFind(Map<String, String> map) {
 		try {
-			SQLiteDBI dbi = new SQLiteDBI();
+			if (dbi == null) {
+				dbi = new SQLiteDBI();
+			}
+			dbi.openDB();
 			List<MavenP2Version> mpvList = dbi.find(map);
 			
 			for(MavenP2Version v: mpvList) {
@@ -100,6 +108,7 @@ public class MvnP2Util {
 	 */
 	private static void doUpdate(Map<String, String> map) {
 			//TODO: not built in dbi yet
+		System.out.println("Update not implemented yet");
 	}
 	
 	/**
