@@ -77,12 +77,15 @@ public class SQLiteDBI {
         
         String where = "";
         String col;
+        String[] values = new String[map.size()];
         
         Iterator<String> colIter = map.keySet().iterator();
 
         for( int i = 0; i < map.size(); i++ ) {
         	col = colIter.next();
-            where += col+" LIKE '%"+map.get(col)+"%'"; //quick fix
+        	values[i] = map.get(col);
+        	
+            where += col + " = ?";
             if( i < map.size() - 1 )
                 where += " AND ";
         }
@@ -91,16 +94,11 @@ public class SQLiteDBI {
         System.out.println(query);
         
         PreparedStatement stmt = this.conn.prepareStatement(query);
-        //I can't get this to work for the life of me, the result set is always empty
-        //but it needs to be figured out before it goes live due to SQLinjection
-        /**
-        colIter = map.keySet().iterator();
         
-        for( int i = 1; i < (map.size() * 2) + 1; i++) {
-            col = colIter.next();
-			stmt.setString( i++, col);
-            stmt.setString( i, map.get(col) );
-        }**/
+        for(int i = 0; i < values.length; i++) {
+        	System.out.println(i);
+			stmt.setString( i + 1, values[i]);
+        }
 
         
         ResultSet rs = stmt.executeQuery();
