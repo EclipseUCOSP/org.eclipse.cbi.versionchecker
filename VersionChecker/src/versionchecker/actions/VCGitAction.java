@@ -79,7 +79,6 @@ public class VCGitAction implements IWorkbenchWindowActionDelegate {
 							"Clone successfully");
 	
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					MessageDialog.openInformation(
 							window.getShell(),
 							"VersionChecker",

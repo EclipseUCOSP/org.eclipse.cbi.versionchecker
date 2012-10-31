@@ -10,9 +10,7 @@ public class VCGitWindow {
     private JTextField gitURLField;
     private JTextField loginField;
     private JPasswordField passwordField;
-    
     private Boolean setted;
-      
     private JButton okButton;
     private JButton cancelButton;
 
@@ -128,9 +126,4 @@ public class VCGitWindow {
             close();
         }
     }
-	
-	
-	
-	
-	
 }
