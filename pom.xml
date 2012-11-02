@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ucosp.eclipse</groupId>
   <artifactId>mvn-p2-vt-plugin</artifactId>
-  <version>1.1</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <repositories>
@@ -42,4 +42,18 @@
       <version>0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
+
+
+  <distributionManagement>
+  	<repository>
+  		<id>ucosp</id>
+  		<name>UCOSP Repository - Releases</name>
+  		<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+  	</repository>
+  	<snapshotRepository>
+  		<id>ucosp</id>
+  		<name>UCOSP Repository - Snapshots</name>
+  		<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+  	</snapshotRepository>
+  </distributionManagement>
 </project>
