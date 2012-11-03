@@ -16,6 +16,12 @@
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.7.2</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+			<version>4.11-beta-1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -57,7 +63,7 @@
             </configuration>
         </plugin>
 		</plugins>
-		<sourceDirectory>${basedir}/src/</sourceDirectory>
+		<sourceDirectory>${basedir}/src/main/</sourceDirectory>
 		<outputDirectory>${basedir}/target/</outputDirectory>
 	</build>
 	<distributionManagement>
