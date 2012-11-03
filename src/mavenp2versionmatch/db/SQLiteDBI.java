@@ -70,6 +70,58 @@ public class SQLiteDBI {
 		stmt.executeUpdate();
 	}
 
+	/**
+	 * Updates all records (should only ever be one match however) matching the values 
+	 * found in matchMap with the values found in updateMap.
+	 * @param matchMap Map of the key-value pairs to match in the database.
+	 * @param updateMap Map of the key-value pairs to update in the matching record.
+	 * @throws SQLException
+	 */
+	public void updateRecord(Map<String, String> matchMap, Map<String, String> updateMap) throws SQLException{
+		if(conn.isClosed())
+			throw new SQLException("Connection is closed, cannot add record");
+		
+		String matchString = "";
+		String updateString = "";
+		Iterator<String> matchIter = matchMap.keySet().iterator();
+		Iterator<String> updateIter = updateMap.keySet().iterator();
+
+		//Dynamically create the column string for updating and
+		//add the proper amount of IN variables for the query
+		while( updateIter.hasNext()) {
+			updateString += updateIter.next() + "=?";
+			if( updateIter.hasNext()) {
+				updateString += ", ";
+			}
+		}
+		//System.out.println("update string: " + updateString);
+		//Dynamically create the column string for matching and
+		//add the proper amount of IN variables for the query
+		while( matchIter.hasNext()) {
+			matchString += matchIter.next() + "=?";
+			if( matchIter.hasNext()) {
+				matchString += " AND ";
+			}
+		}
+		//System.out.println("match string: " + matchString);
+		
+		String query = "UPDATE " + tableName + " SET " + updateString + " WHERE " + matchString + ";";
+		
+		PreparedStatement stmt = this.conn.prepareStatement(query);
+		
+		Iterator<String> valueIter1 = updateMap.values().iterator();
+		Iterator<String> valueIter2 = matchMap.values().iterator();
+		//add the values to the prepared statement
+		for( int i = 1; i < updateMap.size() + 1; i++ ) {
+			stmt.setString( i, valueIter1.next());
+		}
+		for( int i = 1; i < matchMap.size() + 1; i++ ) {
+			stmt.setString( i + updateMap.size(), valueIter2.next());
+		}
+		System.out.println("Rows updated: " + stmt.executeUpdate());
+		
+	}
+
     public List<MavenP2Version> find(Map<String, String> map) throws SQLException {
 		if(conn.isClosed())
 			throw new SQLException("Connection is closed, cannot find record");

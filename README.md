@@ -34,7 +34,8 @@ side because of the limitations of Sqlite.
 
 - There are no limits on the size of the maven_p2 table columns. It looks like the max size of each version number is the max size of int*3 plus a string. This can be changed when we get better information.    
 
-### Database Ineterface
+### Database Interface
 
 - Database Name is hardcoded, but we are planning on changing it to be a config file option to help when writing tests.
 - PreparedStatements were used to insert rows because it eliminates the risk of SQL injection.
+- The update command assumes we are finding a match for the git_repo, git_commit, git_branch, and one of p2_version and maven_version - all other values provided are updated for the matching record.
