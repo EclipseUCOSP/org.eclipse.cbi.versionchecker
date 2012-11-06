@@ -18,7 +18,7 @@ public class MvnP2Util {
 	 * or maven version
 	 * @param map database column names and values
 	 */
-	private static boolean isValidAdd(Map<String, String> map) {
+	protected static boolean isValidAdd(Map<String, String> map) {
 		return map.containsKey(MavenP2Col.GIT_REPO.getColName()) &&
 				map.containsKey(MavenP2Col.GIT_COMMIT.getColName()) &&
 				map.containsKey(MavenP2Col.GIT_BRANCH.getColName()) &&
@@ -31,7 +31,7 @@ public class MvnP2Util {
 	 * @param args command line input to main
 	 * @return map of db column name and input value
 	 */
-	private static Map<String, String> getOptions(String[] args) {
+	protected static Map<String, String> getOptions(String[] args) {
 		Map<String, String> map = new HashMap<String, String>();
 		
 		for (int i = 1; i< args.length; i++) {
@@ -59,7 +59,7 @@ public class MvnP2Util {
 	 * attempts to insert a record
 	 * @param map of db column name and input value
 	 */
-	private static void doAdd(Map<String, String> map) {
+	protected static void doAdd(Map<String, String> map) {
 			
 			if (!isValidAdd(map)) {
 				System.err.println("Invalid input. Must include git repo, branch, " +
@@ -85,7 +85,7 @@ public class MvnP2Util {
 	 * searches a record
 	 * @param map of db column name and input value
 	 */
-	private static void doFind(Map<String, String> map) {
+	protected static void doFind(Map<String, String> map) {
 		try {
 			if (dbi == null) {
 				dbi = new SQLiteDBI();
@@ -107,7 +107,7 @@ public class MvnP2Util {
 	 * updates a record
 	 * @param map of db column name and input value
 	 */
-	private static void doUpdate(Map<String, String> map) {
+	protected static void doUpdate(Map<String, String> map) {
 			//TODO: not built in dbi yet
 		System.out.println("Update not implemented yet");
 	}
