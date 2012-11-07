@@ -6,11 +6,19 @@ public class CommandTest extends TestCase{
 		super(name);
 	}
 	
-	public void testCommands() throws Exception {
+	public void testAddCommand() throws Exception {
 		assertEquals(Command.ADD, Command.findByStr("add"));
+	}
+	public void testModifyCommand() throws Exception{
 		assertEquals(Command.FIND, Command.findByStr("find"));
+	}
+	public void testUpdateCommand() throws Exception{
 		assertEquals(Command.UPDATE, Command.findByStr("update"));
+	}
+	public void testNotCommand() throws Exception{
 		assertEquals(null, Command.findByStr("notacommand"));
+	}
+	public void testEmptyCommand() throws Exception{
 		assertEquals(null, Command.findByStr(""));
 	}
 
