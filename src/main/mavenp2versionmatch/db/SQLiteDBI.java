@@ -9,11 +9,16 @@ import java.util.Map;
 public class SQLiteDBI {
 	private Connection conn;
 	//TODO: standardize the dbName and tableName or load them from a config file
-	private static final String dbName = "my.db";
-	private static final String tableName = "maven_p2";
+	private static String dbName;
+	private static String tableName;
+
+	// Defaults
+	private static final String DEFAULT_DBNAME = "my.db";
+	private static final String DEFAULT_TABLENAME = "maven_p2";
 	
-	public SQLiteDBI () throws SQLException {
-		
+	public SQLiteDBI(String dbName, String tableName) throws SQLException {
+		this.dbName = dbName;
+		this.tableName = tableName;
 		//make sure driver is loaded
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -24,6 +29,12 @@ public class SQLiteDBI {
 		if(!new File(dbName).exists()) {
 			throw new SQLException("Database does not exist");
 		}
+	}
+	public SQLiteDBI(String dbName){
+		this(dbName, DEFAULT_TABLENAME);
+	}
+	public SQLiteDBI() throws SQLException {
+		this(DEFAULT_DBNAME);
 	}
 	
 	public void openDB() throws SQLException {
