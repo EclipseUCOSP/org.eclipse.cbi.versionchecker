@@ -41,7 +41,7 @@ public class MvnP2Util {
 			
 			if (e == null) {
 				System.err.println("Invalid argument. No entry for " + key);
-				System.exit(-1);
+				/* mjl: removed a call to System.exit(-1) here. want to handle gracefully, accept any remaining arguments.*/
 			}
 			else {
 				map.put(e.getColName(), val);
