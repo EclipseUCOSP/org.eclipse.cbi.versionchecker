@@ -30,7 +30,7 @@ public class SQLiteDBI {
 			throw new SQLException("Database does not exist");
 		}
 	}
-	public SQLiteDBI(String dbName){
+	public SQLiteDBI(String dbName) throws SQLException{
 		this(dbName, DEFAULT_TABLENAME);
 	}
 	public SQLiteDBI() throws SQLException {
