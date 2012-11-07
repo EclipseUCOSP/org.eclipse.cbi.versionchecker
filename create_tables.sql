@@ -1,5 +1,5 @@
-DROP INDEX git;
-DROP TABLE maven_p2;
+DROP INDEX IF EXISTS git;
+DROP TABLE IF EXISTS maven_p2;
 
 --TODO: add foreign key from project magement db
 CREATE TABLE maven_p2
