@@ -61,7 +61,14 @@
                     <descriptorRef>jar-with-dependencies</descriptorRef>
                 </descriptorRefs>
             </configuration>
-        </plugin>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<overwrite>true</overwrite>
+				</configuration>
+			</plugin>
 		</plugins>
 		<sourceDirectory>${basedir}/src/main/</sourceDirectory>
 		<outputDirectory>${basedir}/target/</outputDirectory>
