@@ -11,7 +11,7 @@ import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.SQLiteDBI;
 
 public class MvnP2Util {
-	private static SQLiteDBI dbi;
+	protected static SQLiteDBI dbi;
 	
 	/*
 	 * Input must contain git repo and commit and one of p2 version
