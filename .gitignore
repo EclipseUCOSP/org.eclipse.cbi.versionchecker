@@ -27,7 +27,8 @@
 # Logs and databases #
 ######################
 *.log
-*.db
+#*.db #ml: only exclude .db in basedir. we want to include the .db test resources
+my.db
 
 
 # OS generated files #
