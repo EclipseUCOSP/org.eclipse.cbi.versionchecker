@@ -5,6 +5,7 @@ import java.io.File;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.Config;
@@ -40,7 +41,7 @@ public class CheckVersion extends AbstractMojo
 	 */
 	private String mvnVersion;
 
-	public void execute() throws MojoExecutionException
+	public void execute() throws MojoExecutionException, MojoFailureException
 	{
 		String query = "add";
 		query += " -mvnv " + mvnVersion;
@@ -75,15 +76,12 @@ public class CheckVersion extends AbstractMojo
 			} else {
 				query += " -repo " + url;
 			}
-
 		} catch (IOException ioe) {
-			getLog().error("Unable to read repository");
 			ioe.printStackTrace();
-			return;
+			throw new MojoFailureException("Unable to read repository");
 		} catch (IllegalArgumentException iae) {
-			getLog().error("Not a Git repository");
 			iae.printStackTrace();
-			return;
+			throw new MojoFailureException("Not a Git repository");
 		}
 
 		String[] query_arr = query.split(" ");
@@ -93,6 +91,7 @@ public class CheckVersion extends AbstractMojo
 			mavenp2versionmatch.main.MvnP2Util.main(query_arr);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new MojoFailureException("Failure in MavenP2Util.");
 		}
 	}
 
