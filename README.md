@@ -1,5 +1,11 @@
 db
 ==
+NOTE FOR CONFIG RECENT ISSUES:
+I fixed a project configuration bug that was preventing the tests from running after regenerating the classpath. You might need to delete an empty folder called "mavenp2versionmatch" from src (not main). This folder is not tracked in git. Then run 
+- mvn clean install
+- mvn eclipse:clean
+- mvn eclipse:eclipse  
+
 Maven P2 Version Matcher
 ------------------------
 - mvn assembly:single will build a standalone jar (for testing)
