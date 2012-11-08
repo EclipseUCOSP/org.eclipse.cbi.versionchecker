@@ -1,15 +1,11 @@
 TODO:
 	- need to remove the my.db from the repo and use one hosted on nexus
-		- may want to save this until after most db functionality and testing complete, however
-	- allow parameters to be set directly through plugin, instead of through System.in
+	- may want to save this until after most db functionality and testing complete, however
 
 Perform the following steps to run the plugin:
 	- mvn clean install
 	- mvn org.ucosp.eclipse:mvn-p2-vt-plugin:callVC
-	- enter desired query (when prompted via the console)
-
-Additional Notes:
-Adding <pluginGroup>mvn.p2.vt</pluginGroup> under <pluginGroups> in your Maven settings.xml will allow you to call the plugin like this: mvn mvn.p2.vt:goal
+	- an add entry for this project is sent to MVNP2Util
 
 If you get the error:
 Unbound classpath variable: 'M2_REPO/...' in project '...' it means you have not setup your M2_REPO variable as a classpath variable in Eclipse. To fix this:

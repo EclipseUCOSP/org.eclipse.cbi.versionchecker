@@ -1,8 +1,6 @@
 package mvn.p2.vt.mojo;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.File;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -11,8 +9,6 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
  * Calls the Version Checker, prompting the user to enter a query to run.
@@ -22,13 +18,6 @@ import org.eclipse.jgit.revwalk.RevCommit;
  */
 public class CheckVersion extends AbstractMojo
 {
-	/**
-	 * The query to send the version checker.
-	 *
-	 * @parameter expression="${callVC.query}""
-	 */
-	private String query;
-
 	/**
 	 * The root of the Git repository.
 	 *
