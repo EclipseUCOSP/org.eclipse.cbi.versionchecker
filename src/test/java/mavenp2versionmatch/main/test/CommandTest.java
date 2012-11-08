@@ -1,3 +1,4 @@
+package mavenp2versionmatch.main.test;
 import mavenp2versionmatch.main.Command;
 import junit.framework.TestCase;
 
