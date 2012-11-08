@@ -72,7 +72,7 @@ public class CheckVersion extends AbstractMojo
 			Config config = repo.getConfig();
 			String url = config.getString("remote", upstreamRemote, "url");
 			if (url == null) {
-				getLog().warn("Could not find remote" + upstreamRemote);
+				getLog().warn("Could not find remote: " + upstreamRemote);
 			} else {
 				query += " -repo " + url;
 			}

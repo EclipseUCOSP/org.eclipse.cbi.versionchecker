@@ -48,6 +48,7 @@
        <plugin>
          <groupId>org.apache.maven.plugins</groupId>
          <artifactId>maven-surefire-plugin</artifactId>
+         <version>2.12</version>
          <configuration>
            <testFailureIgnore>true</testFailureIgnore>
          </configuration>
@@ -59,6 +60,17 @@
 
   <dependencies>
     <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+   <dependency>
+  <groupId>org.codehaus.plexus</groupId>
+  <artifactId>plexus-container-default</artifactId>
+  <version>1.5.5</version>
+</dependency>
+    <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
       <version>2.1.0.201209190230-r</version>
@@ -66,7 +78,7 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>2.0</version>
+      <version>3.0</version>
     </dependency>
     <dependency>
       <groupId>org.ucosp.eclipse</groupId>
@@ -74,10 +86,10 @@
       <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.1</version>
+      <groupId>org.apache.maven.plugin-testing</groupId>
+      <artifactId>maven-plugin-testing-harness</artifactId>
       <scope>test</scope>
+      <version>2.0</version>
     </dependency>
   </dependencies>
 
