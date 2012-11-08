@@ -10,41 +10,43 @@ import java.io.File;
 
 public class VCXmlParser {
 
-	public void parse() {
+	public Object[] parse() {
+		Object[] toRet = null;
 		try {
-
+			
+			
 			File fXmlFile = new File("C:\\eclipse32\\artifacts.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
 			doc.getDocumentElement().normalize();
-
-			System.out.println("Root element :"
-					+ doc.getDocumentElement().getNodeName());
 			Node tmp = doc.getElementsByTagName("artifacts").item(0);
 			NodeList artList = tmp.getChildNodes();
-			
-			
-			System.out.println("-----------------------");
 
+			int artSize = 0;
 			for (int temp = 0; temp < artList.getLength(); temp++) {
-
 				Node nNode = artList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+						artSize++;
+				}
+			}
 
+			toRet = new Object[artSize];
+			int artIndex = 0;
+			for (int temp = 0; temp < artList.getLength(); temp++) {
+				Node nNode = artList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element e = (Element) nNode;
-
-					System.out.println("ID : "
-							+ e.getAttribute("id"));
-					System.out.println("Version : "
-							+ e.getAttribute("version"));
-
+					toRet[artIndex] = new VCArtifact(e.getAttribute("id"),e.getAttribute("version"));
+					artIndex++;
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		return toRet;
 	}
 
 }
