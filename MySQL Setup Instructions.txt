@@ -1,0 +1,10 @@
+Installing MySQL:
+	- download and install MySQL (ensure Connector/J is installed too)
+		- set the username to 'root' and password to 'Excellence'
+		 if you've already installed MySQL with different credentials, need to set these in db project
+
+Setting up our database:
+	- open the MySQL workbench (at least, if you're like me and like easy-to-use GUIs!)
+	- create schema 'eclipse' with default collation
+		- set newly created schema as the default schema
+	- execute 'create_tables_mysql.sql' script (found in the same folder as this document)

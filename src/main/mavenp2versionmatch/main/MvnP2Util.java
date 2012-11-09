@@ -12,10 +12,12 @@ import javax.swing.JOptionPane;
 
 import mavenp2versionmatch.db.MavenP2Col;
 import mavenp2versionmatch.db.MavenP2Version;
-import mavenp2versionmatch.db.SQLiteDBI;
+import mavenp2versionmatch.db.MySQLDBI;
+//import mavenp2versionmatch.db.SQLiteDBI;
 
 public class MvnP2Util {
-	private static SQLiteDBI dbi;
+	//private static SQLiteDBI dbi;
+	private static MySQLDBI dbi;
 	
 	/*
 	 * Input must contain git repo and commit and one of p2 version
@@ -76,7 +78,7 @@ public class MvnP2Util {
 				// if no match found, add the new record
 				try {
 					if (MvnP2Util.dbi == null) {
-						dbi = new SQLiteDBI();
+						dbi = new MySQLDBI();
 					}
 					dbi.openDB();
 					dbi.addRecord(map);
@@ -96,7 +98,7 @@ public class MvnP2Util {
 	private static void doFind(Map<String, String> map) {
 		try {
 			if (dbi == null) {
-				dbi = new SQLiteDBI();
+				dbi = new MySQLDBI();
 			}
 			dbi.openDB();
 			List<MavenP2Version> mpvList = dbi.find(map);
@@ -128,7 +130,7 @@ public class MvnP2Util {
 		else{
 			try {
 				if (dbi == null) {
-					dbi = new SQLiteDBI();
+					dbi = new MySQLDBI();
 				}
 				dbi.openDB();
 				Map<String, String> mvnMap = filterMap(map, MavenP2Col.MAVEN_VERSION);
@@ -156,7 +158,6 @@ public class MvnP2Util {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			System.out.println("No matching record found in the database - update cancelled.");
 		}
 		return false;
 	}
@@ -209,7 +210,8 @@ public class MvnP2Util {
 			doFind(map);
 			break;
 		case UPDATE:
-			doUpdate(map);
+			boolean success = doUpdate(map);
+			if (!success) System.out.println("No matching record found in the database - update cancelled.");
 			break;
 		default:
 			System.err.println("Unexpected command. Should never get here.");
