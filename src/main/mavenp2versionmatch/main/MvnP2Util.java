@@ -64,6 +64,7 @@ public class MvnP2Util {
 	/*
 	 * Attempts to insert a record, checking if any matching entries already exist
 	 * in the database first.
+	 * Precondition: dbi has been initialized and opened.
 	 * @param true if succeeded, false if failed
 	 */
 	protected static boolean doAdd(Map<String, String> map) {
@@ -77,12 +78,7 @@ public class MvnP2Util {
 			if (!doUpdate(map)){
 				// if no match found, add the new record
 				try {
-					if (MvnP2Util.dbi == null) {
-						dbi = new MySQLDBI();
-					}
-					dbi.openDB();
 					dbi.addRecord(map);
-					dbi.closeDB();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -95,21 +91,17 @@ public class MvnP2Util {
 	
 	/*
 	 * searches a record and prints to standard output.
+	 * Precondition: dbi has been initialized and opened.
 	 * @param map of db column name and input value
 	 * @return true if find succeeded, false if find failed
 	 */
 	protected static boolean doFind(Map<String, String> map) {
 		try {
-			if (dbi == null) {
-				dbi = new MySQLDBI();
-			}
-			dbi.openDB();
 			List<MavenP2Version> mpvList = dbi.find(map);
 			
 			for(MavenP2Version v: mpvList) {
 				System.out.println(v);
 			}
-			dbi.closeDB();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -123,6 +115,7 @@ public class MvnP2Util {
 	 * for the hardcoded list of columns (as seen in filterMap). If any matches found, 
 	 * prompts the user to confirm an update, updating if confirmed and canceling 
 	 * the database call otherwise.
+	 * Precondition: dbi has been initialized and opened.
 	 * @param map of db column name and input value
 	 * @return true if a matching record was found to update, false otherwise or on failure.
 	 */
@@ -134,10 +127,6 @@ public class MvnP2Util {
 		}
 		else{
 			try {
-				if (dbi == null) {
-					dbi = new MySQLDBI();
-				}
-				dbi.openDB();
 				Map<String, String> mvnMap = filterMap(map, MavenP2Col.MAVEN_VERSION);
 				Map<String, String> p2Map = filterMap(map, MavenP2Col.P2_VERSION);
 				List<MavenP2Version> mvnMatch = dbi.find(mvnMap);
@@ -206,22 +195,36 @@ public class MvnP2Util {
 			System.exit(-1);
 		}
 		Map<String, String> map = getOptions(args);
-		//doAdd(map);
+		
+		try{
+			dbi = new MySQLDBI(); // initialize database interface.
+			dbi.openDB();
+		}catch(SQLException e){
+			System.err.println("Couldn't initialize database interface.");
+			System.exit(-1);
+		}
 		
 		switch (command) {
 		case ADD:
-			doAdd(map);
+			if (!doAdd(map)) System.out.println("Failed to complete add successfully.");
 			break;
 		case FIND:
-			doFind(map);
+			if (!doFind(map)) System.out.println("No matching record found in the database, or other database failure.");
 			break;
 		case UPDATE:
-			boolean success = doUpdate(map);
-			if (!success) System.out.println("No matching record found in the database - update cancelled.");
+			if (!doUpdate(map)) System.out.println("No matching record found in the database - update cancelled.");
 			break;
 		default:
 			System.err.println("Unexpected command. Should never get here.");
+
+		try{
+			dbi.closeDB(); // done with DBI, close it.
+		}catch(SQLException e){
+			System.err.println("Couldn't close database interface.");
 			System.exit(-1);
+		}
+
+
 		}
 	}
 
