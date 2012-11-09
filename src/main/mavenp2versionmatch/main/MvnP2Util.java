@@ -64,13 +64,13 @@ public class MvnP2Util {
 	/*
 	 * Attempts to insert a record, checking if any matching entries already exist
 	 * in the database first.
-	 * @param map of db column name and input value
+	 * @param true if succeeded, false if failed
 	 */
-	protected static void doAdd(Map<String, String> map) {
+	protected static boolean doAdd(Map<String, String> map) {
 		if (!isValidAdd(map)) {
 			System.err.println("Invalid input. Must include git repo, branch, " +
 					"commit and one of maven version and p2 version.");
-			System.exit(-1);
+			return false; // a failure
 		}
 		else {
 			// check if a matching entry already exists, updating instead of adding if match found
@@ -86,16 +86,19 @@ public class MvnP2Util {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					return false;
 				}	
 			}
 		}
+		return true;
 	}
 	
 	/*
-	 * searches a record
+	 * searches a record and prints to standard output.
 	 * @param map of db column name and input value
+	 * @return true if find succeeded, false if find failed
 	 */
-	protected static void doFind(Map<String, String> map) {
+	protected static boolean doFind(Map<String, String> map) {
 		try {
 			if (dbi == null) {
 				dbi = new MySQLDBI();
@@ -109,7 +112,9 @@ public class MvnP2Util {
 			dbi.closeDB();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 		
 	}
 	
@@ -119,13 +124,13 @@ public class MvnP2Util {
 	 * prompts the user to confirm an update, updating if confirmed and canceling 
 	 * the database call otherwise.
 	 * @param map of db column name and input value
-	 * @return true if a matching record was found to update, false otherwise
+	 * @return true if a matching record was found to update, false otherwise or on failure.
 	 */
 	protected static boolean doUpdate(Map<String, String> map) {
 		if (!isValidAdd(map)) {
 			System.err.println("Invalid input. Must include git repo, branch, " +
 					"commit and one of maven version and p2 version.");
-			System.exit(-1);
+			return false;
 		}
 		else{
 			try {
@@ -157,6 +162,7 @@ public class MvnP2Util {
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+				return false;
 			}
 		}
 		return false;
