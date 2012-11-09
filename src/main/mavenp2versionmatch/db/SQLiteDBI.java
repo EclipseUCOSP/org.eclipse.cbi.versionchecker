@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class SQLiteDBI {
+public class SQLiteDBI implements DBI{
 	private Connection conn;
 	//TODO: standardize the dbName and tableName or load them from a config file
 	private static final String dbName = "my.db";

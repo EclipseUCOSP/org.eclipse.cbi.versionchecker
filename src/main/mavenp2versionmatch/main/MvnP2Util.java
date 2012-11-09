@@ -10,14 +10,15 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 
+import mavenp2versionmatch.db.DBI;
 import mavenp2versionmatch.db.MavenP2Col;
 import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.MySQLDBI;
-//import mavenp2versionmatch.db.SQLiteDBI;
+import mavenp2versionmatch.db.SQLiteDBI;
 
 public class MvnP2Util {
 	//private static SQLiteDBI dbi;
-	private static MySQLDBI dbi;
+	private static DBI dbi;
 	
 	/*
 	 * Input must contain git repo and commit and one of p2 version
