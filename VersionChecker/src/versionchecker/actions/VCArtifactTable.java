@@ -4,6 +4,10 @@ package versionchecker.actions;
 * SimpleTableSelectionDemo.java requires no other files.
 */
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,8 +18,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 /** 
 * SimpleTableSelectionDemo is just like SimpleTableDemo, 
@@ -115,12 +121,29 @@ public class VCArtifactTable extends JPanel {
    public static void createAndShowGUI(Object[] data) {
        //Create and set up the window.
        JFrame frame = new JFrame("Version Checker");
+       
+       JPanel mainPanel = new JPanel();
+       frame.setContentPane(mainPanel);
+       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
        //Create and set up the content pane.
        VCArtifactTable newContentPane = new VCArtifactTable(data);
        newContentPane.setOpaque(true); //content panes must be opaque
-       frame.setContentPane(newContentPane);
-
+       
+       mainPanel.add(newContentPane);
+       
+       JPanel buttonPanel = new JPanel();
+       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+       
+       JButton fetchButton = new JButton("Fetch");
+       JButton cloneButton = new JButton("Clone");
+       
+       buttonPanel.add(fetchButton);
+       buttonPanel.add(Box.createRigidArea(new Dimension(50, 0)));
+       buttonPanel.add(cloneButton);
+       
+       mainPanel.add(buttonPanel);
+       
        //Display the window.
        frame.pack();
        frame.setVisible(true);

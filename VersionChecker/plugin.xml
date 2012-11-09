@@ -16,10 +16,10 @@
             </separator>
          </menu>
          <action
-               label="&amp;Git"
+               label="&amp;Version Checker"
                icon="icons/sample.gif"
-               class="versionchecker.actions.VCGitAction"
-               tooltip="Version Checker Git"
+               class="versionchecker.actions.VCAction"
+               tooltip="Version Checker"
                menubarPath="sampleMenu/sampleGroup"
                toolbarPath="sampleGroup"
                id="versionchecker.actions.VCGitAction">

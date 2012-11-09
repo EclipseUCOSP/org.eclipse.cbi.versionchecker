@@ -33,13 +33,13 @@ public class VCXmlParser {
 			}
 
 			toRet = new Object[artSize];
-			int artIndex = 0;
+			int curIndex = 0;
 			for (int temp = 0; temp < artList.getLength(); temp++) {
 				Node nNode = artList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element e = (Element) nNode;
-					toRet[artIndex] = new VCArtifact(e.getAttribute("id"),e.getAttribute("version"));
-					artIndex++;
+					toRet[curIndex] = new VCArtifact(e.getAttribute("id"),e.getAttribute("version"));
+					curIndex++;
 				}
 			}
 		} catch (Exception e) {

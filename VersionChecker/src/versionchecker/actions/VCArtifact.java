@@ -1,6 +1,6 @@
 package versionchecker.actions;
 
-public class VCArtifact {
+public class VCArtifact implements Comparable{
 	private String id;
 	private String version;
 	
@@ -15,5 +15,11 @@ public class VCArtifact {
 	
 	public String getVersion(){
 		return this.version;
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		return this.id.compareTo(((VCArtifact) arg0).id);
 	}
 }

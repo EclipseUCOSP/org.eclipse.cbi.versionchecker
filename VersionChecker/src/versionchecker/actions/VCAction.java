@@ -25,12 +25,12 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
  * delegated to it.
  * @see IWorkbenchWindowActionDelegate
  */
-public class VCGitAction implements IWorkbenchWindowActionDelegate {
+public class VCAction implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow window;
 	/**
 	 * The constructor.
 	 */
-	public VCGitAction() {
+	public VCAction() {
 	}
 
 	/**
