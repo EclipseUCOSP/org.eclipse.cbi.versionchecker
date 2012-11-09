@@ -1,5 +1,7 @@
-package mavenp2versionmatch.main;
+package mavenp2versionmatch.main.test;
+import mavenp2versionmatch.main.Command;
 import junit.framework.TestCase;
+
 
 public class CommandTest extends TestCase{
 	public CommandTest(String name){

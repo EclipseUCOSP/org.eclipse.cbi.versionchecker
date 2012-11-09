@@ -5,6 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<properties>
 		<java.version>1.6</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<groupId>org.ucosp.eclipse</groupId>
@@ -71,8 +73,8 @@
 			</plugin>
 		</plugins>
 		<sourceDirectory>${basedir}/src/main/</sourceDirectory>
-		<outputDirectory>${basedir}/target/</outputDirectory>
-		<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+		<outputDirectory>${basedir}/target/classes</outputDirectory>
+		<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory> 
 	</build>
 	<distributionManagement>
 		<repository>

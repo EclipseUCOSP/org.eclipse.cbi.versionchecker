@@ -6,39 +6,27 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class SQLiteDBI {
+public class MySQLDBI {
 	private Connection conn;
 	//TODO: standardize the dbName and tableName or load them from a config file
-	private static String dbName;
-	private static String tableName;
-
-	// Defaults
-	private static final String DEFAULT_DBNAME = "my.db";
-	private static final String DEFAULT_TABLENAME = "maven_p2";
+	private static final String url = "jdbc:mysql://localhost:3306/eclipse";
+	private static final String user = "root";
+	private static final String password = "Excellence";
+	private static final String dbName = "eclipse";
+	private static final String tableName = "maven_p2";
 	
-	public SQLiteDBI(String dbName, String tableName) throws SQLException {
-		this.dbName = dbName;
-		this.tableName = tableName;
+	public MySQLDBI () throws SQLException {
+		
 		//make sure driver is loaded
 		try {
-			Class.forName("org.sqlite.JDBC");
+			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			throw new SQLException("SQLite Driver wasn't loaded");
+			throw new SQLException("MySQL Driver wasn't loaded");
 		}
-		//make sure DB exists
-		if(!new File(dbName).exists()) {
-			throw new SQLException("Database does not exist");
-		}
-	}
-	public SQLiteDBI(String dbName) throws SQLException{
-		this(dbName, DEFAULT_TABLENAME);
-	}
-	public SQLiteDBI() throws SQLException {
-		this(DEFAULT_DBNAME);
 	}
 	
 	public void openDB() throws SQLException {
-		conn = DriverManager.getConnection("jdbc:sqlite:" + dbName);
+		conn = DriverManager.getConnection(url, user, password);
 	}
 	
 	public void closeDB() throws SQLException {
@@ -46,7 +34,6 @@ public class SQLiteDBI {
 			conn.close();
 		}
 	}
-	//TODO duplicate records are added
 	public void addRecord(Map<String, String> colMap) throws SQLException{
 		if(conn.isClosed())
 			throw new SQLException("Connection is closed, cannot add record");
