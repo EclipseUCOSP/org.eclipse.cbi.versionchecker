@@ -8,3 +8,8 @@ Setting up our database:
 	- create schema 'eclipse' with default collation
 		- set newly created schema as the default schema
 	- execute 'create_tables_mysql.sql' script (found in the same folder as this document)
+	
+Getting it working with our project:
+	- add the J Connector jar file to your system's classpath
+		- J Connector should have been installed with MySQL; if not, download and extract locally
+		- instead of adding to classpath, can copy and past jar file to your JRE lib\ext folder (ex. C:\Program Files\Java\jre7\lib\ext)
