@@ -26,6 +26,7 @@ public class MvnP2UtilSqliteTest extends TestCase{
 		MvnP2Util util = new MvnP2Util();
 		URL url = getClass().getClassLoader().getResource("empty.db");
 		util.dbi = new SQLiteDBI(url.getPath());
+		util.dbi.openDB();
 
 		Map<String, String>mAdd = new HashMap();
 		mAdd.put("git_repo", "GITREPO");
@@ -35,9 +36,6 @@ public class MvnP2UtilSqliteTest extends TestCase{
 
 		util.doAdd(mAdd);
 
-		// connection is closed after doadd.
-		util.dbi = new SQLiteDBI(url.getPath()); // reopen connection
-		util.dbi.openDB();
 		Map<String, String>mFind = new HashMap();
 		mFind.put("maven_version", "0.0-DUMMY");
 
@@ -45,6 +43,12 @@ public class MvnP2UtilSqliteTest extends TestCase{
 
 		util.dbi.closeDB(); // done all the queries we will need, close database
 		assertEquals("added one entry to empty database, should contain one item. instead, contains " + mpvList.size(), mpvList.size(), 1); // there should only be one entry in the database
+		MavenP2Version mpv = mpvList.get(0);
+		assertEquals(mpv.getGitRepo(), "GITREPO");
+		assertEquals(mpv.getGitCommit(), "GITCOMMIT");
+		assertEquals(mpv.getGitBranch(), "GITBRANCH");
+		assertEquals(mpv.getMavenVersion(), "0.0-DUMMY");
+
 	
 	}
 }
