@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ucosp.eclipse</groupId>
   <artifactId>mvn-p2-vt-plugin</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <properties>
@@ -27,32 +27,32 @@
   </repositories>
 
   <build>
-   <plugins>
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-compiler-plugin</artifactId>
-         <version>2.5.1</version>
-         <configuration>
-            <source>${java.version}</source>
-            <target>${java.version}</target>
-          </configuration>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.5.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
       </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-eclipse-plugin</artifactId>
-            <version>2.9</version>
-            <configuration>
-               <useProjectReferences>false</useProjectReferences>
-            </configuration>
-        </plugin>
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-surefire-plugin</artifactId>
-         <version>2.12</version>
-         <configuration>
-           <testFailureIgnore>true</testFailureIgnore>
-         </configuration>
-       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <version>2.9</version>
+        <configuration>
+          <useProjectReferences>false</useProjectReferences>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.12</version>
+        <configuration>
+          <testFailureIgnore>true</testFailureIgnore>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -65,11 +65,11 @@
       <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
-   <dependency>
-  <groupId>org.codehaus.plexus</groupId>
-  <artifactId>plexus-container-default</artifactId>
-  <version>1.5.5</version>
-</dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-container-default</artifactId>
+      <version>1.5.5</version>
+    </dependency>
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
@@ -95,15 +95,15 @@
 
 
   <distributionManagement>
-  	<repository>
-  		<id>ucosp</id>
-  		<name>UCOSP Repository - Releases</name>
-  		<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
-  	</repository>
-  	<snapshotRepository>
-  		<id>ucosp</id>
-  		<name>UCOSP Repository - Snapshots</name>
-  		<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
-  	</snapshotRepository>
+    <repository>
+      <id>ucosp</id>
+      <name>UCOSP Repository - Releases</name>
+      <url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <snapshotRepository>
+      <id>ucosp</id>
+      <name>UCOSP Repository - Snapshots</name>
+      <url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
   </distributionManagement>
 </project>

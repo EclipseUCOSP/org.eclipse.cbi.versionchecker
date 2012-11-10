@@ -12,12 +12,9 @@ import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectId;
 
 /**
- * Calls the Version Checker, prompting the user to enter a query to run.
- * The given query is then passed as arguments to the main method in MvnP2Util,
- * which executes the query (valid syntax specified in the 'db' README).
- * @goal callVC
+ * A common base class for version checker mojos.
  */
-public class CheckVersion extends AbstractMojo
+public class AbstractVersionMojo extends AbstractMojo
 {
 	/**
 	 * The root of the Git repository.
@@ -34,55 +31,40 @@ public class CheckVersion extends AbstractMojo
 	private String upstreamRemote;
 
 	/**
-	 * The Maven version.
-	 *
-	 * @parameter expression="${project.version}"
-	 * @readonly
+	 * Creates a version manifest.
 	 */
-	private String mvnVersion;
-
-	public void execute() throws MojoExecutionException, MojoFailureException
-	{
-		String query = "add";
-		query += " -mvnv " + mvnVersion;
-
+	protected VersionManifest createManifest() throws MojoFailureException {
 		// Find the Git revision &c.
 		// Note: I do not call readEnvironment on the builder, since undocumented
 		// environment variables are the bane of repeatable builds.
+		VersionManifest manifest = new VersionManifest();
 		try {
 			Repository repo = new FileRepositoryBuilder()
 				.setGitDir(repositoryRoot)
 				.findGitDir()
 				.build();
 
-			String branchName = repo.getBranch();
-			if (branchName == null) {
-				getLog().warn("Not on a branch");
-			} else {
-				query += " -br " + branchName;
-			}
+			manifest.setBranch(repo.getBranch());
 
 			ObjectId head = repo.resolve("HEAD");
-			if (head == null) {
-				getLog().warn("Could not resolve HEAD");
-			} else {
-				query += " -cmt " + head.name();
-			}
+			if (head != null) manifest.setCommit(head.name());
 
 			Config config = repo.getConfig();
 			String url = config.getString("remote", upstreamRemote, "url");
-			if (url == null) {
-				getLog().warn("Could not find remote: " + upstreamRemote);
-			} else {
-				query += " -repo " + url;
-			}
+			manifest.setRepository(url);
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			throw new MojoFailureException("Unable to read repository");
+			throw new MojoFailureException("Unable to read repository", ioe);
 		} catch (IllegalArgumentException iae) {
-			iae.printStackTrace();
-			throw new MojoFailureException("Not a Git repository");
+			throw new MojoFailureException("Not a Git repository", iae);
 		}
+
+		return manifest;
+	}
+
+	public void execute() throws MojoExecutionException, MojoFailureException
+	{
+		VersionManifest manifest = createManifest();
+		String query = manifest.createAddQuery();
 
 		String[] query_arr = query.split(" ");
 		getLog().info("Executing the following query: " + query);
@@ -90,8 +72,7 @@ public class CheckVersion extends AbstractMojo
 			// call the MvnP2Util with the given commands. This just starts the main method, set up your array of strings accordingly.
 			mavenp2versionmatch.main.MvnP2Util.main(query_arr);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new MojoFailureException("Failure in MavenP2Util.");
+			throw new MojoFailureException("Failure in MavenP2Util.", e);
 		}
 	}
 

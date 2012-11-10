@@ -23,9 +23,9 @@
     <plugins>
       <plugin>
         <artifactId>mvn-p2-vt-plugin</artifactId>
+        <goal>add-tycho-version</goal>
         <configuration>
-          <!-- can add parameters here -->
-          <mvnVersion>TEST-VERSION</mvnVersion>
+          <p2Version>1.0.qualifier</p2Version>
           <upstreamRemote>origin</upstreamRemote>
         </configuration>
       </plugin>
