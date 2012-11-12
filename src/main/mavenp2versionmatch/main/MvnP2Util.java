@@ -17,14 +17,14 @@ import mavenp2versionmatch.db.MySQLDBI;
 import mavenp2versionmatch.db.SQLiteDBI;
 
 public class MvnP2Util {
-	protected static DBI dbi;
+	private static DBI dbi;
 	
 	/*
 	 * Input must contain git repo and commit and one of p2 version
 	 * or maven version
 	 * @param map database column names and values
 	 */
-	protected static boolean isValidAdd(Map<String, String> map) {
+	private static boolean isValidAdd(Map<String, String> map) {
 		return map.containsKey(MavenP2Col.GIT_REPO.getColName()) &&
 				map.containsKey(MavenP2Col.GIT_COMMIT.getColName()) &&
 				map.containsKey(MavenP2Col.GIT_BRANCH.getColName()) &&
@@ -37,7 +37,7 @@ public class MvnP2Util {
 	 * @param args command line input to main
 	 * @return map of db column name and input value
 	 */
-	protected static Map<String, String> getOptions(String[] args) {
+	private static Map<String, String> getOptions(String[] args) {
 		Map<String, String> map = new HashMap<String, String>();
 		
 		for (int i = 1; i< args.length; i++) {
@@ -67,7 +67,7 @@ public class MvnP2Util {
 	 * Precondition: dbi has been initialized and opened.
 	 * @param true if succeeded, false if failed
 	 */
-	protected static boolean doAdd(Map<String, String> map) {
+	private static boolean doAdd(Map<String, String> map) {
 		if (!isValidAdd(map)) {
 			System.err.println("Invalid input. Must include git repo, branch, " +
 					"commit and one of maven version and p2 version.");
@@ -95,7 +95,7 @@ public class MvnP2Util {
 	 * @param map of db column name and input value
 	 * @return true if find succeeded, false if find failed
 	 */
-	protected static boolean doFind(Map<String, String> map) {
+	private static boolean doFind(Map<String, String> map) {
 		try {
 			List<MavenP2Version> mpvList = dbi.find(map);
 			
@@ -119,7 +119,7 @@ public class MvnP2Util {
 	 * @param map of db column name and input value
 	 * @return true if a matching record was found to update, false otherwise or on failure.
 	 */
-	protected static boolean doUpdate(Map<String, String> map) {
+	private static boolean doUpdate(Map<String, String> map) {
 		if (!isValidAdd(map)) {
 			System.err.println("Invalid input. Must include git repo, branch, " +
 					"commit and one of maven version and p2 version.");
