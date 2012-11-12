@@ -13,42 +13,38 @@ import mavenp2versionmatch.db.SQLiteDBI;
 import mavenp2versionmatch.db.MavenP2Version;
 
 public class MvnP2UtilSqliteTest extends TestCase{
-	private MvnP2Util util;
-
 	public MvnP2UtilSqliteTest(String name){
 		super(name);
-		util = new MvnP2Util();
 	}
 
 	/* note: use different filenames for each test's database to avoid any unexpected interactions between different unit tests. */
 
-	public void testSqliteDoAddAndFind() throws SQLException{
-		MvnP2Util util = new MvnP2Util();
+	public void testSqliteDoAddAndFind() throws SQLException, InvalidManifestException {
 		URL url = getClass().getClassLoader().getResource("empty.db");
-		util.dbi = new SQLiteDBI(url.getPath());
-		util.dbi.openDB();
+		MvnP2Util util = new MvnP2Util(new SQLiteDBI(url.getPath()));
+		util.open();
 
-		Map<String, String>mAdd = new HashMap();
-		mAdd.put("git_repo", "GITREPO");
-		mAdd.put("git_commit", "GITCOMMIT");
-		mAdd.put("git_branch", "GITBRANCH");
-		mAdd.put("maven_version", "0.0-DUMMY");
+		try {
+			VersionManifest mft = new VersionManifest();
+			mft.setGitRepo("GITREPO");
+			mft.setGitCommit("102909bacbf86c8e9024fcee4378dbc8223b6a1e");
+			mft.setGitBranch("GITBRANCH");
+			mft.setMavenVersion("0.0-DUMMY");
 
-		util.doAdd(mAdd);
+			util.add(mft);
 
-		Map<String, String>mFind = new HashMap();
-		mFind.put("maven_version", "0.0-DUMMY");
+			VersionManifest query = new VersionManifest();
+			query.setMavenVersion("0.0-DUMMY");
+			List<VersionManifest> mpvList = util.find(query);
 
-		List<MavenP2Version> mpvList = util.dbi.find(mFind);
-
-		util.dbi.closeDB(); // done all the queries we will need, close database
-		assertEquals("added one entry to empty database, should contain one item. instead, contains " + mpvList.size(), mpvList.size(), 1); // there should only be one entry in the database
-		MavenP2Version mpv = mpvList.get(0);
-		assertEquals(mpv.getGitRepo(), "GITREPO");
-		assertEquals(mpv.getGitCommit(), "GITCOMMIT");
-		assertEquals(mpv.getGitBranch(), "GITBRANCH");
-		assertEquals(mpv.getMavenVersion(), "0.0-DUMMY");
-
-	
+			assertEquals("added one entry to empty database, should contain one item. instead, contains " + mpvList.size(), mpvList.size(), 1);
+			VersionManifest mpv = mpvList.get(0);
+			assertEquals(mpv.getGitRepo(), "GITREPO");
+			assertEquals(mpv.getGitCommit(), "102909bacbf86c8e9024fcee4378dbc8223b6a1e");
+			assertEquals(mpv.getGitBranch(), "GITBRANCH");
+			assertEquals(mpv.getMavenVersion(), "0.0-DUMMY");
+		} finally {
+			util.close(); // done all the queries we will need, close database
+		}
 	}
 }
