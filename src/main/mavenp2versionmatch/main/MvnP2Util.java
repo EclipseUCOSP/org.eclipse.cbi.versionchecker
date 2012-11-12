@@ -15,6 +15,7 @@ import mavenp2versionmatch.db.MavenP2Col;
 import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.MySQLDBI;
 import mavenp2versionmatch.db.SQLiteDBI;
+
 /** * A utility for managing the version database.  */
 public class MvnP2Util {
 	protected DBI dbi;
@@ -41,12 +42,36 @@ public class MvnP2Util {
 	 * Assumes that it is valid to omit every value. Only verifies that
 	 * values that do exist are valid for that field.
 	 */
-	protected void validate(VersionManifest mft) throws InvalidManifestException {
+	protected static void validate(VersionManifest mft) throws InvalidManifestException {
 		// TODO Implement.
 		String commit = mft.getGitCommit();
 		if (commit != null && !Pattern.matches("[a-f0-9]{40}", commit)) {
 			throw new InvalidManifestException("Invalid Git commit: " + commit);
 		}
+
+		// We should make sure that versions are valid, project is not just
+		// whitespace.
+	}
+
+	/**
+	 * Validates a version manifest for an add.
+	 *
+	 * Tests that all the required fields:
+	 *  * commit
+	 *  * branch
+	 *  * repo
+	 * are present, and that at least one of the version fields:
+	 *  * p2 version
+	 *  * Maven version
+	 * is present.
+	 */
+	protected static void validateAdd(VersionManifest mft) throws InvalidManifestException
+	{
+		if (mft.getGitCommit() == null ||
+				mft.getGitBranch() == null ||
+				mft.getGitRepo() == null ||
+				(mft.getP2Version() == null && mft.getMavenVersion() == null))
+			throw new InvalidManifestException("Git commit, branch, repo, and one version are required");
 	}
 
 	/**
@@ -55,11 +80,7 @@ public class MvnP2Util {
 	public void add(VersionManifest mft)
 		throws InvalidManifestException, SQLException {
 		validate(mft);
-		if (mft.getGitCommit() == null ||
-				mft.getGitBranch() == null ||
-				mft.getGitRepo() == null ||
-				(mft.getP2Version() == null && mft.getMavenVersion() == null))
-			throw new InvalidManifestException("Git commit, branch, repo, and one version are required");
+		validateAdd(mft);
 
 		Map<String,String> map = createMap(mft);
 		if (!doUpdate(map)) {
@@ -75,11 +96,7 @@ public class MvnP2Util {
 	public boolean update(VersionManifest mft)
 		throws InvalidManifestException, SQLException {
 		validate(mft);
-		if (mft.getGitCommit() == null ||
-				mft.getGitBranch() == null ||
-				mft.getGitRepo() == null ||
-				(mft.getP2Version() == null && mft.getMavenVersion() == null))
-			throw new InvalidManifestException("Git commit, branch, repo, and one version are required");
+		validateAdd(mft);
 
 		Map<String, String> map = createMap(mft);
 		return doUpdate(map);
@@ -106,7 +123,7 @@ public class MvnP2Util {
 	 * Expects the options to begin at index 1.
 	 * @param args The command-line arguments.
 	 */
-	private static VersionManifest createManifest(String[] args) {
+	protected static VersionManifest createManifest(String[] args) {
 		VersionManifest mft = new VersionManifest();
 
 		int i = 1;
