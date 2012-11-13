@@ -7,6 +7,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import mavenp2versionmatch.db.MavenP2Col;
+import mavenp2versionmatch.exception.MvnP2Exception;
 import mavenp2versionmatch.main.MvnP2Util;
 
 public class MvnP2UtilTest {
@@ -120,7 +121,7 @@ public class MvnP2UtilTest {
 	}
 
 	@Test
-	public void testValidAddInvalidArgument() throws Exception {
+	public void testValidAddInvalidArgument() {
 		// test with a made up argument
 		// expected: string will be accepted, but the bad argument will not be included in our Map.
 		String[] args = new String("add -repo dummyrepo -cmt dummycommit -br dummybranch -p2v 0.0-DUMMY -invalidarg abcd").split(" ");
@@ -129,18 +130,31 @@ public class MvnP2UtilTest {
 		Object goargcontainer[] = new Object[1];
 		goargcontainer[0] = args;
 		
-		Object result = getOptions.invoke(util, goargcontainer);
-		Map<?, ?> m = null;
-		
-		if (result instanceof Map) {
-			m = (Map<?, ?>)result;
+		Object result;
+		try {
+			result = getOptions.invoke(util, goargcontainer);
+			Map<?, ?> m = null;
+
+			if (result instanceof Map) {
+				m = (Map<?, ?>) result;
+			} else {
+				fail("getOptions returned an unexpected type");
+			}
+
+			// assertEquals("Should return false, test arguments contain made up argument -invalidarg being accepted",
+			// false, util.isValidAdd(m));
+			assertEquals(numargs, m.size());
+
+		} catch (InvocationTargetException e) {
+			if (!(e.getCause() instanceof MvnP2Exception)) {
+				e.printStackTrace();
+				fail("unexpected exception");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("unexpected exception");
 		}
-		else {
-			fail("getOptions returned an unexpected type");
-		}
-		
-		//assertEquals("Should return false, test arguments contain made up argument -invalidarg being accepted", false, util.isValidAdd(m));
-		assertEquals(numargs, m.size());
 	}
 
 	/* rethink this

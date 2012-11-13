@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class SQLiteDBI implements DBI{
 	//TODO: we should be opening and closing the connection in each method rather
-	// than making the called open it and then closing it ourselves 
+	// than making the caller open it and then closing it ourselves 
 	private Connection conn;
 	//TODO: standardize the dbName and tableName or load them from a config file
 	private static String dbName;
