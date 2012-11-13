@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.sql.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import org.junit.*;
@@ -48,7 +47,7 @@ public class MvnP2UtilSqliteTest {
 	/* note: use different filenames for each test's database to avoid any unexpected interactions between different unit tests. */
 
 	@Test
-	public void testSqliteDoAddAndFind() throws SQLException, IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	public void testSqliteDoAddAndFind() throws Exception {
 
 		Map<String, String>mAdd = new HashMap<String, String>();
 		mAdd.put("git_repo", "GITREPO");
@@ -58,8 +57,6 @@ public class MvnP2UtilSqliteTest {
 		
 		Object args[] = new Object[1];
 		args[0] = mAdd;
-		
-		Integer oldsize = dbi.findAll().size();
 
 		doAdd.invoke(util, args);
 
@@ -68,7 +65,9 @@ public class MvnP2UtilSqliteTest {
 
 		List<MavenP2Version> mpvList = dbi.find(mFind);
 
-		assertEquals("added one entry to database, should contain " + oldsize + 1 + "instead, contains " + mpvList.size(), mpvList.size(), oldsize + 1);
+		assertEquals("added one entry to database, " +
+				"there should be one matching, but there is " + 
+				mpvList.size(), mpvList.size(), 1);
 		MavenP2Version mpv = mpvList.get(0);
 		assertEquals(mpv.getGitRepo(), "GITREPO");
 		assertEquals(mpv.getGitCommit(), "GITCOMMIT");

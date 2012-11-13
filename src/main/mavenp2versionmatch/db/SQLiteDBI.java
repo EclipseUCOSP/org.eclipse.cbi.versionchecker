@@ -19,8 +19,8 @@ public class SQLiteDBI implements DBI{
 	private static final String DEFAULT_TABLENAME = "maven_p2";
 	
 	public SQLiteDBI(String dbName, String tableName) throws SQLException {
-		this.dbName = dbName;
-		this.tableName = tableName;
+		SQLiteDBI.dbName = dbName;
+		SQLiteDBI.tableName = tableName;
 		//make sure driver is loaded
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -48,7 +48,7 @@ public class SQLiteDBI implements DBI{
 			conn.close();
 		}
 	}
-	//TODO duplicate records are added
+	
 	public void addRecord(Map<String, String> colMap) throws SQLException{
 		if(conn.isClosed())
 			throw new SQLException("Connection is closed, cannot add record");

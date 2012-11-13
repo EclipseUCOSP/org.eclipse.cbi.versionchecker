@@ -21,7 +21,7 @@ public class MvnP2UtilTest {
 	 * what if you pass something like -project -git_commit asdf
 	 * */
 	@BeforeClass
-	public static void setup() throws SecurityException, NoSuchMethodException {
+	public static void setup() throws Exception {
 		util = new MvnP2Util();
 		
 		goParams = new Class[1];
@@ -65,7 +65,7 @@ public class MvnP2UtilTest {
 	}
 	
 	@Test
-	public void testValidAddP2() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	public void testValidAddP2() throws Exception {
 		// test with a valid dummy string for a p2 add
 		String[] args = new String("add -repo dummyrepo -cmt dummycommit -br dummybranch -p2v 0.0-DUMMY").split(" ");
 		int numargs = (args.length - 1) / 2;
@@ -93,7 +93,7 @@ public class MvnP2UtilTest {
 	}
 	
 	@Test
-	public void testValidAddMissingArgs() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	public void testValidAddMissingArgs() throws Exception {
 		// test with an invalid dummy string, missing version info
 		String[] args = new String("add -repo dummyrepo -cmt dummycommit -br dummybranch").split(" ");
 		int numargs = (args.length - 1) / 2;
@@ -120,7 +120,7 @@ public class MvnP2UtilTest {
 	}
 
 	@Test
-	public void testValidAddInvalidArgument() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	public void testValidAddInvalidArgument() throws Exception {
 		// test with a made up argument
 		// expected: string will be accepted, but the bad argument will not be included in our Map.
 		String[] args = new String("add -repo dummyrepo -cmt dummycommit -br dummybranch -p2v 0.0-DUMMY -invalidarg abcd").split(" ");
@@ -158,7 +158,7 @@ public class MvnP2UtilTest {
 	*/
 	
 	@Test
-	public void testValidAddSameArgumentTwice() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
+	public void testValidAddSameArgumentTwice() throws Exception {
 		// Specify the same argument twice
 		// Expected: receive the last specified argument.
 		// Maybe we can warn the user that the same argument was passed twice.

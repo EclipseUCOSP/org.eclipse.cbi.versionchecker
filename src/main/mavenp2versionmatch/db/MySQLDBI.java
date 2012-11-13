@@ -1,6 +1,5 @@
 package mavenp2versionmatch.db;
 
-import java.io.File;
 import java.sql.*;
 import java.util.Iterator;
 import java.util.List;
