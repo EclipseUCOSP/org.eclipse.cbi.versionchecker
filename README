@@ -4,7 +4,7 @@ TODO:
 
 Perform the following steps to run the plugin:
 	- mvn clean install
-	- mvn org.ucosp.eclipse:mvn-p2-vt-plugin:callVC
+	- mvn org.ucosp.eclipse:mvn-p2-vt-plugin:add-maven-version
 	- an add entry for this project is sent to MVNP2Util
 
 If you get the error:
