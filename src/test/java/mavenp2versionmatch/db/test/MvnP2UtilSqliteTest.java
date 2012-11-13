@@ -1,15 +1,20 @@
-package mavenp2versionmatch.main;
+package mavenp2versionmatch.db.test;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.sql.*;
 import java.net.URL;
+import java.lang.reflect.Constructor;
 import junit.framework.TestCase;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
+import mavenp2versionmatch.main.VersionManifest;
+import mavenp2versionmatch.main.InvalidManifestException;
+import mavenp2versionmatch.main.MvnP2Util;
 import mavenp2versionmatch.db.MavenP2Col;
 import mavenp2versionmatch.db.SQLiteDBI;
+import mavenp2versionmatch.db.DBI;
 import mavenp2versionmatch.db.MavenP2Version;
 
 public class MvnP2UtilSqliteTest extends TestCase{
@@ -21,7 +26,14 @@ public class MvnP2UtilSqliteTest extends TestCase{
 
 	public void testSqliteDoAddAndFind() throws SQLException, InvalidManifestException {
 		URL url = getClass().getClassLoader().getResource("empty.db");
-		MvnP2Util util = new MvnP2Util(new SQLiteDBI(url.getPath()));
+		MvnP2Util util = null;
+		try {
+			Constructor<MvnP2Util> cons = MvnP2Util.class.getDeclaredConstructor(DBI.class);
+			cons.setAccessible(true);
+			util = cons.newInstance(new SQLiteDBI(url.getPath()));
+		} catch (Exception e) {
+			fail("Unable to construct a MvnP2Util with a SQLiteDBI");
+		}
 		util.open();
 
 		try {

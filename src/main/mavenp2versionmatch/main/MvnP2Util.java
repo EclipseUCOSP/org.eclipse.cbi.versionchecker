@@ -18,7 +18,7 @@ import mavenp2versionmatch.db.SQLiteDBI;
 
 /** * A utility for managing the version database.  */
 public class MvnP2Util {
-	protected DBI dbi;
+	private DBI dbi;
 
 	public MvnP2Util() {
 		this(new MySQLDBI());
@@ -185,7 +185,7 @@ public class MvnP2Util {
 	 * @param map of db column name and input value
 	 * @return true if a matching record was found to update, false otherwise
 	 */
-	protected boolean doUpdate(Map<String, String> map) throws SQLException {
+	private boolean doUpdate(Map<String, String> map) throws SQLException {
 		Map<String, String> mvnMap = filterMap(map, MavenP2Col.MAVEN_VERSION);
 		Map<String, String> p2Map = filterMap(map, MavenP2Col.P2_VERSION);
 		List<VersionManifest> mvnMatch = dbi.find(mvnMap);

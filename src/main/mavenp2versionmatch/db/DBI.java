@@ -12,5 +12,6 @@ public interface DBI {
 	public void addRecord(Map<String, String> colMap) throws SQLException;
 	public void updateRecord(Map<String, String> matchMap, Map<String, String> updateMap) throws SQLException;
 	public List<VersionManifest> find(Map<String, String> map) throws SQLException;
+	public List<VersionManifest> findAll() throws SQLException;
 }
 

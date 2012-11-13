@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SQLiteDBI implements DBI{
+	//TODO: we should be opening and closing the connection in each method rather
+	// than making the called open it and then closing it ourselves 
 	private Connection conn;
 	//TODO: standardize the dbName and tableName or load them from a config file
 	private static String dbName;
@@ -172,4 +174,23 @@ public class SQLiteDBI implements DBI{
 		return mpvList;
 
     }
+    
+	@Override
+	public List<VersionManifest> findAll()
+			throws SQLException {
+		if(conn.isClosed())
+			throw new SQLException("Connection is closed, cannot find records");
+		
+		String query = "SELECT * FROM " + tableName;
+        
+        PreparedStatement stmt = this.conn.prepareStatement(query);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+		List<VersionManifest> mpvList = VersionManifest.fromResultSet(rs);
+		
+		rs.close();
+		
+		return mpvList;
+	}
 }

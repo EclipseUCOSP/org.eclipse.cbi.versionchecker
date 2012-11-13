@@ -74,7 +74,7 @@
 		</plugins>
 		<sourceDirectory>${basedir}/src/main/</sourceDirectory>
 		<outputDirectory>${basedir}/target/classes</outputDirectory>
-		<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory> 
+		<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
 	</build>
 	<distributionManagement>
 		<repository>

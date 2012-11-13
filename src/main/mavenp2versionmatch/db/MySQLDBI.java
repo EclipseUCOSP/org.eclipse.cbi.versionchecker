@@ -11,6 +11,8 @@ import java.util.Map;
 public class MySQLDBI implements DBI{
 	private Connection conn;
 	//TODO: standardize the dbName and tableName or load them from a config file
+	//TODO: the implementation of connection opening and closing connections between
+	//this class and the SQLiteDBI is inconsistent
 	private static final String url = "jdbc:mysql://localhost:3306/eclipse";
 	private static final String user = "eclipse";
 	private static final String password = "Excellence";
@@ -153,6 +155,25 @@ public class MySQLDBI implements DBI{
 
 		rs.close();
 
+		return mpvList;
+    }
+
+	@Override
+	public List<VersionManifest> findAll()
+			throws SQLException {
+		if(conn.isClosed())
+			throw new SQLException("Connection is closed, cannot find records");
+		
+		String query = "SELECT * FROM " + tableName;
+        
+        PreparedStatement stmt = this.conn.prepareStatement(query);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+		List<VersionManifest> mpvList = VersionManifest.fromResultSet(rs);
+		
+		rs.close();
+		
 		return mpvList;
 	}
 }
