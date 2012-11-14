@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS maven_p2;
+
 CREATE TABLE maven_p2
 (
 	id SERIAL,

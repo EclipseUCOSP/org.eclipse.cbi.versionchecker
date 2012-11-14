@@ -2,29 +2,25 @@ package mavenp2versionmatch.main;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import javax.swing.JOptionPane;
-
-
 import mavenp2versionmatch.db.DBI;
 import mavenp2versionmatch.db.MavenP2Col;
 import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.MySQLDBI;
-import mavenp2versionmatch.db.SQLiteDBI;
+import mavenp2versionmatch.exception.MvnP2Exception;
+
 
 public class MvnP2Util {
-	protected static DBI dbi;
+	private static DBI dbi;
 	
 	/*
 	 * Input must contain git repo and commit and one of p2 version
 	 * or maven version
 	 * @param map database column names and values
 	 */
-	protected static boolean isValidAdd(Map<String, String> map) {
+	private static boolean isValidAdd(Map<String, String> map) {
 		return map.containsKey(MavenP2Col.GIT_REPO.getColName()) &&
 				map.containsKey(MavenP2Col.GIT_COMMIT.getColName()) &&
 				map.containsKey(MavenP2Col.GIT_BRANCH.getColName()) &&
@@ -37,7 +33,7 @@ public class MvnP2Util {
 	 * @param args command line input to main
 	 * @return map of db column name and input value
 	 */
-	protected static Map<String, String> getOptions(String[] args) {
+	private static Map<String, String> getOptions(String[] args) throws MvnP2Exception {
 		Map<String, String> map = new HashMap<String, String>();
 		
 		for (int i = 1; i< args.length; i++) {
@@ -46,8 +42,9 @@ public class MvnP2Util {
 			MavenP2Col e  = MavenP2Col.findByStr(key);
 			
 			if (e == null) {
-				System.err.println("Invalid argument. No entry for " + key);
-				/* mjl: removed a call to System.exit(-1) here. want to handle gracefully, accept any remaining arguments.*/
+				String errormsg = "Invalid argument. No entry for " + key;
+				System.err.println(errormsg);
+				throw new MvnP2Exception(errormsg);
 			}
 			else {
 				map.put(e.getColName(), val);
@@ -67,47 +64,41 @@ public class MvnP2Util {
 	 * Precondition: dbi has been initialized and opened.
 	 * @param true if succeeded, false if failed
 	 */
-	protected static boolean doAdd(Map<String, String> map) {
+	private static void doAdd(Map<String, String> map) throws SQLException, MvnP2Exception {
 		if (!isValidAdd(map)) {
-			System.err.println("Invalid input. Must include git repo, branch, " +
-					"commit and one of maven version and p2 version.");
-			return false; // a failure
+			String errormsg = "Invalid input. Must include git repo, branch, " +
+			"commit and one of maven version and p2 version.";
+			
+			System.err.println(errormsg);
+			throw new MvnP2Exception(errormsg);
 		}
 		else {
 			// check if a matching entry already exists, updating instead of adding if match found
 			if (!doUpdate(map)){
 				// if no match found, add the new record
-				try {
-					dbi.addRecord(map);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return false;
-				}	
-			}
+
+			dbi.addRecord(map);	
+		  }
 		}
-		return true;
 	}
 	
 	/*
 	 * searches a record and prints to standard output.
 	 * Precondition: dbi has been initialized and opened.
 	 * @param map of db column name and input value
-	 * @return true if find succeeded, false if find failed
+	 * @return true if one or more item is found, false otherwise
 	 */
-	protected static boolean doFind(Map<String, String> map) {
-		try {
+	private static boolean doFind(Map<String, String> map) throws SQLException {
 			List<MavenP2Version> mpvList = dbi.find(map);
 			
 			for(MavenP2Version v: mpvList) {
 				System.out.println(v);
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			
+			if(mpvList.size() > 0) {
+				return true;
+			}
 			return false;
-		}
-		return true;
-		
 	}
 	
 	/**
@@ -118,40 +109,46 @@ public class MvnP2Util {
 	 * Precondition: dbi has been initialized and opened.
 	 * @param map of db column name and input value
 	 * @return true if a matching record was found to update, false otherwise or on failure.
+	 * @throws SQLException, MvnP2Exception 
 	 */
-	protected static boolean doUpdate(Map<String, String> map) {
+	private static boolean doUpdate(Map<String, String> map) throws SQLException, MvnP2Exception {
+		
 		if (!isValidAdd(map)) {
-			System.err.println("Invalid input. Must include git repo, branch, " +
-					"commit and one of maven version and p2 version.");
-			return false;
+			String errormsg = "Invalid input. Must include git repo, branch, " +
+			"commit and one of maven version and p2 version.";
+			
+			System.err.println(errormsg);
+			
+			throw new MvnP2Exception(errormsg);
 		}
 		else{
-			try {
-				Map<String, String> mvnMap = filterMap(map, MavenP2Col.MAVEN_VERSION);
-				Map<String, String> p2Map = filterMap(map, MavenP2Col.P2_VERSION);
-				List<MavenP2Version> mvnMatch = dbi.find(mvnMap);
-				List<MavenP2Version> p2Match = dbi.find(p2Map);
-				if (mvnMatch.size() > 0 || p2Match.size() > 0){
-					System.out.println("Matching record found in the database.");
-					// matching record found - ask the user if they would like to update 
-					if(JOptionPane.showConfirmDialog(null, "Matching record found in the database.\nUpdate the existing record?") == JOptionPane.OK_OPTION){
-						if (mvnMatch.size() > 0){
-							for (String key : mvnMap.keySet()) map.remove(key);
-							dbi.updateRecord(mvnMap, map);
-						}
-						else{
-							for (String key : p2Map.keySet()) map.remove(key);
-							dbi.updateRecord(p2Map, map);
-						}
+			Map<String, String> mvnMap = filterMap(map,
+					MavenP2Col.MAVEN_VERSION);
+			Map<String, String> p2Map = filterMap(map, MavenP2Col.P2_VERSION);
+			List<MavenP2Version> mvnMatch = dbi.find(mvnMap);
+			List<MavenP2Version> p2Match = dbi.find(p2Map);
+			
+			if (mvnMatch.size() > 0 || p2Match.size() > 0) {
+				System.out.println("Matching record found in the database.");
+				// matching record found - ask the user if they would like to
+				// update
+				if (JOptionPane
+						.showConfirmDialog(null,
+								"Matching record found in the database." +
+								"\nUpdate the existing record?") == JOptionPane.OK_OPTION) {
+					if (mvnMatch.size() > 0) {
+						for (String key : mvnMap.keySet())
+							map.remove(key);
+						dbi.updateRecord(mvnMap, map);
+					} else {
+						for (String key : p2Map.keySet())
+							map.remove(key);
+						dbi.updateRecord(p2Map, map);
 					}
-					else{
-						System.out.println("Nothing updated in database - user cancellation.");
-					}
-					return true;
+				} else {
+					System.out.println("Nothing updated in database - user cancellation.");
 				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-				return false;
+				return true;
 			}
 		}
 		return false;
@@ -181,32 +178,31 @@ public class MvnP2Util {
 	/**
 	 * main method
 	 * @param args
+	 * @throws MvnP2Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException, MvnP2Exception {
 		if (args.length < 1) {
-			System.err.println("Arguments not found. Must specify one of: " +
-					"add, find, update.");
-			System.exit(-1);
+			String errormsg = "Arguments not found. Must specify one of: " +
+								"add, find, update.";
+			System.err.println(errormsg);
+			throw new MvnP2Exception(errormsg);
 		}
 		
 		Command command = Command.findByStr(args[0]);
 		if (command == null) {
-			System.err.println("Command not found: " + args[0]);
-			System.exit(-1);
+			String errormsg = "Command not found: " + args[0];
+			
+			System.err.println(errormsg);
+			throw new MvnP2Exception(errormsg);
 		}
 		Map<String, String> map = getOptions(args);
-		
-		try{
-			dbi = new MySQLDBI(); // initialize database interface.
-			dbi.openDB();
-		}catch(SQLException e){
-			System.err.println("Couldn't initialize database interface.");
-			System.exit(-1);
-		}
+
+		dbi = new MySQLDBI(); // initialize database interface.
+		dbi.openDB();
 		
 		switch (command) {
 		case ADD:
-			if (!doAdd(map)) System.out.println("Failed to complete add successfully.");
+			doAdd(map);
 			break;
 		case FIND:
 			if (!doFind(map)) System.out.println("No matching record found in the database, or other database failure.");
@@ -217,11 +213,12 @@ public class MvnP2Util {
 		default:
 			System.err.println("Unexpected command. Should never get here.");
 
-		try{
+		try {
 			dbi.closeDB(); // done with DBI, close it.
-		}catch(SQLException e){
-			System.err.println("Couldn't close database interface.");
-			System.exit(-1);
+		} catch(SQLException e) {
+			String errormsg = "Couldn't close database interface.";
+			System.err.println(errormsg);
+			throw new MvnP2Exception(errormsg);
 		}
 
 

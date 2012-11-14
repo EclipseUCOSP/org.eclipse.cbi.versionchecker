@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SQLiteDBI implements DBI{
+	//TODO: we should be opening and closing the connection in each method rather
+	// than making the caller open it and then closing it ourselves 
 	private Connection conn;
 	//TODO: standardize the dbName and tableName or load them from a config file
 	private static String dbName;
@@ -17,8 +19,8 @@ public class SQLiteDBI implements DBI{
 	private static final String DEFAULT_TABLENAME = "maven_p2";
 	
 	public SQLiteDBI(String dbName, String tableName) throws SQLException {
-		this.dbName = dbName;
-		this.tableName = tableName;
+		SQLiteDBI.dbName = dbName;
+		SQLiteDBI.tableName = tableName;
 		//make sure driver is loaded
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -46,7 +48,7 @@ public class SQLiteDBI implements DBI{
 			conn.close();
 		}
 	}
-	//TODO duplicate records are added
+	
 	public void addRecord(Map<String, String> colMap) throws SQLException{
 		if(conn.isClosed())
 			throw new SQLException("Connection is closed, cannot add record");
@@ -170,4 +172,23 @@ public class SQLiteDBI implements DBI{
 		return mpvList;
 
     }
+    
+	@Override
+	public List<MavenP2Version> findAll()
+			throws SQLException {
+		if(conn.isClosed())
+			throw new SQLException("Connection is closed, cannot find records");
+		
+		String query = "SELECT * FROM " + tableName;
+        
+        PreparedStatement stmt = this.conn.prepareStatement(query);
+        
+        ResultSet rs = stmt.executeQuery();
+        
+		List<MavenP2Version> mpvList = MavenP2Version.convertFromResultSet(rs);
+		
+		rs.close();
+		
+		return mpvList;
+	}
 }

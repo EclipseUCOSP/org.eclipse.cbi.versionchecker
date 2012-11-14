@@ -1,12 +1,13 @@
-package mavenp2versionmatch.db;
-import java.util.Map;
-import junit.framework.TestCase;
+package mavenp2versionmatch.db.test;
 
-public class MavenP2ColTest extends TestCase{
-	public MavenP2ColTest(String name){
-		super(name);
-	}
-	public void testFindByStrKnown() throws Exception{
+import static org.junit.Assert.*;
+import mavenp2versionmatch.db.MavenP2Col;
+import org.junit.Test;
+
+public class MavenP2ColTest {
+
+	@Test
+	public void testFindByStrKnown() {
 		// test argument names
 		ArgColPair[] args = {
 			new ArgColPair("-repo", "git_repo"),
@@ -23,7 +24,8 @@ public class MavenP2ColTest extends TestCase{
 		}
 
 	}
-	public void testFindByStrUnknown() throws Exception{
+	@Test
+	public void testFindByStrUnknown() {
 		// test for failure when passing in unknown argument names.
 		MavenP2Col col = MavenP2Col.findByStr("-notarg");
 		assertEquals(null, col);
