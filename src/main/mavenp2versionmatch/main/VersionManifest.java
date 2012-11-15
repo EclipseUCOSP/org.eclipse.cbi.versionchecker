@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class VersionManifest {
 	// Fields
@@ -113,7 +115,7 @@ public class VersionManifest {
 	 * Create a map from this manifest.
 	 *
 	 */
-	private Map<String,String> createMap() {
+	public Map<String,String> createMap() {
 		Map<String, String> map = new HashMap<String, String>();
 
 		String commit = this.getGitCommit();

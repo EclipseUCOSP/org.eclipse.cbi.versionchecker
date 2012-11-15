@@ -2,6 +2,8 @@ package mavenp2versionmatch.exception;
 
 public class DBIException extends Exception {
 
+	Exception source; // Exception used to create this, or just null
+
 	public DBIException() {
 		super();
 	}
@@ -17,5 +19,11 @@ public class DBIException extends Exception {
 	public DBIException(String message, Throwable cause) {
 		super(message, cause);
 	}
+
+	public DBIException(Exception e){
+		super(e.getMessage(), e.getCause());
+		source = e;
+	}
+
 
 }
