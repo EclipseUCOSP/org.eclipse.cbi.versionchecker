@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public abstract class JdbcDBI implements DBI{
 	protected Connection conn;
@@ -22,6 +23,11 @@ public abstract class JdbcDBI implements DBI{
 	//TODO: standardize the dbName and tableName or load them from a config file
 	//TODO: the implementation of connection opening and closing connections between
 	//this class and the SQLiteDBI is inconsistent
+	
+	protected JdbcDBI(){
+		// initialize config
+		config = new HashMap<String,String>();
+	}
 
 	public abstract void open() throws DBIException;
 

@@ -17,6 +17,7 @@ public class MySQLDBI extends JdbcDBI{
 
 
 	public MySQLDBI (String url, String dbName, String tableName, String user, String password) {
+		super();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {

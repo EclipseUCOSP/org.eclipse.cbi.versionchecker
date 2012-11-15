@@ -15,6 +15,7 @@ public class SQLiteDBI extends JdbcDBI{
 	private static final String DEFAULT_TABLENAME = "maven_p2";
 	
 	public SQLiteDBI(String dbName, String tableName){
+		super();
 		config.put(JdbcDBI.CONFIG_DBNAME, dbName);
 		config.put(JdbcDBI.CONFIG_TABLENAME, tableName);
 
