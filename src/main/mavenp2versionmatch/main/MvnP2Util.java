@@ -1,159 +1,209 @@
 package mavenp2versionmatch.main;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.Set;
 import javax.swing.JOptionPane;
+
 import mavenp2versionmatch.db.DBI;
 import mavenp2versionmatch.db.MavenP2Col;
 import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.MySQLDBI;
-import mavenp2versionmatch.exception.MvnP2Exception;
+import mavenp2versionmatch.db.SQLiteDBI;
+import mavenp2versionmatch.exception.MvnP2Exception;;
 
-
+/** * A utility for managing the version database.  */
 public class MvnP2Util {
-	private static DBI dbi;
-	
-	/*
-	 * Input must contain git repo and commit and one of p2 version
-	 * or maven version
-	 * @param map database column names and values
-	 */
-	private static boolean isValidAdd(Map<String, String> map) {
-		return map.containsKey(MavenP2Col.GIT_REPO.getColName()) &&
-				map.containsKey(MavenP2Col.GIT_COMMIT.getColName()) &&
-				map.containsKey(MavenP2Col.GIT_BRANCH.getColName()) &&
-				(map.containsKey(MavenP2Col.MAVEN_VERSION.getColName()) ||
-						map.containsKey(MavenP2Col.P2_VERSION.getColName()));
+	private DBI dbi;
+
+	public MvnP2Util() {
+		this(new MySQLDBI());
 	}
-	
-	/*
-	 * get command line options starting at index 1
-	 * @param args command line input to main
-	 * @return map of db column name and input value
+
+	protected MvnP2Util(DBI dbi) {
+		this.dbi = dbi;
+	}
+
+	public void open() throws SQLException {
+		dbi.open();
+	}
+
+	public void close() throws SQLException {
+		dbi.close();
+	}
+
+	/**
+	 * Validates a version manifest.
+	 * 
+	 * Assumes that it is valid to omit every value. Only verifies that
+	 * values that do exist are valid for that field.
 	 */
-	private static Map<String, String> getOptions(String[] args) throws MvnP2Exception {
+	protected static void validate(VersionManifest mft) throws InvalidManifestException {
+		// TODO Implement.
+		String commit = mft.getGitCommit();
+		if (commit != null && !Pattern.matches("[a-f0-9]{40}", commit)) {
+			throw new InvalidManifestException("Invalid Git commit: " + commit);
+		}
+
+		// We should make sure that versions are valid, project is not just
+		// whitespace.
+	}
+
+	/**
+	 * Validates a version manifest for an add.
+	 *
+	 * Tests that all the required fields:
+	 *  * commit
+	 *  * branch
+	 *  * repo
+	 * are present, and that at least one of the version fields:
+	 *  * p2 version
+	 *  * Maven version
+	 * is present.
+	 */
+	protected static void validateAdd(VersionManifest mft) throws InvalidManifestException
+	{
+		if (mft.getGitCommit() == null ||
+				mft.getGitBranch() == null ||
+				mft.getGitRepo() == null ||
+				(mft.getP2Version() == null && mft.getMavenVersion() == null))
+			throw new InvalidManifestException("Git commit, branch, repo, and one version are required");
+	}
+
+	/**
+	 * Adds a version manifest to the database.
+	 */
+	public void add(VersionManifest mft)
+		throws InvalidManifestException, SQLException {
+		validate(mft);
+		validateAdd(mft);
+
+		Map<String,String> map = createMap(mft);
+		if (!doUpdate(map)) {
+			dbi.addRecord(map);
+		}
+	}
+
+	/**
+	 * Updates a version manifest.
+	 *
+	 * @return true if a record was updated, false otherwise
+	 */
+	public boolean update(VersionManifest mft)
+		throws InvalidManifestException, SQLException {
+		validate(mft);
+		validateAdd(mft);
+
+		Map<String, String> map = createMap(mft);
+		return doUpdate(map);
+	}
+
+	/**
+	 * Finds all version manifests matching this manifest.
+	 *
+	 * Finds the manifests whose values match all those in this manifest. Null
+	 * values are equivalent to wildcards.
+	 */
+	public List<VersionManifest> find(VersionManifest mft)
+		throws InvalidManifestException, SQLException {
+		validate(mft);
+
+		Map<String,String> map = createMap(mft);
+
+		return dbi.find(map);
+	}
+
+	/**
+	 * Parses a version manifest from command-line options.
+	 *
+	 * Expects the options to begin at index 1.
+	 * @param args The command-line arguments.
+	 */
+	protected static VersionManifest createManifest(String[] args) {
+		VersionManifest mft = new VersionManifest();
+
+		int i = 1;
+		// Ensure we've always got at least 2 more arguments available
+		while(i < args.length - 1) {
+			String key = args[i++];
+			String val = args[i++];
+			MavenP2Col col = MavenP2Col.findByStr(key);
+
+			if (col == null) {
+				throw new IllegalArgumentException("Unrecognized option: " + key);
+			}
+
+			switch (col) {
+				case GIT_COMMIT: mft.setGitCommit(val); break;
+				case GIT_BRANCH: mft.setGitBranch(val); break;
+				case GIT_REPO: mft.setGitRepo(val); break;
+				case PROJECT: mft.setProject(val); break;
+				case P2_VERSION: mft.setP2Version(val); break;
+				case MAVEN_VERSION: mft.setMavenVersion(val); break;
+				default: assert false : "Unhandled argument: " + col.toString();
+			}
+		}
+
+		return mft;
+	}
+
+	/**
+	 * Create a map from a manifest.
+	 *
+	 * Temporary - until the DBI is updated to use manifests.
+	 */
+	private static Map<String,String> createMap(VersionManifest mft) {
 		Map<String, String> map = new HashMap<String, String>();
-		
-		for (int i = 1; i< args.length; i++) {
-			String key = args[i];
-			String val = args[++i];
-			MavenP2Col e  = MavenP2Col.findByStr(key);
-			
-			if (e == null) {
-				String errormsg = "Invalid argument. No entry for " + key;
-				System.err.println(errormsg);
-				throw new MvnP2Exception(errormsg);
-			}
-			else {
-				map.put(e.getColName(), val);
-			}
-		}
-		//TODO: For debugging. Add to log or usr msg 
-		for (String key : map.keySet()) {
-			System.out.print(key + ": ");
-			System.out.println(map.get(key));
-		}
+
+		String commit = mft.getGitCommit();
+		String repo = mft.getGitRepo();
+		String branch = mft.getGitBranch();
+		String project = mft.getProject();
+		String p2Version = mft.getP2Version();
+		String mavenVersion = mft.getMavenVersion();
+
+		if (commit != null) map.put(MavenP2Col.GIT_COMMIT.getColName(), commit);
+		if (branch != null) map.put(MavenP2Col.GIT_BRANCH.getColName(), branch);
+		if (repo != null) map.put(MavenP2Col.GIT_REPO.getColName(), repo);
+		if (project != null) map.put(MavenP2Col.PROJECT.getColName(), project);
+		if (p2Version != null) map.put(MavenP2Col.P2_VERSION.getColName(), p2Version);
+		if (mavenVersion != null) map.put(MavenP2Col.MAVEN_VERSION.getColName(), mavenVersion);
+
 		return map;
 	}
-	
-	/*
-	 * Attempts to insert a record, checking if any matching entries already exist
-	 * in the database first.
-	 * Precondition: dbi has been initialized and opened.
-	 * @param true if succeeded, false if failed
-	 */
-	private static void doAdd(Map<String, String> map) throws SQLException, MvnP2Exception {
-		if (!isValidAdd(map)) {
-			String errormsg = "Invalid input. Must include git repo, branch, " +
-			"commit and one of maven version and p2 version.";
-			
-			System.err.println(errormsg);
-			throw new MvnP2Exception(errormsg);
-		}
-		else {
-			// check if a matching entry already exists, updating instead of adding if match found
-			if (!doUpdate(map)){
-				// if no match found, add the new record
 
-			dbi.addRecord(map);	
-		  }
-		}
-	}
-	
-	/*
-	 * searches a record and prints to standard output.
-	 * Precondition: dbi has been initialized and opened.
-	 * @param map of db column name and input value
-	 * @return true if one or more item is found, false otherwise
-	 */
-	private static boolean doFind(Map<String, String> map) throws SQLException {
-			List<MavenP2Version> mpvList = dbi.find(map);
-			
-			for(MavenP2Version v: mpvList) {
-				System.out.println(v);
-			}
-			
-			if(mpvList.size() > 0) {
-				return true;
-			}
-			return false;
-	}
-	
+
 	/**
 	 * Attempts to update a record using the map given, searching for matches in
 	 * for the hardcoded list of columns (as seen in filterMap). If any matches found, 
 	 * prompts the user to confirm an update, updating if confirmed and canceling 
 	 * the database call otherwise.
-	 * Precondition: dbi has been initialized and opened.
 	 * @param map of db column name and input value
-	 * @return true if a matching record was found to update, false otherwise or on failure.
-	 * @throws SQLException, MvnP2Exception 
+	 * @return true if a matching record was found to update, false otherwise
 	 */
-	private static boolean doUpdate(Map<String, String> map) throws SQLException, MvnP2Exception {
-		
-		if (!isValidAdd(map)) {
-			String errormsg = "Invalid input. Must include git repo, branch, " +
-			"commit and one of maven version and p2 version.";
-			
-			System.err.println(errormsg);
-			
-			throw new MvnP2Exception(errormsg);
-		}
-		else{
-			Map<String, String> mvnMap = filterMap(map,
-					MavenP2Col.MAVEN_VERSION);
-			Map<String, String> p2Map = filterMap(map, MavenP2Col.P2_VERSION);
-			List<MavenP2Version> mvnMatch = dbi.find(mvnMap);
-			List<MavenP2Version> p2Match = dbi.find(p2Map);
-			
-			if (mvnMatch.size() > 0 || p2Match.size() > 0) {
-				System.out.println("Matching record found in the database.");
-				// matching record found - ask the user if they would like to
-				// update
-				if (JOptionPane
-						.showConfirmDialog(null,
-								"Matching record found in the database." +
-								"\nUpdate the existing record?") == JOptionPane.OK_OPTION) {
-					if (mvnMatch.size() > 0) {
-						for (String key : mvnMap.keySet())
-							map.remove(key);
-						dbi.updateRecord(mvnMap, map);
-					} else {
-						for (String key : p2Map.keySet())
-							map.remove(key);
-						dbi.updateRecord(p2Map, map);
-					}
-				} else {
-					System.out.println("Nothing updated in database - user cancellation.");
-				}
-				return true;
+	private boolean doUpdate(Map<String, String> map) throws SQLException {
+		Map<String, String> mvnMap = filterMap(map, MavenP2Col.MAVEN_VERSION);
+		Map<String, String> p2Map = filterMap(map, MavenP2Col.P2_VERSION);
+		List<VersionManifest> mvnMatch = dbi.find(mvnMap);
+		List<VersionManifest> p2Match = dbi.find(p2Map);
+		if (mvnMatch.size() > 0 || p2Match.size() > 0){
+			if (mvnMatch.size() > 0) {
+				for (String key : mvnMap.keySet()) map.remove(key);
+				dbi.updateRecord(mvnMap, map);
+			} else {
+				for (String key : p2Map.keySet()) map.remove(key);
+				dbi.updateRecord(p2Map, map);
 			}
+			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Filter a given Map of database values to only include required values
 	 * (for use in determining whether a given record already exists).
@@ -170,58 +220,79 @@ public class MvnP2Util {
 					key == MavenP2Col.GIT_BRANCH.getColName() ||
 					key == filter.getColName()){
 				result.put(key, map.get(key));
-			}
+					}
 		}
 		return result;
 	}
-	
+
 	/**
 	 * main method
 	 * @param args
-	 * @throws MvnP2Exception 
 	 */
-	public static void main(String[] args) throws SQLException, MvnP2Exception {
+	public static void main(String[] args) throws MvnP2Exception{
 		if (args.length < 1) {
 			String errormsg = "Arguments not found. Must specify one of: " +
-								"add, find, update.";
+					"add, find, update.";
 			System.err.println(errormsg);
 			throw new MvnP2Exception(errormsg);
 		}
-		
+
 		Command command = Command.findByStr(args[0]);
 		if (command == null) {
 			String errormsg = "Command not found: " + args[0];
-			
 			System.err.println(errormsg);
 			throw new MvnP2Exception(errormsg);
 		}
-		Map<String, String> map = getOptions(args);
 
-		dbi = new MySQLDBI(); // initialize database interface.
-		dbi.openDB();
-		
-		switch (command) {
-		case ADD:
-			doAdd(map);
-			break;
-		case FIND:
-			if (!doFind(map)) System.out.println("No matching record found in the database, or other database failure.");
-			break;
-		case UPDATE:
-			if (!doUpdate(map)) System.out.println("No matching record found in the database - update cancelled.");
-			break;
-		default:
-			System.err.println("Unexpected command. Should never get here.");
+		MvnP2Util util = new MvnP2Util();
+		VersionManifest mft = createManifest(args);
 
 		try {
-			dbi.closeDB(); // done with DBI, close it.
+			util.open();
+		} catch(SQLException e) {
+			String errormsg = "Couldn't initialize database interface.";
+			System.err.println(errormsg);
+			e.printStackTrace();
+			throw new MvnP2Exception(errormsg);
+		}
+
+		try {
+			switch (command) {
+				case ADD:
+					util.add(mft);
+					break;
+				case FIND:
+					List<VersionManifest> mfts = util.find(mft);
+					for (VersionManifest vm : mfts) {
+						System.out.println(vm.toString());
+					}
+					if (mfts.size() == 0) {
+						System.err.println("No matching records found.");
+					}
+					break;
+				case UPDATE:
+					if (util.update(mft)) {
+						System.err.println("Updated record.");
+					} else {
+						System.err.println("No matching record found.");
+					}
+					break;
+				default:
+					assert false : "Unhandled command: " + command.toString();
+			}
+		} catch (InvalidManifestException e) {
+			System.err.println("Invalid manifest: " + e.getMessage());
+		} catch (SQLException e) {
+			System.err.println("Connection error.");
+			e.printStackTrace();
+		}
+
+		try {
+			util.close();
 		} catch(SQLException e) {
 			String errormsg = "Couldn't close database interface.";
 			System.err.println(errormsg);
 			throw new MvnP2Exception(errormsg);
-		}
-
-
 		}
 	}
 

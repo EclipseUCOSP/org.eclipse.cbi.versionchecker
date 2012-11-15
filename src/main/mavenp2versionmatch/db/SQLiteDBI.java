@@ -1,5 +1,7 @@
 package mavenp2versionmatch.db;
 
+import mavenp2versionmatch.main.VersionManifest;
+
 import java.io.File;
 import java.sql.*;
 import java.util.Iterator;
@@ -39,11 +41,11 @@ public class SQLiteDBI implements DBI{
 		this(DEFAULT_DBNAME);
 	}
 	
-	public void openDB() throws SQLException {
+	public void open() throws SQLException {
 		conn = DriverManager.getConnection("jdbc:sqlite:" + dbName);
 	}
 	
-	public void closeDB() throws SQLException {
+	public void close() throws SQLException {
 		if(!conn.isClosed()) {
 			conn.close();
 		}
@@ -135,7 +137,7 @@ public class SQLiteDBI implements DBI{
 		
 	}
 
-    public List<MavenP2Version> find(Map<String, String> map) throws SQLException {
+    public List<VersionManifest> find(Map<String, String> map) throws SQLException {
 		if(conn.isClosed())
 			throw new SQLException("Connection is closed, cannot find record");
         
@@ -165,7 +167,7 @@ public class SQLiteDBI implements DBI{
         
         ResultSet rs = stmt.executeQuery();
         
-		List<MavenP2Version> mpvList = MavenP2Version.convertFromResultSet(rs);
+		List<VersionManifest> mpvList = VersionManifest.fromResultSet(rs);
 		
 		rs.close();
 		
@@ -174,7 +176,7 @@ public class SQLiteDBI implements DBI{
     }
     
 	@Override
-	public List<MavenP2Version> findAll()
+	public List<VersionManifest> findAll()
 			throws SQLException {
 		if(conn.isClosed())
 			throw new SQLException("Connection is closed, cannot find records");
@@ -185,7 +187,7 @@ public class SQLiteDBI implements DBI{
         
         ResultSet rs = stmt.executeQuery();
         
-		List<MavenP2Version> mpvList = MavenP2Version.convertFromResultSet(rs);
+		List<VersionManifest> mpvList = VersionManifest.fromResultSet(rs);
 		
 		rs.close();
 		
