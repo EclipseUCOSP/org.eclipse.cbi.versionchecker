@@ -26,8 +26,12 @@ public abstract class JdbcDBI implements DBI{
 	public abstract void open() throws DBIException;
 
 	public void close() throws DBIException {
-		if(!conn.isClosed()) {
-			conn.close();
+		try{
+			if(!conn.isClosed()) {
+				conn.close();
+			}
+		}catch(SQLException e){
+			throw new DBIException(e);
 		}
 	}
 
@@ -49,11 +53,31 @@ public abstract class JdbcDBI implements DBI{
 			throw new DBIException(e); // create a generic DBIException from this SQLException and throw it
 		}
 	}
+	public void updateRecordFromMap(Map<String,String> match, Map<String,String> update) throws DBIException{
+		try{
+			this.open();
+			this.updateRecordFromMapQuery(match, update);
+			this.close();
+		}catch(SQLException e){
+			throw new DBIException(e); // create a generic DBIException from this SQLException and throw it
+		}
+	}
 	public List<VersionManifest> find(VersionManifest vm) throws DBIException{
 		List<VersionManifest> results;
 		try{
 			this.open();
 			results = this.findFromMapQuery(vm.createMap());
+			this.close();
+		}catch(SQLException e){
+			throw new DBIException(e); // create a generic DBIException from this SQLException and throw it
+		}
+		return results;
+	}
+	public List<VersionManifest> findFromMap(Map<String, String> map) throws DBIException{
+		List<VersionManifest> results;
+		try{
+			this.open();
+			results = this.findFromMapQuery(map);
 			this.close();
 		}catch(SQLException e){
 			throw new DBIException(e); // create a generic DBIException from this SQLException and throw it

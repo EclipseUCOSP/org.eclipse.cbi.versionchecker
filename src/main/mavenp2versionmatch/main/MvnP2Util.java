@@ -1,6 +1,5 @@
 package mavenp2versionmatch.main;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +14,8 @@ import mavenp2versionmatch.db.MavenP2Col;
 import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.MySQLDBI;
 import mavenp2versionmatch.db.SQLiteDBI;
-import mavenp2versionmatch.exception.MvnP2Exception;;
+import mavenp2versionmatch.exception.MvnP2Exception;
+import mavenp2versionmatch.exception.DBIException;
 
 /** * A utility for managing the version database.  */
 public class MvnP2Util {
@@ -27,14 +27,6 @@ public class MvnP2Util {
 
 	protected MvnP2Util(DBI dbi) {
 		this.dbi = dbi;
-	}
-
-	public void open() throws SQLException {
-		dbi.open();
-	}
-
-	public void close() throws SQLException {
-		dbi.close();
 	}
 
 	/**
@@ -79,13 +71,13 @@ public class MvnP2Util {
 	 * Adds a version manifest to the database.
 	 */
 	public void add(VersionManifest mft)
-		throws InvalidManifestException, SQLException {
+		throws InvalidManifestException, DBIException {
 		validate(mft);
 		validateAdd(mft);
 
-		Map<String,String> map = createMap(mft);
+		Map<String,String> map = mft.createMap();
 		if (!doUpdate(map)) {
-			dbi.addRecord(map);
+			dbi.addRecord(mft);
 		}
 	}
 
@@ -95,11 +87,11 @@ public class MvnP2Util {
 	 * @return true if a record was updated, false otherwise
 	 */
 	public boolean update(VersionManifest mft)
-		throws InvalidManifestException, SQLException {
+		throws InvalidManifestException, DBIException {
 		validate(mft);
 		validateAdd(mft);
 
-		Map<String, String> map = createMap(mft);
+		Map<String, String> map = mft.createMap();
 		return doUpdate(map);
 	}
 
@@ -110,12 +102,10 @@ public class MvnP2Util {
 	 * values are equivalent to wildcards.
 	 */
 	public List<VersionManifest> find(VersionManifest mft)
-		throws InvalidManifestException, SQLException {
+		throws InvalidManifestException, DBIException {
 		validate(mft);
 
-		Map<String,String> map = createMap(mft);
-
-		return dbi.find(map);
+		return dbi.find(mft);
 	}
 
 	/**
@@ -186,18 +176,19 @@ public class MvnP2Util {
 	 * @param map of db column name and input value
 	 * @return true if a matching record was found to update, false otherwise
 	 */
-	private boolean doUpdate(Map<String, String> map) throws SQLException {
+	private boolean doUpdate(Map<String, String> map) throws DBIException {
+		//TODO: Change doUpdate to use VersionManifest
 		Map<String, String> mvnMap = filterMap(map, MavenP2Col.MAVEN_VERSION);
 		Map<String, String> p2Map = filterMap(map, MavenP2Col.P2_VERSION);
-		List<VersionManifest> mvnMatch = dbi.find(mvnMap);
-		List<VersionManifest> p2Match = dbi.find(p2Map);
+		List<VersionManifest> mvnMatch = dbi.findFromMap(mvnMap);
+		List<VersionManifest> p2Match = dbi.findFromMap(p2Map);
 		if (mvnMatch.size() > 0 || p2Match.size() > 0){
 			if (mvnMatch.size() > 0) {
 				for (String key : mvnMap.keySet()) map.remove(key);
-				dbi.updateRecord(mvnMap, map);
+				dbi.updateRecordFromMap(mvnMap, map);
 			} else {
 				for (String key : p2Map.keySet()) map.remove(key);
-				dbi.updateRecord(p2Map, map);
+				dbi.updateRecordFromMap(p2Map, map);
 			}
 			return true;
 		}
@@ -248,15 +239,6 @@ public class MvnP2Util {
 		VersionManifest mft = createManifest(args);
 
 		try {
-			util.open();
-		} catch(SQLException e) {
-			String errormsg = "Couldn't initialize database interface.";
-			System.err.println(errormsg);
-			e.printStackTrace();
-			throw new MvnP2Exception(errormsg);
-		}
-
-		try {
 			switch (command) {
 				case ADD:
 					util.add(mft);
@@ -282,18 +264,11 @@ public class MvnP2Util {
 			}
 		} catch (InvalidManifestException e) {
 			System.err.println("Invalid manifest: " + e.getMessage());
-		} catch (SQLException e) {
+		} catch (DBIException e) {
 			System.err.println("Connection error.");
 			e.printStackTrace();
 		}
 
-		try {
-			util.close();
-		} catch(SQLException e) {
-			String errormsg = "Couldn't close database interface.";
-			System.err.println(errormsg);
-			throw new MvnP2Exception(errormsg);
-		}
 	}
 
 }
