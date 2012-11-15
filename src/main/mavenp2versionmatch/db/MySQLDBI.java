@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MySQLDBI extends JdbcDBI{
-	private Connection conn;
 	//TODO: standardize the dbName and tableName or load them from a config file
 	//TODO: the implementation of connection opening and closing connections between
 	//this class and the SQLiteDBI is inconsistent
