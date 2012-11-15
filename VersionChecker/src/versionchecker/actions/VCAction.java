@@ -41,60 +41,60 @@ public class VCAction implements IWorkbenchWindowActionDelegate {
 	 */
 	public void run(IAction action) {
 		
-		VCXmlParser xp = new VCXmlParser();
-		final Object[] data = xp.parse();
-	       javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	           public void run() {
-	               VCArtifactTable.createAndShowGUI(data);
-	           }
-	       });
+//		VCXmlParser xp = new VCXmlParser();
+//		final Object[] data = xp.parse();
+//	       javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//	           public void run() {
+//	               VCArtifactTable.createAndShowGUI(data);
+//	           }
+//	       });
 		
 		
-//		Dimension d = new Dimension(400,400);
-//		
-//		JFrame f = new JFrame();
-//		f.setSize(d);
-//		f.setResizable(false);
-//		
-//		VCGitWindow vcgw = new VCGitWindow(f);
-//		vcgw.show();
-//		
-//		if (vcgw.status()){
-//			JFileChooser jfc = new JFileChooser();
-//			jfc.setDialogTitle("Select Destination Folder");
-//			jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//			int ret = jfc.showOpenDialog(f);
-//			
-//			if (ret == JFileChooser.APPROVE_OPTION){
-//				File loc = jfc.getSelectedFile();
-//				FileRepositoryBuilder builder = new FileRepositoryBuilder();
-//				Repository repository;
-//				
-//				try {
-//					repository = builder.setGitDir(loc).readEnvironment().findGitDir().build();
-//					Git git = new Git(repository);              
-//					CloneCommand clone = git.cloneRepository();
-//					clone.setBare(false);
-//					clone.setCloneAllBranches(true);
-//					clone.setDirectory(loc).setURI(vcgw.getURL());
-//					UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(vcgw.getLogin(), vcgw.getPass());
-//					clone.setCredentialsProvider(user);
-//					clone.call();
-//					
-//					MessageDialog.openInformation(
-//							window.getShell(),
-//							"VersionChecker",
-//							"Clone successfully");
-//	
-//				} catch (Exception e) {
-//					MessageDialog.openInformation(
-//							window.getShell(),
-//							"VersionChecker",
-//							e.getMessage());
-//				}
-//	
-//			}
-//		}
+		Dimension d = new Dimension(400,400);
+		
+		JFrame f = new JFrame();
+		f.setSize(d);
+		f.setResizable(false);
+		
+		VCGitWindow vcgw = new VCGitWindow(f);
+		vcgw.show();
+		
+		if (vcgw.status()){
+			JFileChooser jfc = new JFileChooser();
+			jfc.setDialogTitle("Select Destination Folder");
+			jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int ret = jfc.showOpenDialog(f);
+			
+			if (ret == JFileChooser.APPROVE_OPTION){
+				File loc = jfc.getSelectedFile();
+				FileRepositoryBuilder builder = new FileRepositoryBuilder();
+				Repository repository;
+				
+				try {
+					repository = builder.setGitDir(loc).readEnvironment().findGitDir().build();
+					Git git = new Git(repository);              
+					CloneCommand clone = git.cloneRepository();
+					clone.setBare(false);
+					clone.setCloneAllBranches(true);
+					clone.setDirectory(loc).setURI(vcgw.getURL());
+					UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(vcgw.getLogin(), vcgw.getPass());
+					clone.setCredentialsProvider(user);
+					clone.call();
+					
+					MessageDialog.openInformation(
+							window.getShell(),
+							"VersionChecker",
+							"Clone successfully");
+	
+				} catch (Exception e) {
+					MessageDialog.openInformation(
+							window.getShell(),
+							"VersionChecker",
+							e.getMessage());
+				}
+	
+			}
+		}
 
 
 	}
