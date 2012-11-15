@@ -3,11 +3,7 @@ package mavenp2versionmatch.db;
 import mavenp2versionmatch.main.VersionManifest;
 import mavenp2versionmatch.exception.DBIException;
 
-import java.io.File;
 import java.sql.*;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 public class MySQLDBI extends JdbcDBI{
 	//TODO: standardize the dbName and tableName or load them from a config file

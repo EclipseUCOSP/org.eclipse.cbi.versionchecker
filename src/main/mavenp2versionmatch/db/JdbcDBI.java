@@ -50,22 +50,26 @@ public abstract class JdbcDBI implements DBI{
 		}
 	}
 	public List<VersionManifest> find(VersionManifest vm) throws DBIException{
+		List<VersionManifest> results;
 		try{
 			this.open();
-			return this.findFromMapQuery(vm.createMap());
+			results = this.findFromMapQuery(vm.createMap());
 			this.close();
 		}catch(SQLException e){
 			throw new DBIException(e); // create a generic DBIException from this SQLException and throw it
 		}
+		return results;
 	}
 	public List<VersionManifest> findAll() throws DBIException{
+		List<VersionManifest> results;
 		try{
 			this.open();
-			return this.findAllQuery();
+			results = this.findAllQuery();
 			this.close();
 		}catch(SQLException e){
 			throw new DBIException(e); // create a generic DBIException from this SQLException and throw it
 		}
+		return results;
 	}
 
 
