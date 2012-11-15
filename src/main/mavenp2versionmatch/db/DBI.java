@@ -10,9 +10,9 @@ import mavenp2versionmatch.exception.DBIException;
 public interface DBI {
 	public void open() throws DBIException;
 	public void close() throws DBIException;
-	public void addRecord(Map<String, String> colMap) throws DBIException;
-	public void updateRecord(Map<String, String> matchMap, Map<String, String> updateMap) throws DBIException;
-	public List<VersionManifest> find(Map<String, String> map) throws DBIException;
+	public void addRecord(VersionManifest vm) throws DBIException;
+	public void updateRecord(VersionManifest match, VersionManifest update) throws DBIException;
+	public List<VersionManifest> find(VersionManifest vm) throws DBIException;
 	public List<VersionManifest> findAll() throws DBIException;
 }
 
