@@ -113,40 +113,6 @@ public class VCArtifactTable extends JPanel {
        System.out.println("--------------------------");
    }
 
-   /**
-    * Create the GUI and show it.  For thread safety,
-    * this method should be invoked from the
-    * event-dispatching thread.
-    */
-   public static void createAndShowGUI(Object[] data) {
-       //Create and set up the window.
-       JFrame frame = new JFrame("Version Checker");
-       
-       JPanel mainPanel = new JPanel();
-       frame.setContentPane(mainPanel);
-       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
-       //Create and set up the content pane.
-       VCArtifactTable newContentPane = new VCArtifactTable(data);
-       newContentPane.setOpaque(true); //content panes must be opaque
-       
-       mainPanel.add(newContentPane);
-       
-       JPanel buttonPanel = new JPanel();
-       buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
-       
-       JButton fetchButton = new JButton("Fetch");
-       JButton cloneButton = new JButton("Clone");
-       
-       buttonPanel.add(fetchButton);
-       buttonPanel.add(Box.createRigidArea(new Dimension(50, 0)));
-       buttonPanel.add(cloneButton);
-       
-       mainPanel.add(buttonPanel);
-       
-       //Display the window.
-       frame.pack();
-       frame.setVisible(true);
-   }
 
 }

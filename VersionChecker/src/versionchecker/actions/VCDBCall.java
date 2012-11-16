@@ -1,12 +1,11 @@
 package versionchecker.actions;
 
-import java.awt.List;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import mavenp2versionmatch.db.*;
-import mavenp2versionmatch.main.VersionManifest;
+import mavenp2versionmatch.main.*;
 
 public class VCDBCall {
 	public final static int DBI_MYSQL = 0;
@@ -28,11 +27,28 @@ public class VCDBCall {
 		
 	}
 	
-	public String getCurrentRepo(String name, String mVersion) throws SQLException{
+	public String[] getCurrentRepo(String name, String mVersion) throws SQLException{
 		this.db.open();
 		Map<String, String> query = new HashMap<String,String>();
 		query.put("project", name);
 		query.put("maven_version", mVersion);
+		java.util.List<VersionManifest> result = db.find(query);
+		this.db.close();
+		
+		String retRepo = "";
+		String retBranch = "";
+		if (result.size()>0){
+			retRepo = result.get(0).getGitRepo();
+			retBranch = result.get(0).getGitBranch();
+		}
+		String[] ret = {retRepo, retBranch};
+		return ret;
+	}
+	
+	public String getLastestRepo(String name) throws SQLException{
+		this.db.open();
+		Map<String, String> query = new HashMap<String,String>();
+		query.put("project", name);
 		java.util.List<VersionManifest> result = db.find(query);
 		this.db.close();
 		String ret = "";
