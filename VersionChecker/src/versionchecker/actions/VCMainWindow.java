@@ -3,6 +3,9 @@ package versionchecker.actions;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,7 +24,11 @@ public class VCMainWindow {
     
 
 	public VCMainWindow(Object[] data) {
-		this.oriData = data;
+		//this.oriData = data;
+		ArrayList<VCArtifact> tmp = new ArrayList(Arrays.asList(data));
+		Collections.sort(tmp);
+		this.oriData = tmp.toArray();
+		
 		createAndShowGUI(this.oriData);
 	}
 	

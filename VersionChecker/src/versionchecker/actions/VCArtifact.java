@@ -19,7 +19,6 @@ public class VCArtifact implements Comparable{
 
 	@Override
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
 		return this.id.compareTo(((VCArtifact) arg0).id);
 	}
 }
