@@ -16,12 +16,6 @@ import org.eclipse.jgit.lib.ObjectId;
  */
 public class AbstractVersionMojo extends AbstractMojo
 {
-	/**
-	 * The root of the Git repository.
-	 *
-	 * @parameter default-value="${basedir}/.git"
-	 */
-	private File repositoryRoot;
 
 	/**
 	 * The name of the upstream remote repository.
@@ -29,6 +23,7 @@ public class AbstractVersionMojo extends AbstractMojo
 	 * @parameter default-value="origin"
 	 */
 	private String upstreamRemote;
+	
 
 	/**
 	 * Creates a version manifest.
@@ -39,10 +34,14 @@ public class AbstractVersionMojo extends AbstractMojo
 		// environment variables are the bane of repeatable builds.
 		VersionManifest manifest = new VersionManifest();
 		try {
+					
 			Repository repo = new FileRepositoryBuilder()
-				.setGitDir(repositoryRoot)
 				.findGitDir()
 				.build();
+			
+			File repositoryRoot = repo.getWorkTree();
+
+			System.out.println(repositoryRoot);
 
 			manifest.setBranch(repo.getBranch());
 
@@ -50,6 +49,7 @@ public class AbstractVersionMojo extends AbstractMojo
 			if (head != null) manifest.setCommit(head.name());
 
 			Config config = repo.getConfig();
+			
 			String url = config.getString("remote", upstreamRemote, "url");
 			manifest.setRepository(url);
 		} catch (IOException ioe) {

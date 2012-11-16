@@ -26,6 +26,7 @@
         <goal>add-maven-version</goal>
         <configuration>
           <mvnVersion>1.0-SNAPSHOT</mvnVersion>
+          <!--a bug in the testing harness plugin prevents this from being loaded--> 
           <upstreamRemote>origin</upstreamRemote>
         </configuration>
       </plugin>
