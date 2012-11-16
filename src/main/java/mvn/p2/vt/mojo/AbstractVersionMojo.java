@@ -38,10 +38,6 @@ public class AbstractVersionMojo extends AbstractMojo
 			Repository repo = new FileRepositoryBuilder()
 				.findGitDir()
 				.build();
-			
-			File repositoryRoot = repo.getWorkTree();
-
-			System.out.println(repositoryRoot);
 
 			manifest.setBranch(repo.getBranch());
 
