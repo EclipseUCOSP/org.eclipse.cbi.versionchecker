@@ -1,6 +1,8 @@
 package versionchecker.actions;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -11,12 +13,43 @@ import javax.swing.JTextField;
 
 public class VCMainWindow {
 	private Object[] oriData;
+	private Object[] curContent;
     private JTextField searchField;
     private JButton searchButton;
+    private VCArtifactTable tablePanel;
+    private JPanel mainPanel;
+    
 
 	public VCMainWindow(Object[] data) {
 		this.oriData = data;
 		createAndShowGUI(this.oriData);
+	}
+	
+	private void doSearch(String str){
+		int size = 0;
+		for (int i = 0; i < this.oriData.length; i++){
+			VCArtifact cur = (VCArtifact) oriData[i];
+			if (cur.getId().startsWith(str)){
+				size++;
+			}
+		}
+		curContent = new Object[size];
+		int index = 0;
+		for (int i = 0; i < this.oriData.length; i++){
+			VCArtifact cur = (VCArtifact) oriData[i];
+			if (cur.getId().startsWith(str)){
+				curContent[index] = cur;
+				index++;
+			}
+		}
+		
+		
+		mainPanel.remove(1);
+		tablePanel = new VCArtifactTable(curContent);
+		tablePanel.setOpaque(true); // content panes must be opaque
+		mainPanel.add(tablePanel, 1);
+		mainPanel.updateUI();
+		
 	}
 
 	/**
@@ -27,7 +60,7 @@ public class VCMainWindow {
 		// Create and set up the window.
 		JFrame frame = new JFrame("Version Checker");
 
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		frame.setContentPane(mainPanel);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 		
@@ -45,11 +78,18 @@ public class VCMainWindow {
         searchPanel.add(Box.createRigidArea(new Dimension(50, 0)));
         
         this.searchButton = new JButton("Search");
+        
+        this.searchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+            	doSearch(searchField.getText());
+            }
+        });
+        
         searchPanel.add(searchButton);
         mainPanel.add(searchPanel);
 
 		// Create and set up the content pane.
-		VCArtifactTable tablePanel = new VCArtifactTable(data);
+		tablePanel = new VCArtifactTable(data);
 		tablePanel.setOpaque(true); // content panes must be opaque
 
 		mainPanel.add(tablePanel);
