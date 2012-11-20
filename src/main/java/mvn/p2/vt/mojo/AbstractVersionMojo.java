@@ -1,5 +1,6 @@
 package mvn.p2.vt.mojo;
 
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
@@ -36,7 +37,6 @@ public class AbstractVersionMojo extends AbstractMojo
 	/**
 	 * Creates a version manifest.
 	 */
-	//TODO: refactor this plugin to run once per build instead of on every module?
 	protected VersionManifest createManifest() throws MojoFailureException {
 		// Find the Git revision &c.
 		// Note: I do not call readEnvironment on the builder, since undocumented
@@ -63,6 +63,14 @@ public class AbstractVersionMojo extends AbstractMojo
 		return manifest;
 	}
 
+	/**
+	 * 
+	 * @param repo
+	 * @return VersionManifest
+	 * @throws IOException
+	 * @throws AmbiguousObjectException
+	 * Builds a VersionMainfest from a configured Repository 
+	 */
 	private VersionManifest buildManifest(Repository repo)
 			throws IOException, AmbiguousObjectException {
 		System.out.println(repo);
@@ -82,7 +90,15 @@ public class AbstractVersionMojo extends AbstractMojo
 		return manifest;
 	}
 	
-	protected VersionManifest storeSubmodule(Repository repo) throws IOException, ConfigInvalidException {
+	/**
+	 * @param repo
+	 * @return VersionManifest
+	 * @throws IOException
+	 * @throws ConfigInvalidException
+	 * @throws MojoFailureException
+	 * Checks if a submodule is being built and creates a repository if this is the case
+	 */
+	protected VersionManifest storeSubmodule(Repository repo) throws IOException, ConfigInvalidException, MojoFailureException {
 		VersionManifest manifest = null; 
 		
 		SubmoduleWalk gen = SubmoduleWalk.forIndex(repo);
@@ -94,12 +110,40 @@ public class AbstractVersionMojo extends AbstractMojo
 			//mojo running in git submodule?
 			if (modulePath.equals(currDir.toString())) {
 				manifest = new VersionManifest();
-
-				//TODO gen.getModules path will work for git 1.7.7 and older
+				
+				FilenameFilter gitFilter = new FilenameFilter() {
+					public boolean accept(File dir, String name) {
+						if (name.equals(".git")) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+				};
+				File currDir = new File(modulePath);
+				File[] files = currDir.listFiles(gitFilter);
+				//there should be exactly one
+				if (files.length != 1) {
+					throw new MojoFailureException("Unexpected .git file location");
+				}
+				Repository srepo  = null;
+				
+				//for git 1.7.8 and greater
+				if (files[0].isFile()) {
+				srepo = new FileRepositoryBuilder()
 				//TODO better way to get modules path?
-				Repository srepo = new FileRepositoryBuilder()
 				.setGitDir(new File(repo.getWorkTree() + "/.git/modules/" + gen.getDirectory().getName()))
 				.build();
+				}
+				//for git 1.7.7 and below
+				else if (files[0].isDirectory()) {
+					srepo = new FileRepositoryBuilder()
+					.setGitDir(files[0])
+					.build();
+				}
+				else {
+					throw new MojoFailureException(".git is neither a file nor a directory");
+				}
 
 				return buildManifest(srepo);
 			}
