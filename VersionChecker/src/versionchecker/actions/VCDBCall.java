@@ -31,7 +31,7 @@ public class VCDBCall {
 		this.db.open();
 		Map<String, String> query = new HashMap<String,String>();
 		query.put("project", name);
-		query.put("maven_version", mVersion);
+		query.put("p2_version", mVersion);
 		java.util.List<VersionManifest> result = db.find(query);
 		this.db.close();
 		

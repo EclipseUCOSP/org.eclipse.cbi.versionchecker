@@ -1,7 +1,10 @@
 package versionchecker.actions;
 
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+
+import org.eclipse.core.runtime.Platform;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
@@ -13,9 +16,10 @@ public class VCXmlParser {
 	public Object[] parse() {
 		Object[] toRet = null;
 		try {
+			java.net.URL tmpUrl = Platform.getInstallLocation().getURL();
+
+			File fXmlFile = new File(tmpUrl.getPath() + "artifacts.xml");
 			
-			
-			File fXmlFile = new File("C:\\eclipse32\\artifacts.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
