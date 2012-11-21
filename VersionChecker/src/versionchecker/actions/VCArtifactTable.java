@@ -33,6 +33,7 @@ public class VCArtifactTable extends JPanel {
    private boolean ALLOW_ROW_SELECTION = true;
    private Object[][] contents;
    private int size = 0;
+   private VCArtifact selectedAF;
 
    public VCArtifactTable(Object[] data) {
        super(new GridLayout(1,0));
@@ -65,8 +66,11 @@ public class VCArtifactTable extends JPanel {
                        System.out.println("No rows are selected.");
                    } else {
                        int selectedRow = lsm.getMinSelectionIndex();
-                       System.out.println("Row " + selectedRow
+                       
+                       System.out.println("ID " + contents[selectedRow][0]
                                           + " is now selected.");
+                       selectedAF = new VCArtifact((String) contents[selectedRow][0],(String) contents[selectedRow][1]);
+                       
                    }
                }
            });
@@ -87,6 +91,14 @@ public class VCArtifactTable extends JPanel {
 
        //Add the scroll pane to this panel.
        add(scrollPane);
+   }
+   
+   public String getSelectedID(){
+	   return this.selectedAF.getId();
+   }
+   
+   public String getSelectedVer(){
+	   return this.selectedAF.getVersion();
    }
    
    private void addEntry(VCArtifact toAdd){

@@ -14,49 +14,49 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.eclipse.ui.IWorkbenchWindow;
+
 public class VCMainWindow {
 	private Object[] oriData;
 	private Object[] curContent;
-    private JTextField searchField;
-    private JButton searchButton;
-    private VCArtifactTable tablePanel;
-    private JPanel mainPanel;
-    
+	private JTextField searchField;
+	private JButton searchButton;
+	private VCArtifactTable tablePanel;
+	private JPanel mainPanel;
+	private IWorkbenchWindow window;
 
-	public VCMainWindow(Object[] data) {
-		//this.oriData = data;
+	public VCMainWindow(Object[] data, IWorkbenchWindow window) {
+		// this.oriData = data;
+		this.window = window;
 		ArrayList<VCArtifact> tmp = new ArrayList(Arrays.asList(data));
 		Collections.sort(tmp);
 		this.oriData = tmp.toArray();
-		
 		createAndShowGUI(this.oriData);
 	}
-	
-	private void doSearch(String str){
+
+	private void doSearch(String str) {
 		int size = 0;
-		for (int i = 0; i < this.oriData.length; i++){
+		for (int i = 0; i < this.oriData.length; i++) {
 			VCArtifact cur = (VCArtifact) oriData[i];
-			if (cur.getId().startsWith(str)){
+			if (cur.getId().startsWith(str)) {
 				size++;
 			}
 		}
 		curContent = new Object[size];
 		int index = 0;
-		for (int i = 0; i < this.oriData.length; i++){
+		for (int i = 0; i < this.oriData.length; i++) {
 			VCArtifact cur = (VCArtifact) oriData[i];
-			if (cur.getId().startsWith(str)){
+			if (cur.getId().startsWith(str)) {
 				curContent[index] = cur;
 				index++;
 			}
 		}
-		
-		
+
 		mainPanel.remove(1);
 		tablePanel = new VCArtifactTable(curContent);
 		tablePanel.setOpaque(true); // content panes must be opaque
 		mainPanel.add(tablePanel, 1);
 		mainPanel.updateUI();
-		
 	}
 
 	/**
@@ -70,30 +70,38 @@ public class VCMainWindow {
 		mainPanel = new JPanel();
 		frame.setContentPane(mainPanel);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-		
+
 		JPanel searchPanel = new JPanel();
 		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.LINE_AXIS));
-		
+
 		searchPanel.setPreferredSize(new Dimension(300, 20));
-		searchPanel.setMaximumSize(searchPanel.getPreferredSize()); // prevent growth
-		searchPanel.setMinimumSize(searchPanel.getPreferredSize()); // prevent shrink
-		
-        this.searchField = new JTextField();
-        this.searchField.setSize(100, 20);
-        searchPanel.add(searchField);
-        
-        searchPanel.add(Box.createRigidArea(new Dimension(50, 0)));
-        
-        this.searchButton = new JButton("Search");
-        
-        this.searchButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-            	doSearch(searchField.getText());
-            }
-        });
-        
-        searchPanel.add(searchButton);
-        mainPanel.add(searchPanel);
+		searchPanel.setMaximumSize(searchPanel.getPreferredSize()); // prevent
+																	// growth
+		searchPanel.setMinimumSize(searchPanel.getPreferredSize()); // prevent
+																	// shrink
+
+		this.searchField = new JTextField();
+		this.searchField.setSize(100, 20);
+
+		this.searchField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				doSearch(searchField.getText());
+			}
+		});
+		searchPanel.add(searchField);
+
+		searchPanel.add(Box.createRigidArea(new Dimension(50, 0)));
+
+		this.searchButton = new JButton("Search");
+
+		this.searchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				doSearch(searchField.getText());
+			}
+		});
+
+		searchPanel.add(searchButton);
+		mainPanel.add(searchPanel);
 
 		// Create and set up the content pane.
 		tablePanel = new VCArtifactTable(data);
@@ -104,8 +112,23 @@ public class VCMainWindow {
 		JPanel clonePanel = new JPanel();
 		clonePanel.setLayout(new BoxLayout(clonePanel, BoxLayout.LINE_AXIS));
 
-		JButton fetchButton = new JButton("Fetch");
-		JButton cloneButton = new JButton("Clone");
+		JButton fetchButton = new JButton("Clone Lastest Version");
+		JButton cloneButton = new JButton("Clone Current Version");
+		
+		fetchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				String id = tablePanel.getSelectedID();
+				VCCloneTask task = new VCCloneTask(id,null,window);
+			}
+		});
+		
+		cloneButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				String id = tablePanel.getSelectedID();
+				String ver = tablePanel.getSelectedVer();
+				VCCloneTask task = new VCCloneTask(id,ver,window);
+			}
+		});
 
 		clonePanel.add(fetchButton);
 		clonePanel.add(Box.createRigidArea(new Dimension(50, 0)));
