@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jgit.api.CloneCommand;
@@ -21,10 +23,8 @@ public class VCCloneTask {
 	private String gitRepo;
 	private String gitBranch;
 	private Boolean lastestFlag = false;
-	private IWorkbenchWindow window;
 	
-	public VCCloneTask(String id, String version,IWorkbenchWindow window){
-		this.window = window;
+	public VCCloneTask(String id, String version){
 		this.id = id;
 		if (version == null){
 			this.lastestFlag = true;
@@ -35,10 +35,9 @@ public class VCCloneTask {
 			this.makeDBCall();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			MessageDialog.openInformation(
-					window.getShell(),
-					"VersionChecker",
-					"SQLExecption, Please check the database connection");
+			JOptionPane.showMessageDialog(
+					null,
+					"SQLExecption, Please check the database connection","VersionChecker",1);
 			return;
 		}
 		createAndShowGit();
@@ -90,17 +89,17 @@ public class VCCloneTask {
 					clone.setCredentialsProvider(user);
 					clone.call();
 					
-					MessageDialog.openInformation(
-							window.getShell(),
-							"VersionChecker",
-							"Clone successfully");
+
 	
 				} catch (Exception e) {
-					MessageDialog.openInformation(
-							window.getShell(),
-							"VersionChecker",
-							e.getMessage());
+					JOptionPane.showMessageDialog(
+							null,
+							"Clone failed","VersionChecker",1);
 				}
+				
+				JOptionPane.showMessageDialog(
+						null,
+						"Clone successfully","VersionChecker",1);
 	
 			}
 		}

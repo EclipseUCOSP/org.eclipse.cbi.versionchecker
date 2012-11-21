@@ -20,11 +20,11 @@ public class MySQLDBI implements DBI{
 	private static final String tableName = "maven_p2";
 
 	public MySQLDBI () {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("MySQL driver not found in classpath", e);
-		}
+//		try {
+//			Class.forName("com.mysql.jdbc.Driver");
+//		} catch (ClassNotFoundException e) {
+//			throw new RuntimeException("MySQL driver not found in classpath", e);
+//		}
 	}
 
 	public void open() throws SQLException {

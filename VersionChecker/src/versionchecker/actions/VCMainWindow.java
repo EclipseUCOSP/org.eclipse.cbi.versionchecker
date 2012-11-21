@@ -23,11 +23,9 @@ public class VCMainWindow {
 	private JButton searchButton;
 	private VCArtifactTable tablePanel;
 	private JPanel mainPanel;
-	private IWorkbenchWindow window;
 
-	public VCMainWindow(Object[] data, IWorkbenchWindow window) {
-		// this.oriData = data;
-		this.window = window;
+	public VCMainWindow(Object[] data) {
+
 		ArrayList<VCArtifact> tmp = new ArrayList(Arrays.asList(data));
 		Collections.sort(tmp);
 		this.oriData = tmp.toArray();
@@ -118,7 +116,7 @@ public class VCMainWindow {
 		fetchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				String id = tablePanel.getSelectedID();
-				VCCloneTask task = new VCCloneTask(id,null,window);
+				VCCloneTask task = new VCCloneTask(id,null);
 			}
 		});
 		
@@ -126,7 +124,7 @@ public class VCMainWindow {
 			public void actionPerformed(ActionEvent event) {
 				String id = tablePanel.getSelectedID();
 				String ver = tablePanel.getSelectedVer();
-				VCCloneTask task = new VCCloneTask(id,ver,window);
+				VCCloneTask task = new VCCloneTask(id,ver);
 			}
 		});
 

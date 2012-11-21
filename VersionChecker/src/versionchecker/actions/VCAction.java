@@ -33,7 +33,7 @@ public class VCAction implements IWorkbenchWindowActionDelegate {
 		final Object[] data = xp.parse();
 	       javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	           public void run() {
-	        	   VCMainWindow mainW = new VCMainWindow(data,window);
+	        	   VCMainWindow mainW = new VCMainWindow(data);
 	               //VCArtifactTable.createAndShowGUI(data);
 	           }
 	       });
