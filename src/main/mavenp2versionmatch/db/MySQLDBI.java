@@ -1,179 +1,51 @@
 package mavenp2versionmatch.db;
 
 import mavenp2versionmatch.main.VersionManifest;
+import mavenp2versionmatch.exception.DBIException;
 
-import java.io.File;
 import java.sql.*;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
-public class MySQLDBI implements DBI{
-	private Connection conn;
+public class MySQLDBI extends JdbcDBI{
 	//TODO: standardize the dbName and tableName or load them from a config file
 	//TODO: the implementation of connection opening and closing connections between
 	//this class and the SQLiteDBI is inconsistent
-	private static final String url = "jdbc:mysql://localhost:3306/eclipse";
-	private static final String user = "eclipse";
-	private static final String password = "Excellence";
-	private static final String dbName = "eclipse";
-	private static final String tableName = "maven_p2";
+	private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/eclipse";
+	private static final String DEFAULT_USER = "eclipse";
+	private static final String DEFAULT_PASSWORD = "Excellence";
+	private static final String DEFAULT_DBNAME = "eclipse";
+	private static final String DEFAULT_TABLENAME = "maven_p2";
 
-	public MySQLDBI () {
+
+	public MySQLDBI (String url, String dbName, String tableName, String user, String password) {
+		super();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("MySQL driver not found in classpath", e);
 		}
+
+		/* Store configuration in a map provided by the JdbcDBI superclass */
+		if(url != null) config.put(JdbcDBI.CONFIG_URL, url);
+		if(dbName != null) config.put(JdbcDBI.CONFIG_DBNAME, dbName);
+		if(tableName != null) config.put(JdbcDBI.CONFIG_TABLENAME, tableName);
+		if(user != null) config.put(JdbcDBI.CONFIG_USER, user);
+		if(password != null) config.put(JdbcDBI.CONFIG_PASSWORD, password);
 	}
 
-	public void open() throws SQLException {
-		conn = DriverManager.getConnection(url, user, password);
+	public MySQLDBI (){
+		this(DEFAULT_URL, DEFAULT_DBNAME, DEFAULT_TABLENAME, DEFAULT_USER, DEFAULT_PASSWORD);
 	}
 
-	public void close() throws SQLException {
-		if(!conn.isClosed()) {
-			conn.close();
-		}
-	}
-	public void addRecord(Map<String, String> colMap) throws SQLException{
-		if(conn.isClosed())
-			throw new SQLException("Connection is closed, cannot add record");
-
-		String colString = "";
-		String valString = "";
-		Iterator<String> colIter = colMap.keySet().iterator();
-
-		//Dynamically create the column string for inserting and
-		//add the proper amount of IN variables for the query
-		while( colIter.hasNext()) {
-			colString += colIter.next();
-			valString += "?"; //IN variable for statement
-
-			if( colIter.hasNext()) {
-				colString += ", ";
-				valString += ", ";
+	public void open() throws DBIException {
+		try{
+			if((config.containsKey(JdbcDBI.CONFIG_USER)) && (config.containsKey(JdbcDBI.CONFIG_PASSWORD))){ // a username and password have been defined
+				conn = DriverManager.getConnection(config.get(JdbcDBI.CONFIG_URL), config.get(JdbcDBI.CONFIG_USER), config.get(JdbcDBI.CONFIG_PASSWORD));
+			}else{ // Connect without username and password, then
+				conn = DriverManager.getConnection(config.get(JdbcDBI.CONFIG_URL));
 			}
 		}
-
-		String query = "INSERT INTO "+ tableName + "("+colString+")" + "VALUES ("+valString+");";
-
-		PreparedStatement stmt = this.conn.prepareStatement(query);
-
-		Iterator<String> valueIter = colMap.values().iterator();
-		//add the values to the prepared statement
-		for( int i = 1; i < colMap.size() + 1; i++ ) {
-			stmt.setString( i, valueIter.next());
+		catch(SQLException e){
+			throw new DBIException(e);
 		}
-
-
-		stmt.executeUpdate();
-	}
-
-	/**
-	 * Updates all records (should only ever be one match however) matching the values 
-	 * found in matchMap with the values found in updateMap.
-	 * @param matchMap Map of the key-value pairs to match in the database.
-	 * @param updateMap Map of the key-value pairs to update in the matching record.
-	 * @throws SQLException
-	 */
-	public void updateRecord(Map<String, String> matchMap, Map<String, String> updateMap) throws SQLException{
-		if(conn.isClosed())
-			throw new SQLException("Connection is closed, cannot add record");
-
-		String matchString = "";
-		String updateString = "";
-		Iterator<String> matchIter = matchMap.keySet().iterator();
-		Iterator<String> updateIter = updateMap.keySet().iterator();
-
-		//Dynamically create the column string for updating and
-		//add the proper amount of IN variables for the query
-		while( updateIter.hasNext()) {
-			updateString += updateIter.next() + "=?";
-			if( updateIter.hasNext()) {
-				updateString += ", ";
-			}
-		}
-		//System.out.println("update string: " + updateString);
-		//Dynamically create the column string for matching and
-		//add the proper amount of IN variables for the query
-		while( matchIter.hasNext()) {
-			matchString += matchIter.next() + "=?";
-			if( matchIter.hasNext()) {
-				matchString += " AND ";
-			}
-		}
-		//System.out.println("match string: " + matchString);
-
-		String query = "UPDATE " + tableName + " SET " + updateString + " WHERE " + matchString + ";";
-
-		PreparedStatement stmt = this.conn.prepareStatement(query);
-
-		Iterator<String> valueIter1 = updateMap.values().iterator();
-		Iterator<String> valueIter2 = matchMap.values().iterator();
-		//add the values to the prepared statement
-		for( int i = 1; i < updateMap.size() + 1; i++ ) {
-			stmt.setString( i, valueIter1.next());
-		}
-		for( int i = 1; i < matchMap.size() + 1; i++ ) {
-			stmt.setString( i + updateMap.size(), valueIter2.next());
-		}
-		System.out.println("Rows updated: " + stmt.executeUpdate());
-
-	}
-
-	public List<VersionManifest> find(Map<String, String> map) throws SQLException {
-		if(conn.isClosed())
-			throw new SQLException("Connection is closed, cannot find record");
-
-		String where = "";
-		String col;
-		String[] values = new String[map.size()];
-
-		Iterator<String> colIter = map.keySet().iterator();
-
-		for( int i = 0; i < map.size(); i++ ) {
-			col = colIter.next();
-			values[i] = map.get(col);
-
-			where += col + " = ?";
-			if( i < map.size() - 1 )
-				where += " AND ";
-		}
-
-		String query = "SELECT * FROM " + tableName + " WHERE " + where;
-
-		PreparedStatement stmt = this.conn.prepareStatement(query);
-
-		for(int i = 0; i < values.length; i++) {
-			stmt.setString( i + 1, values[i]);
-		}
-
-		ResultSet rs = stmt.executeQuery();
-
-		List<VersionManifest> mpvList = VersionManifest.fromResultSet(rs);
-
-		rs.close();
-
-		return mpvList;
-    }
-
-	@Override
-	public List<VersionManifest> findAll()
-			throws SQLException {
-		if(conn.isClosed())
-			throw new SQLException("Connection is closed, cannot find records");
-		
-		String query = "SELECT * FROM " + tableName;
-        
-        PreparedStatement stmt = this.conn.prepareStatement(query);
-        
-        ResultSet rs = stmt.executeQuery();
-        
-		List<VersionManifest> mpvList = VersionManifest.fromResultSet(rs);
-		
-		rs.close();
-		
-		return mpvList;
 	}
 }

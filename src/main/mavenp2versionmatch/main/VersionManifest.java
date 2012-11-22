@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class VersionManifest {
 	// Fields
@@ -107,6 +109,30 @@ public class VersionManifest {
 		}
 
 		return mpvList;
+	}
+
+	/**
+	 * Create a map from this manifest.
+	 *
+	 */
+	public Map<String,String> createMap() {
+		Map<String, String> map = new HashMap<String, String>();
+
+		String commit = this.getGitCommit();
+		String repo = this.getGitRepo();
+		String branch = this.getGitBranch();
+		String project = this.getProject();
+		String p2Version = this.getP2Version();
+		String mavenVersion = this.getMavenVersion();
+
+		if (commit != null) map.put(MavenP2Col.GIT_COMMIT.getColName(), commit);
+		if (branch != null) map.put(MavenP2Col.GIT_BRANCH.getColName(), branch);
+		if (repo != null) map.put(MavenP2Col.GIT_REPO.getColName(), repo);
+		if (project != null) map.put(MavenP2Col.PROJECT.getColName(), project);
+		if (p2Version != null) map.put(MavenP2Col.P2_VERSION.getColName(), p2Version);
+		if (mavenVersion != null) map.put(MavenP2Col.MAVEN_VERSION.getColName(), mavenVersion);
+
+		return map;
 	}
 
 }
