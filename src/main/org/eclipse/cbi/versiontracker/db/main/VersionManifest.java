@@ -135,4 +135,28 @@ public class VersionManifest {
 		return map;
 	}
 
+	/**
+	 * Creates a query which adds this manifest to the database.
+	 */
+	public String createAddQuery() {
+		String commit = this.getGitCommit();
+		String repository = this.getGitRepo();
+		String branch = this.getGitBranch();
+		String project = this.getProject();
+		String p2Version = this.getP2Version();
+		String mvnVersion = this.getMavenVersion();
+		String gTag = this.getGitTag();
+
+		String q = "add";
+
+		if (mvnVersion != null) q += " -mvnv " + mvnVersion;
+		if (p2Version != null) q += " -p2v " + p2Version;
+		if (commit != null) q += " -cmt " + commit;
+		if (branch != null) q += " -br " + branch;
+		if (repository != null) q += " -repo " + repository;
+		if (project != null) q += " -p " + project;
+		if (gTag != null) q += " -gtag " + gTag;
+		return q;
+	}
+
 }
