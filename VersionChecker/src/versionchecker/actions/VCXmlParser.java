@@ -1,6 +1,5 @@
 package versionchecker.actions;
 
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
@@ -11,6 +10,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
 
+/**
+ * VCXmlParser is used for loading data from artifacts.xml. It will check the
+ * Eclipse platform install path and try loading the data from XML file.
+ */
 public class VCXmlParser {
 
 	public Object[] parse() {
@@ -19,7 +22,7 @@ public class VCXmlParser {
 			java.net.URL tmpUrl = Platform.getInstallLocation().getURL();
 
 			File fXmlFile = new File(tmpUrl.getPath() + "artifacts.xml");
-			
+
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -32,7 +35,7 @@ public class VCXmlParser {
 			for (int temp = 0; temp < artList.getLength(); temp++) {
 				Node nNode = artList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-						artSize++;
+					artSize++;
 				}
 			}
 
@@ -42,7 +45,8 @@ public class VCXmlParser {
 				Node nNode = artList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element e = (Element) nNode;
-					toRet[curIndex] = new VCArtifact(e.getAttribute("id"),e.getAttribute("version"));
+					toRet[curIndex] = new VCArtifact(e.getAttribute("id"),
+							e.getAttribute("version"));
 					curIndex++;
 				}
 			}

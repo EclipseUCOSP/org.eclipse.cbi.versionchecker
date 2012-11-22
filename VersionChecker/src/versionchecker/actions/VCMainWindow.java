@@ -14,8 +14,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.eclipse.ui.IWorkbenchWindow;
-
+/**
+ * VCMainWindow is used as main UI of Version Checker plugin.
+ */
 public class VCMainWindow {
 	private Object[] oriData;
 	private Object[] curContent;
@@ -32,11 +33,14 @@ public class VCMainWindow {
 		createAndShowGUI(this.oriData);
 	}
 
+	/**
+	 * Search the current artifact table for given ID.
+	 */
 	private void doSearch(String str) {
 		int size = 0;
 		for (int i = 0; i < this.oriData.length; i++) {
 			VCArtifact cur = (VCArtifact) oriData[i];
-			if (cur.getId().startsWith(str)) {
+			if (cur.getId().contains(str)) {
 				size++;
 			}
 		}
@@ -44,7 +48,7 @@ public class VCMainWindow {
 		int index = 0;
 		for (int i = 0; i < this.oriData.length; i++) {
 			VCArtifact cur = (VCArtifact) oriData[i];
-			if (cur.getId().startsWith(str)) {
+			if (cur.getId().contains(str)) {
 				curContent[index] = cur;
 				index++;
 			}
