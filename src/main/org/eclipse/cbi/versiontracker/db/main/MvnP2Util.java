@@ -128,6 +128,7 @@ public class MvnP2Util {
 				case GIT_COMMIT: mft.setGitCommit(val); break;
 				case GIT_BRANCH: mft.setGitBranch(val); break;
 				case GIT_REPO: mft.setGitRepo(val); break;
+				case GIT_TAG: mft.setGitTag(val); break;
 				case PROJECT: mft.setProject(val); break;
 				case P2_VERSION: mft.setP2Version(val); break;
 				case MAVEN_VERSION: mft.setMavenVersion(val); break;
