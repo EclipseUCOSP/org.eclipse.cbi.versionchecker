@@ -23,14 +23,17 @@ public class SQLiteDBI implements DBI{
 	public SQLiteDBI(String dbName, String tableName) throws SQLException {
 		SQLiteDBI.dbName = dbName;
 		SQLiteDBI.tableName = tableName;
+		System.out.println("\n\n\noooooog\n\n");
 		//make sure driver is loaded
 		try {
 			Class.forName("org.sqlite.JDBC");
+			System.out.println("\n\n\n1\n\n");
 		} catch (ClassNotFoundException e) {
 			throw new SQLException("SQLite Driver wasn't loaded");
 		}
 		//make sure DB exists
 		if(!new File(dbName).exists()) {
+			System.out.println("\n\n\n2: '" + dbName + "'\n\n");
 			throw new SQLException("Database does not exist");
 		}
 	}

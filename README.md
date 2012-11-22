@@ -21,6 +21,8 @@ The recognized options are:
 - -mvnv
 - -br
 
+Example: add -repo 1 -p 2 -gtag 3 -p2v 4 -mvnv 5 -br 6 -cmt 0123456789abcdef01234567890abcdef1234567
+
 - mvn install will build a jar
 
 ### Database schema notes:
