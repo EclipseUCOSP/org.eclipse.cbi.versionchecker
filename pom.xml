@@ -9,9 +9,9 @@
     	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
-	<groupId>org.ucosp.eclipse</groupId>
-	<artifactId>MvnP2Util</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<groupId>org.eclipse.cbi</groupId>
+	<artifactId>db</artifactId>
+	<version>1.3-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.xerial</groupId>
