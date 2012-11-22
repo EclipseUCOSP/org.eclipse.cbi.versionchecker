@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.sql.*;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.lang.reflect.Constructor;
 import junit.framework.TestCase;
 import static org.junit.Assert.*;
@@ -30,7 +31,8 @@ public class MvnP2UtilSqliteTest extends TestCase{
 		try {
 			Constructor<MvnP2Util> cons = MvnP2Util.class.getDeclaredConstructor(DBI.class);
 			cons.setAccessible(true);
-			util = cons.newInstance(new SQLiteDBI(url.getPath()));
+			// convert to URI instead of using getPath(), to handle spaces in file path
+			util = cons.newInstance(new SQLiteDBI(url.toURI().getPath()));
 		} catch (Exception e) {
 			fail("Unable to construct a MvnP2Util with a SQLiteDBI");
 		}

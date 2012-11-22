@@ -1,6 +1,6 @@
 Installing MySQL:
 	- download and install MySQL (ensure Connector/J is installed too)
-	- set the username to 'root' and password to 'Excellence'
+	- set the username to 'eclipse' and password to 'Excellence'
 	if you've already installed MySQL with different credentials, need to set these in db project
 
 Setting up our database:

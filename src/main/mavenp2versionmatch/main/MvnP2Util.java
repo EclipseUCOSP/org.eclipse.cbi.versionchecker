@@ -2,16 +2,12 @@ package mavenp2versionmatch.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.Set;
-import javax.swing.JOptionPane;
 
 import mavenp2versionmatch.db.DBI;
 import mavenp2versionmatch.db.MavenP2Col;
-import mavenp2versionmatch.db.MavenP2Version;
 import mavenp2versionmatch.db.MySQLDBI;
 import mavenp2versionmatch.db.SQLiteDBI;
 import mavenp2versionmatch.exception.MvnP2Exception;
