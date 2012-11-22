@@ -1,4 +1,4 @@
-package mavenp2versionmatch.exception;
+package org.eclipse.cbi.versiontracker.db.exception;
 
 public class MvnP2Exception extends Exception {
 

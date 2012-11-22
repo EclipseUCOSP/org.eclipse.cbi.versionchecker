@@ -1,4 +1,4 @@
-package mavenp2versionmatch.main;
+package org.eclipse.cbi.versiontracker.db.main;
 
 public enum Command {
 	ADD("add"),

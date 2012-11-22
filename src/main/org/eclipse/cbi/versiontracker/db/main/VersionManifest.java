@@ -1,6 +1,6 @@
-package mavenp2versionmatch.main;
+package org.eclipse.cbi.versiontracker.db.main;
 
-import mavenp2versionmatch.db.MavenP2Col;
+import org.eclipse.cbi.versiontracker.db.db.MavenP2Col;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

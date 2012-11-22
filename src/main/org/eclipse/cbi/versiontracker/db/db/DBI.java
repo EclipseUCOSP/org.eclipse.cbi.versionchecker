@@ -1,11 +1,11 @@
-package mavenp2versionmatch.db;
+package org.eclipse.cbi.versiontracker.db.db;
 
-import mavenp2versionmatch.main.VersionManifest;
+import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
 
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
-import mavenp2versionmatch.exception.DBIException;
+import org.eclipse.cbi.versiontracker.db.exception.DBIException;
 
 public interface DBI {
 	public void open() throws DBIException;

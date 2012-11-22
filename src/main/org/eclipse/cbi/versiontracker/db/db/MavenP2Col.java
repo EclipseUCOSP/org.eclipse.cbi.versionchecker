@@ -1,4 +1,4 @@
-package mavenp2versionmatch.db;
+package org.eclipse.cbi.versiontracker.db.db;
 
 public enum MavenP2Col {
 	GIT_REPO("git_repo", "-repo"),

@@ -1,7 +1,7 @@
-package mavenp2versionmatch.db.test;
+package org.eclipse.cbi.versiontracker.db.db.test;
 
 import static org.junit.Assert.*;
-import mavenp2versionmatch.db.MavenP2Col;
+import org.eclipse.cbi.versiontracker.db.db.MavenP2Col;
 import org.junit.Test;
 
 public class MavenP2ColTest {

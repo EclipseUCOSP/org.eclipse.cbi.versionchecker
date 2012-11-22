@@ -1,4 +1,4 @@
-package mavenp2versionmatch.main;
+package org.eclipse.cbi.versiontracker.db.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import mavenp2versionmatch.db.DBI;
-import mavenp2versionmatch.db.MavenP2Col;
-import mavenp2versionmatch.db.MySQLDBI;
-import mavenp2versionmatch.db.SQLiteDBI;
-import mavenp2versionmatch.exception.MvnP2Exception;
-import mavenp2versionmatch.exception.DBIException;
+import org.eclipse.cbi.versiontracker.db.db.DBI;
+import org.eclipse.cbi.versiontracker.db.db.MavenP2Col;
+import org.eclipse.cbi.versiontracker.db.db.MySQLDBI;
+import org.eclipse.cbi.versiontracker.db.db.SQLiteDBI;
+import org.eclipse.cbi.versiontracker.db.exception.MvnP2Exception;
+import org.eclipse.cbi.versiontracker.db.exception.DBIException;
 
 /** * A utility for managing the version database.  */
 public class MvnP2Util {

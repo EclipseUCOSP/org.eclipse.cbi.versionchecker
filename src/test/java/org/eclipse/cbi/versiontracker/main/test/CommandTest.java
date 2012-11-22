@@ -1,5 +1,5 @@
-package mavenp2versionmatch.main.test;
-import mavenp2versionmatch.main.Command;
+package org.eclipse.cbi.versiontracker.db.main.test;
+import org.eclipse.cbi.versiontracker.db.main.Command;
 import org.junit.*;
 import static org.junit.Assert.*;
 

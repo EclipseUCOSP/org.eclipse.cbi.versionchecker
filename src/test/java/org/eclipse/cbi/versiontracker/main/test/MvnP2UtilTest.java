@@ -1,4 +1,4 @@
-package mavenp2versionmatch.main.test;
+package org.eclipse.cbi.versiontracker.main.test;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.Class;
@@ -12,12 +12,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-import mavenp2versionmatch.main.InvalidManifestException;
-import mavenp2versionmatch.main.MvnP2Util;
-import mavenp2versionmatch.main.VersionManifest;
-import mavenp2versionmatch.db.MavenP2Col;
-import mavenp2versionmatch.db.SQLiteDBI;
-import mavenp2versionmatch.db.MavenP2Version;
+import org.eclipse.cbi.versiontracker.db.main.InvalidManifestException;
+import org.eclipse.cbi.versiontracker.db.main.MvnP2Util;
+import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
+import org.eclipse.cbi.versiontracker.db.db.MavenP2Col;
+import org.eclipse.cbi.versiontracker.db.db.SQLiteDBI;
+import org.eclipse.cbi.versiontracker.db.db.MavenP2Version;
 
 public class MvnP2UtilTest extends TestCase{
 
