@@ -72,7 +72,7 @@ public class AbstractVersionMojo extends AbstractMojo
 			manifest.setProject(project.getName());
 		}
 		else {
-			getLog().warn("Project name could not be determined");
+			getLog().warn("Project name could not be detected");
 		}
 		
 		return manifest;

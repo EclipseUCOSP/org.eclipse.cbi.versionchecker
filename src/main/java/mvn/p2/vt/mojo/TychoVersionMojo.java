@@ -14,12 +14,25 @@ public class TychoVersionMojo extends AbstractVersionMojo
 	 * @parameter expression="${unqualifiedVersion}.${buildQualifier}"
 	 * @readonly
 	 */
+	/**
+	 * The Maven version.
+	 *
+	 * @parameter expression="${project.version}"
+	 * @readonly
+	 */
+	private String mvnVersion;
 	private String p2Version;
 
 	@Override
 	protected VersionManifest createManifest() throws MojoFailureException {
 		VersionManifest manifest = super.createManifest();
 		manifest.setP2Version(p2Version);
+		manifest.setMavenVersion(mvnVersion);
+		
+		if (mvnVersion == null) {
+			getLog().warn("Maven version could not be detected");
+		}
+		
 		return manifest;
 	}
 }
