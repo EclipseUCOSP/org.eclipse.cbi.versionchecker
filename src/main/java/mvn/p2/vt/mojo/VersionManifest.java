@@ -12,6 +12,7 @@ public class VersionManifest
 	private String branch;
 	private String repository;
 	private String project;
+	private String gTag;
 
 	/**
 	 * Creates a query which adds this manifest to the database.
@@ -24,6 +25,7 @@ public class VersionManifest
 		if (branch != null) q += " -br " + branch;
 		if (repository != null) q += " -repo " + repository;
 		if (project != null) q += " -p " + project;
+		if (gTag != null) q += " -gtag " + gTag;
 		return q;
 	}
 
@@ -46,5 +48,10 @@ public class VersionManifest
 	public void setProject(String project) {
 		this.project = project;
 	}
+
+	public void setgTag(String gTag) {
+		this.gTag = gTag;
+	}
+
 
 }

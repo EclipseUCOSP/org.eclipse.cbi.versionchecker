@@ -3,14 +3,19 @@ package mvn.p2.vt.mojo;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.File;
+import java.util.List;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
 import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectId;
@@ -66,6 +71,8 @@ public class AbstractVersionMojo extends AbstractMojo
 			throw new MojoFailureException("Not a Git repository", iae);
 		} catch (ConfigInvalidException cie) {
 			throw new MojoFailureException("Invalid module path", cie);
+		} catch (Exception e) {
+			throw new MojoFailureException("Mojo failure", e);
 		}
 		
 		if (project != null) {
@@ -85,9 +92,10 @@ public class AbstractVersionMojo extends AbstractMojo
 	 * @throws IOException
 	 * @throws AmbiguousObjectException
 	 * Builds a VersionMainfest from a configured Repository 
+	 * @throws GitAPIException 
 	 */
 	private VersionManifest buildManifest(Repository repo)
-			throws IOException, AmbiguousObjectException {
+			throws IOException, AmbiguousObjectException, GitAPIException {
 		
 		VersionManifest manifest = new VersionManifest();
 		
@@ -101,6 +109,18 @@ public class AbstractVersionMojo extends AbstractMojo
 		String url = config.getString("remote", upstreamRemote, "url");
 		manifest.setRepository(url);
 		
+		Git git = new Git(repo);
+		List<Ref> tag_list = git.tagList().call();
+
+		if (tag_list != null && tag_list.size() > 0) {
+			//TODO: just set to last one for now because not sure what to 
+			//do with multiple tags
+			manifest.setgTag(tag_list.get(tag_list.size() - 1).getName());
+		}
+		else {
+			getLog().warn("could not find git tag");
+		}
+		
 		return manifest;
 	}
 	
@@ -111,8 +131,9 @@ public class AbstractVersionMojo extends AbstractMojo
 	 * @throws ConfigInvalidException
 	 * @throws MojoFailureException
 	 * Checks if a submodule is being built and creates a repository if this is the case
+	 * @throws GitAPIException 
 	 */
-	protected VersionManifest storeSubmodule(Repository repo) throws IOException, ConfigInvalidException, MojoFailureException {
+	protected VersionManifest storeSubmodule(Repository repo) throws IOException, ConfigInvalidException, MojoFailureException, GitAPIException {
 		VersionManifest manifest = null; 
 		
 		SubmoduleWalk gen = SubmoduleWalk.forIndex(repo);
