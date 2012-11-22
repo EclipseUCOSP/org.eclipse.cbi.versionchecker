@@ -1,4 +1,4 @@
-package mvn.p2.vt.mojo.test;
+package org.eclipse.cbi.versiontracker.mojo.test;
 
 import junit.framework.TestCase;
 

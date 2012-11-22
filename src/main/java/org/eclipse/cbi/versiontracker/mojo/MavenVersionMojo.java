@@ -1,4 +1,4 @@
-package mvn.p2.vt.mojo;
+package org.eclipse.cbi.versiontracker.mojo;
 
 import org.apache.maven.plugin.MojoFailureException;
 import org.eclipse.cbi.versiontracker.db.main.VersionManifest;

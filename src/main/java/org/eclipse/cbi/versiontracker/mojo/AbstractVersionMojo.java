@@ -1,4 +1,4 @@
-package mvn.p2.vt.mojo;
+package org.eclipse.cbi.versiontracker.mojo;
 
 import java.io.FilenameFilter;
 import java.io.IOException;
