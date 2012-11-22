@@ -1,8 +1,7 @@
 package mvn.p2.vt.mojo.test;
 
 import junit.framework.TestCase;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
 
 import mvn.p2.vt.mojo.VersionManifest;
 

@@ -6,6 +6,7 @@ import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.errors.AmbiguousObjectException;
@@ -33,6 +34,13 @@ public class AbstractVersionMojo extends AbstractMojo
 	 * @parameter default-value="${basedir}"
 	 */
 	private File currDir;
+	
+	/**
+	 * @parameter default-value="${project}"
+	 * @required
+	 * @readonly
+	 */
+	MavenProject project;
 
 	/**
 	 * Creates a version manifest.
@@ -60,6 +68,13 @@ public class AbstractVersionMojo extends AbstractMojo
 			throw new MojoFailureException("Invalid module path", cie);
 		}
 		
+		if (project != null) {
+			manifest.setProject(project.getName());
+		}
+		else {
+			getLog().warn("Project name could not be determined");
+		}
+		
 		return manifest;
 	}
 
@@ -73,7 +88,6 @@ public class AbstractVersionMojo extends AbstractMojo
 	 */
 	private VersionManifest buildManifest(Repository repo)
 			throws IOException, AmbiguousObjectException {
-		System.out.println(repo);
 		
 		VersionManifest manifest = new VersionManifest();
 		
