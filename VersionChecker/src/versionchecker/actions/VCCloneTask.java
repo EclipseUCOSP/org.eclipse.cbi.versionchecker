@@ -7,16 +7,19 @@ import java.sql.SQLException;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.eclipse.ui.IWorkbenchWindow;
 
+/**
+ * VCCloneTask represent a life cycle of a git clone action.
+ * Including database query for gitRepo and gitBranch, getting
+ * user name and password from a UI dialog, actual git operation
+ * and error report.
+ */
 public class VCCloneTask {
 	private String id;
 	private String version;
@@ -89,7 +92,6 @@ public class VCCloneTask {
 					clone.setCredentialsProvider(user);
 					clone.call();
 					
-
 	
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(

@@ -1,5 +1,6 @@
 package versionchecker.actions;
 
+// VCArtifact is a data model for artifact instance.
 public class VCArtifact implements Comparable{
 	private String id;
 	private String version;

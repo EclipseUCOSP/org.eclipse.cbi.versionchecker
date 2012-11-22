@@ -4,9 +4,16 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import mavenp2versionmatch.db.*;
-import mavenp2versionmatch.main.*;
+import mavenp2versionmatch.db.DBI;
+import mavenp2versionmatch.db.MySQLDBI;
+import mavenp2versionmatch.db.SQLiteDBI;
+import mavenp2versionmatch.main.VersionManifest;
 
+/**
+ * VCDBCall represent a life cycle of a VCDB query.
+ * It works with the DB project and use the VersionChecker
+ * API.
+ */
 public class VCDBCall {
 	public final static int DBI_MYSQL = 0;
 	public final static int DBI_SQLITE = 0;
