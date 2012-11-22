@@ -1,6 +1,7 @@
 package mvn.p2.vt.mojo;
 
 import org.apache.maven.plugin.MojoFailureException;
+import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
 
 /**
  * Calls the Version Checker with a Maven version.

@@ -22,7 +22,8 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>mvn-p2-vt-plugin</artifactId>
+		<groupId>org.eclipse.cbi</groupId>
+        <artifactId>versiontracker</artifactId>
         <goal>add-tycho-version</goal>
         <configuration>
           <p2Version>1.0.qualifier</p2Version>

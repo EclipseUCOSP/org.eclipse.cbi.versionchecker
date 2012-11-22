@@ -22,7 +22,8 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>mvn-p2-vt-plugin</artifactId>
+		<groupId>org.eclipse.cbi</groupId>
+        <artifactId>versiontracker</artifactId>
         <goal>add-maven-version</goal>
         <configuration>
           <mvnVersion>1.0-SNAPSHOT</mvnVersion>
