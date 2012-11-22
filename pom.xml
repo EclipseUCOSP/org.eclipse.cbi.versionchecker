@@ -9,7 +9,7 @@
     	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
-	<groupId>org.eclipse.cbi</groupId>
+	<groupId>org.eclipse.cbi.versiontracker</groupId>
 	<artifactId>db</artifactId>
 	<version>1.3-SNAPSHOT</version>
 	<dependencies>
