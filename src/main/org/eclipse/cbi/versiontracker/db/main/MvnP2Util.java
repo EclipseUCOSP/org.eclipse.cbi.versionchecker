@@ -182,10 +182,14 @@ public class MvnP2Util {
 		if (mvnMatch.size() > 0 || p2Match.size() > 0){
 			if (mvnMatch.size() > 0) {
 				for (String key : mvnMap.keySet()) map.remove(key);
-				dbi.updateRecordFromMap(mvnMap, map);
+				if(map.size() > 0){ // Mike: only if there are elements that need to be updated. otherwise just leave it alone.
+					dbi.updateRecordFromMap(mvnMap, map);
+				}
 			} else {
 				for (String key : p2Map.keySet()) map.remove(key);
-				dbi.updateRecordFromMap(p2Map, map);
+				if(map.size() > 0){ // Mike: only if there are elements that need to be updated. otherwise just leave it alone.
+					dbi.updateRecordFromMap(p2Map, map);
+				}
 			}
 			return true;
 		}
