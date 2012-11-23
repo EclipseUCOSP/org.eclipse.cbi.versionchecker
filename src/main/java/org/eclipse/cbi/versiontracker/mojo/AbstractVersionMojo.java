@@ -94,8 +94,8 @@ public class AbstractVersionMojo extends AbstractMojo
 	 * @return VersionManifest
 	 * @throws IOException
 	 * @throws AmbiguousObjectException
-	 * Builds a VersionMainfest from a configured Repository 
 	 * @throws GitAPIException 
+	 * Builds a VersionMainfest from a configured Repository 
 	 */
 	private VersionManifest buildManifest(Repository repo)
 			throws IOException, AmbiguousObjectException, GitAPIException {
@@ -133,8 +133,8 @@ public class AbstractVersionMojo extends AbstractMojo
 	 * @throws IOException
 	 * @throws ConfigInvalidException
 	 * @throws MojoFailureException
-	 * Checks if a submodule is being built and creates a repository if this is the case
 	 * @throws GitAPIException 
+	 * Checks if a submodule is being built and creates a repository if this is the case
 	 */
 	protected VersionManifest storeSubmodule(Repository repo) throws IOException, ConfigInvalidException, MojoFailureException, GitAPIException {
 		VersionManifest manifest = null; 

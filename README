@@ -17,3 +17,7 @@ Unbound classpath variable: 'M2_REPO/...' in project '...' it means you have not
 
 You can also do this by running the following maven command:
 mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo
+
+You must run 'mvn clean install' at least once AFTER importing this project into eclipse.
+Otherwise, the CheckVersionTest class will not work inside of eclipse. This is related
+to test-harness-plugin implementation. 
