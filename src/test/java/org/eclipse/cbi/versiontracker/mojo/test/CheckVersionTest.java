@@ -1,8 +1,8 @@
-package mvn.p2.vt.mojo.test;
+package org.eclipse.cbi.versiontracker.mojo.test;
 
 import java.io.File;
-import mvn.p2.vt.mojo.MavenVersionMojo;
-import mvn.p2.vt.mojo.TychoVersionMojo;
+import org.eclipse.cbi.versiontracker.mojo.MavenVersionMojo;
+import org.eclipse.cbi.versiontracker.mojo.TychoVersionMojo;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class CheckVersionTest extends AbstractMojoTestCase {
 	}
 
 	/**
-	 * Test method for {@link mvn.p2.vt.mojo.MavenVersionMojo#execute()}.
+	 * Test method for {@link org.eclipse.cbi.versiontracker.mojo.MavenVersionMojo#execute()}.
 	 * @throws Exception 
 	 */
 	@Test
@@ -41,7 +41,7 @@ public class CheckVersionTest extends AbstractMojoTestCase {
 	}
 
 	/**
-	 * Test method for {@link mvn.p2.vt.mojo.TychoVersionMojo#execute()}.
+	 * Test method for {@link org.eclipse.cbi.versiontracker.mojo.TychoVersionMojo#execute()}.
 	 * @throws Exception 
 	 */
 	@Test

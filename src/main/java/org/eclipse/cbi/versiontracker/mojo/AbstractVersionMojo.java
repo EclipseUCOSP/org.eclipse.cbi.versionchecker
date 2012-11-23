@@ -1,4 +1,4 @@
-package mvn.p2.vt.mojo;
+package org.eclipse.cbi.versiontracker.mojo;
 
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -19,6 +19,9 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectId;
+
+import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
+import org.eclipse.cbi.versiontracker.db.main.MvnP2Util;
 
 /**
  * A common base class for version checker mojos.
@@ -99,15 +102,15 @@ public class AbstractVersionMojo extends AbstractMojo
 		
 		VersionManifest manifest = new VersionManifest();
 		
-		manifest.setBranch(repo.getBranch());
+		manifest.setGitBranch(repo.getBranch());
 
 		ObjectId head = repo.resolve("HEAD");
-		if (head != null) manifest.setCommit(head.name());
+		if (head != null) manifest.setGitCommit(head.name());
 
 		Config config = repo.getConfig();
 		
 		String url = config.getString("remote", upstreamRemote, "url");
-		manifest.setRepository(url);
+		manifest.setGitRepo(url);
 		
 		Git git = new Git(repo);
 		List<Ref> tag_list = git.tagList().call();
@@ -115,7 +118,7 @@ public class AbstractVersionMojo extends AbstractMojo
 		if (tag_list != null && tag_list.size() > 0) {
 			//TODO: just set to last one for now because not sure what to 
 			//do with multiple tags
-			manifest.setgTag(tag_list.get(tag_list.size() - 1).getName());
+			manifest.setGitTag(tag_list.get(tag_list.size() - 1).getName());
 		}
 		else {
 			getLog().warn("could not find git tag");
@@ -189,14 +192,13 @@ public class AbstractVersionMojo extends AbstractMojo
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
 		VersionManifest manifest = createManifest();
-		String query = manifest.createAddQuery();
 
-		String[] query_arr = query.split(" ");
-		getLog().info("Executing the following query: " + query);
+		MvnP2Util util = new MvnP2Util(); // could pass in a DBI if we wanted to...
+
 		try {
-			// call the MvnP2Util with the given commands. This just starts the main method, set up your array of strings accordingly.
-			mavenp2versionmatch.main.MvnP2Util.main(query_arr);
+			util.add(manifest); // at this time, this method doesn't throw any exceptions... but if it did in the future, we'd want to catch them.
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new MojoFailureException("Failure in MavenP2Util.", e);
 		}
 	}
