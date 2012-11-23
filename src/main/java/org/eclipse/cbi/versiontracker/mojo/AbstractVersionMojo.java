@@ -21,6 +21,7 @@ import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.ObjectId;
 
 import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
+import org.eclipse.cbi.versiontracker.db.main.MvnP2Util;
 
 /**
  * A common base class for version checker mojos.
@@ -191,14 +192,13 @@ public class AbstractVersionMojo extends AbstractMojo
 	public void execute() throws MojoExecutionException, MojoFailureException
 	{
 		VersionManifest manifest = createManifest();
-		String query = manifest.createAddQuery();
 
-		String[] query_arr = query.split(" ");
-		getLog().info("Executing the following query: " + query);
+		MvnP2Util util = new MvnP2Util(); // could pass in a DBI if we wanted to...
+
 		try {
-			// call the MvnP2Util with the given commands. This just starts the main method, set up your array of strings accordingly.
-			org.eclipse.cbi.versiontracker.db.main.MvnP2Util.main(query_arr);
+			util.add(manifest); // at this time, this method doesn't throw any exceptions... but if it did in the future, we'd want to catch them.
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new MojoFailureException("Failure in MavenP2Util.", e);
 		}
 	}
