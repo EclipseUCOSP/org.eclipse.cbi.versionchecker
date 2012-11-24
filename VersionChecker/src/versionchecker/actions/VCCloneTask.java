@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
+import org.eclipse.jgit.lib.AnyObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -26,6 +27,7 @@ public class VCCloneTask {
 	private String version;
 	private String gitRepo;
 	private String gitBranch;
+	private String gitCommit;
 	private Boolean lastestFlag = false;
 
 	public VCCloneTask(String id, String version) {
@@ -50,8 +52,6 @@ public class VCCloneTask {
 			return;
 		}
 
-		// System.out.println(this.gitRepo);
-		// System.out.println(this.gitBranch);
 		createAndShowGit();
 	}
 
@@ -65,6 +65,7 @@ public class VCCloneTask {
 		} else {
 			this.gitRepo = (String) call.getCurrentRepo(id, version)[0];
 			this.gitBranch = (String) call.getCurrentRepo(id, version)[1];
+			this.gitCommit = (String) call.getCurrentRepo(id, version)[2];
 		}
 	}
 
@@ -97,39 +98,26 @@ public class VCCloneTask {
 					Git git = new Git(repository);
 					CloneCommand clone = git.cloneRepository();
 					clone.setBare(false);
-					if (this.lastestFlag) {
-						// clone.setDirectory(loc).setURI(this.gitRepo).setBranchesToClone(Arrays.asList("refs/heads/master"));
-						clone.setDirectory(loc).setURI(this.gitRepo)
-								.setCloneAllBranches(true);
-					} else {
-						// System.out.println("refs/remotes/origin/" +
-						// this.gitBranch);
-						// clone.setDirectory(loc).setURI(this.gitRepo).setBranchesToClone(Arrays.asList("refs\\remotes\\origin\\"
-						// + this.gitBranch));
-						// TODO: Fix clone certain branch option
-						clone.setDirectory(loc).setURI(this.gitRepo)
-								.setCloneAllBranches(true);
-					}
+					
+					// TODO: Fix clone certain branch option
+					clone.setDirectory(loc).setURI(this.gitRepo).setCloneAllBranches(true);
+
 					UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(
 							vcgw.getLogin(), vcgw.getPass());
 					clone.setCredentialsProvider(user);
 					clone.call();
-
-					for (Ref b : git.branchList().setListMode(ListMode.ALL)
-							.call()) {
-						System.out.println("(cloneAllBranches): cloned branch "
-								+ b.getName());
+					
+					// TODO: Revert to git commit
+					if (!this.lastestFlag) {
 					}
-					System.out.println("here");
+					
 
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Clone failed",
-							"VersionChecker", 1);
+					JOptionPane.showMessageDialog(null, "Clone failed","VersionChecker", 1);
 					return;
 				}
-
-				JOptionPane.showMessageDialog(null, "Clone successfully",
-						"VersionChecker", 1);
+				
+				JOptionPane.showMessageDialog(null, "Clone successfully","VersionChecker", 1);
 
 			}
 		}

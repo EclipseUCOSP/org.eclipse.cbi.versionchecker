@@ -33,22 +33,25 @@ public class VCDBCall {
 
 	}
 
-	public String[] getCurrentRepo(String name, String mVersion)
+	public String[] getCurrentRepo(String name, String pVersion)
 			throws SQLException {
 		this.db.open();
 		Map<String, String> query = new HashMap<String, String>();
 		query.put("project", name);
-		query.put("p2_version", mVersion);
+		query.put("p2_version", pVersion);
 		java.util.List<VersionManifest> result = db.find(query);
 		this.db.close();
 
 		String retRepo = "";
 		String retBranch = "";
+		String retCommit = "";
+		
 		if (result.size() > 0) {
 			retRepo = result.get(0).getGitRepo();
 			retBranch = result.get(0).getGitBranch();
+			retCommit = result.get(0).getGitCommit();
 		}
-		String[] ret = { retRepo, retBranch };
+		String[] ret = { retRepo, retBranch ,retCommit};
 		return ret;
 	}
 
