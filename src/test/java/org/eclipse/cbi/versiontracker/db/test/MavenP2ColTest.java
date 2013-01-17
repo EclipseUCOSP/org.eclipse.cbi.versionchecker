@@ -1,4 +1,4 @@
-package org.eclipse.cbi.versiontracker.db.db.test;
+package org.eclipse.cbi.versiontracker.db.test;
 
 import static org.junit.Assert.*;
 import org.eclipse.cbi.versiontracker.db.db.MavenP2Col;

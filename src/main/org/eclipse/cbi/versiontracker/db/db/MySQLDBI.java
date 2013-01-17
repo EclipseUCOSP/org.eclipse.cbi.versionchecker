@@ -1,6 +1,4 @@
 package org.eclipse.cbi.versiontracker.db.db;
-
-import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
 import org.eclipse.cbi.versiontracker.db.exception.DBIException;
 
 import java.sql.*;

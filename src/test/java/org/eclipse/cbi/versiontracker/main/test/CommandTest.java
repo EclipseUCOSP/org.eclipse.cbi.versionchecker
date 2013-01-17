@@ -1,4 +1,4 @@
-package org.eclipse.cbi.versiontracker.db.main.test;
+package org.eclipse.cbi.versiontracker.main.test;
 import org.eclipse.cbi.versiontracker.db.main.Command;
 import org.junit.*;
 import static org.junit.Assert.*;

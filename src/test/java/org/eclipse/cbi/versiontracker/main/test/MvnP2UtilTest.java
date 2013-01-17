@@ -2,11 +2,6 @@ package org.eclipse.cbi.versiontracker.main.test;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.Class;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.sql.*;
-import java.net.URL;
 import junit.framework.TestCase;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -15,9 +10,7 @@ import static org.hamcrest.CoreMatchers.*;
 import org.eclipse.cbi.versiontracker.db.main.InvalidManifestException;
 import org.eclipse.cbi.versiontracker.db.main.MvnP2Util;
 import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
-import org.eclipse.cbi.versiontracker.db.db.MavenP2Col;
-import org.eclipse.cbi.versiontracker.db.db.SQLiteDBI;
-import org.eclipse.cbi.versiontracker.db.db.MavenP2Version;
+
 
 public class MvnP2UtilTest extends TestCase{
 

@@ -1,23 +1,16 @@
-package org.eclipse.cbi.versiontracker.db.db.test;
+package org.eclipse.cbi.versiontracker.db.test;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.sql.*;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.lang.reflect.Constructor;
 import junit.framework.TestCase;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
 import org.eclipse.cbi.versiontracker.db.main.InvalidManifestException;
 import org.eclipse.cbi.versiontracker.db.main.MvnP2Util;
-import org.eclipse.cbi.versiontracker.db.db.MavenP2Col;
 import org.eclipse.cbi.versiontracker.db.db.SQLiteDBI;
 import org.eclipse.cbi.versiontracker.db.db.DBI;
 import org.eclipse.cbi.versiontracker.db.exception.DBIException;
-import org.eclipse.cbi.versiontracker.db.db.MavenP2Version;
+
 
 public class MvnP2UtilSqliteTest extends TestCase{
 	public MvnP2UtilSqliteTest(String name){

@@ -1,6 +1,5 @@
 package org.eclipse.cbi.versiontracker.db.main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.regex.Pattern;
 import org.eclipse.cbi.versiontracker.db.db.DBI;
 import org.eclipse.cbi.versiontracker.db.db.MavenP2Col;
 import org.eclipse.cbi.versiontracker.db.db.MySQLDBI;
-import org.eclipse.cbi.versiontracker.db.db.SQLiteDBI;
 import org.eclipse.cbi.versiontracker.db.exception.MvnP2Exception;
 import org.eclipse.cbi.versiontracker.db.exception.DBIException;
 
