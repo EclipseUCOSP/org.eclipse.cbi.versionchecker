@@ -84,11 +84,15 @@ public class VCArtifactTable extends JPanel {
 	}
 
 	public String getSelectedID() {
-		return this.selectedAF.getId();
+		if (this.selectedAF != null)
+			return this.selectedAF.getId();
+		return null;
 	}
 
 	public String getSelectedVer() {
-		return this.selectedAF.getVersion();
+		if (this.selectedAF != null)
+			return this.selectedAF.getVersion();
+		return null;
 	}
 
 	private void addEntry(VCArtifact toAdd) {
