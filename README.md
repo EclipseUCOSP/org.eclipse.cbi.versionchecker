@@ -1,0 +1,2 @@
+org.eclipse.cbi.versionchecker
+==============================
