@@ -11,6 +11,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -120,7 +121,10 @@ public class VCMainWindow {
 		fetchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				String id = tablePanel.getSelectedID();
-				VCCloneTask task = new VCCloneTask(id,null);
+				if (id != null)
+					new VCCloneTask(id,null);
+				else
+					JOptionPane.showMessageDialog(null, "No component is selected.", "VersionChecker", 1);;
 			}
 		});
 		
@@ -128,7 +132,10 @@ public class VCMainWindow {
 			public void actionPerformed(ActionEvent event) {
 				String id = tablePanel.getSelectedID();
 				String ver = tablePanel.getSelectedVer();
-				VCCloneTask task = new VCCloneTask(id,ver);
+				if (id != null)
+					new VCCloneTask(id,ver);
+				else
+					JOptionPane.showMessageDialog(null, "No component is selected.", "VersionChecker", 1);;
 			}
 		});
 
