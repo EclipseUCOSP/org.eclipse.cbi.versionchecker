@@ -1,0 +1,38 @@
+Manifest-Version: 1.0
+Export-Package: org.eclipse.jgit.api;version="2.1.0",org.eclipse.jgit.
+ api.errors;version="2.1.0",org.eclipse.jgit.blame;version="2.1.0",org
+ .eclipse.jgit.diff;version="2.1.0",org.eclipse.jgit.dircache;version=
+ "2.1.0",org.eclipse.jgit.errors;version="2.1.0",org.eclipse.jgit.even
+ ts;version="2.1.0",org.eclipse.jgit.fnmatch;version="2.1.0",org.eclip
+ se.jgit.ignore;version="2.1.0",org.eclipse.jgit.internal;version="2.1
+ .0";x-internal:=true,org.eclipse.jgit.lib;version="2.1.0",org.eclipse
+ .jgit.merge;version="2.1.0",org.eclipse.jgit.nls;version="2.1.0",org.
+ eclipse.jgit.notes;version="2.1.0",org.eclipse.jgit.patch;version="2.
+ 1.0",org.eclipse.jgit.revplot;version="2.1.0",org.eclipse.jgit.revwal
+ k;version="2.1.0",org.eclipse.jgit.revwalk.filter;version="2.1.0",org
+ .eclipse.jgit.storage.dfs;version="2.1.0",org.eclipse.jgit.storage.fi
+ le;version="2.1.0",org.eclipse.jgit.storage.pack;version="2.1.0",org.
+ eclipse.jgit.submodule;version="2.1.0",org.eclipse.jgit.transport;ver
+ sion="2.1.0",org.eclipse.jgit.transport.resolver;version="2.1.0",org.
+ eclipse.jgit.treewalk;version="2.1.0",org.eclipse.jgit.treewalk.filte
+ r;version="2.1.0",org.eclipse.jgit.util;version="2.1.0",org.eclipse.j
+ git.util.io;version="2.1.0"
+Bundle-ActivationPolicy: lazy
+Implementation-Title: JGit org.eclipse.jgit
+Implementation-Version: 2.1.0.201209190230-r
+Built-By: hudsonBuild
+Bundle-Name: %plugin_name
+Bundle-Localization: plugin
+Created-By: Apache Maven 3.0.4
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: com.jcraft.jsch;bundle-version="[0.1.37,0.2.0)"
+Implementation-Vendor: Eclipse.org - JGit
+Bundle-Vendor: %provider_name
+Implementation-Vendor-URL: http://www.eclipse.org/jgit/
+Implementation-Vendor-Id: org.eclipse.jgit
+Bundle-Version: 2.1.0.201209190230-r
+Build-Jdk: 1.6.0_21
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.jgit
+Archiver-Version: Plexus Archiver
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Versoin Checker Action Set"
+            visible="true"
+            id="VersionChecker.actionSet">
+         <menu
+               label="Version &amp;Checker"
+               id="sampleMenu">
+            <separator
+                  name="sampleGroup">
+            </separator>
+         </menu>
+         <action
+               label="&amp;Version Checker"
+               icon="icons/sample.gif"
+               class="versionchecker.actions.VCAction"
+               tooltip="Version Checker"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               id="versionchecker.actions.VCGitAction">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>
