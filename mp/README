@@ -1,0 +1,23 @@
+TODO:
+	- need to remove the my.db from the repo and use one hosted on nexus
+	- may want to save this until after most db functionality and testing complete, however
+
+Perform the following steps to run the plugin:
+	- mvn clean install
+	- mvn org.ucosp.eclipse:mvn-p2-vt-plugin:add-maven-version
+	- an add entry for this project is sent to MVNP2Util
+
+If you get the error:
+Unbound classpath variable: 'M2_REPO/...' in project '...' it means you have not setup your M2_REPO variable as a classpath variable in Eclipse. To fix this:
+
+- Open Eclipse Preferences
+- Go to Java -> Build Path -> Classpath Variables
+- Add a variable named M2_REPO
+- Click Folder... and select your repository folder. This will be in user home directory under .m2, ie /Users/AUser/.m2/repository
+
+You can also do this by running the following maven command:
+mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo
+
+You must run 'mvn clean install' at least once AFTER importing this project into eclipse.
+Otherwise, the CheckVersionTest class will not work inside of eclipse. This is related
+to test-harness-plugin implementation. 
