@@ -6,6 +6,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -35,7 +37,14 @@ public class VCArtifactTable extends JPanel {
 			this.addEntry((VCArtifact) data[i]);
 		}
 
-		final JTable table = new JTable(contents, columnNames);
+		DefaultTableModel tableModel = new DefaultTableModel(contents, columnNames) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
+		
+		final JTable table = new JTable(tableModel);
 		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
 
