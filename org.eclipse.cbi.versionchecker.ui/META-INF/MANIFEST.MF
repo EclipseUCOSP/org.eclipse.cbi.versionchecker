@@ -1,17 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: VersionChecker
-Bundle-SymbolicName: VersionChecker; singleton:=true
-Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: versionchecker.Activator
+Bundle-Name: org.eclipse.cbi.versiontracker.ui
+Bundle-SymbolicName: org.eclipse.cbi.versiontracker.ui; singleton:=true
+Bundle-Version: 1.1.0.qualifier
+Bundle-Activator: org.eclipse.cbi.versiontracker.ui.Activator
 Require-Bundle: org.eclipse.ui;bundle-version="3.103.0",
  org.eclipse.core.runtime;bundle-version="3.8.0",
  org.eclipse.jgit;bundle-version="2.1.0",
  org.eclipse.jgit.iplog;bundle-version="2.1.0",
  org.eclipse.jgit.pgm;bundle-version="2.1.0",
  org.eclipse.jgit.ui;bundle-version="2.1.0"
-Export-Package: versionchecker,
- versionchecker.actions
+Export-Package: org.eclipse.cbi.versiontracker.ui,
+ org.eclipse.cbi.versiontracker.ui.actions
 Bundle-ClassPath: lib/MvnP2Util-0.1-SNAPSHOT-jar-with-dependencies.jar,
  .,
  .

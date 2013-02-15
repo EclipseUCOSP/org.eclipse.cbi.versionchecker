@@ -5,7 +5,7 @@ org.eclipse.cbi.versionchecker.db/.classpath
 org.eclipse.cbi.versionchecker.maven.plugin/target/
 org.eclipse.cbi.versionchecker.maven.plugin/.project
 org.eclipse.cbi.versionchecker.maven.plugin/.classpath
-UCOSPep/VersionChecker/target/
+org.eclipse.cbi.versionchecker.ui/target/
 
 
 # Compiled source #
