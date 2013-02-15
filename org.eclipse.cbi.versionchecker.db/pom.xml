@@ -11,7 +11,7 @@
 
 	<groupId>org.eclipse.cbi.versiontracker</groupId>
 	<artifactId>org.eclipse.cbi.versionchecker.db</artifactId>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.4-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.xerial</groupId>
