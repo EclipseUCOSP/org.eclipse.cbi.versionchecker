@@ -9,9 +9,9 @@
     	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
-	<groupId>org.eclipse.cbi.versiontracker</groupId>
+	<groupId>org.eclipse.cbi.versionchecker</groupId>
 	<artifactId>org.eclipse.cbi.versionchecker.db</artifactId>
-	<version>1.4-SNAPSHOT</version>
+	<version>1.4.0-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.xerial</groupId>
