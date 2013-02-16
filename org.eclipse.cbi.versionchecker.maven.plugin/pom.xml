@@ -15,9 +15,9 @@
 
   <repositories>
     <repository>
-      <id>ucosp</id>
-      <name>UCOSP Repository - Snapshots</name>
-      <url>https://repo.eclipse.org/nexus/content/repositories/snapshots/</url>
+      <id>eclipse</id>
+      <name>Eclipse Repository</name>
+      <url>https://repo.eclipse.org/content/groups/eclipse/</url>
     </repository>
     <repository>
       <id>jgit-repository</id>
@@ -106,14 +106,14 @@
 
   <distributionManagement>
     <repository>
-      <id>ucosp</id>
-      <name>UCOSP Repository - Releases</name>
-      <url>https://repo.eclipse.org/nexus/content/repositories/snapshots/</url>
+      <id>cbi-releases</id>
+      <name>Eclipse CBI Releases</name>
+      <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
     </repository>
     <snapshotRepository>
-      <id>ucosp</id>
-      <name>UCOSP Repository - Snapshots</name>
-      <url>https://repo.eclipse.org/nexus/content/repositories/snapshots/</url>
+      <id>cbi-snapshots</id>
+      <name>Eclipse CBI Snapshots</name>
+      <url>https://repo.eclipse.org/content/repositories/cbi-snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
