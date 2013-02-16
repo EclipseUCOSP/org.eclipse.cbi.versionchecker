@@ -85,12 +85,12 @@
 		<repository>
 			<id>ucosp</id>
 			<name>UCOSP Repository - Releases</name>
-			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+			<url>https://repo.eclipse.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<snapshotRepository>
 			<id>ucosp</id>
 			<name>UCOSP Repository - Snapshots</name>
-			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+			<url>https://repo.eclipse.org/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -98,7 +98,7 @@
 		<pluginRepository>
 			<id>ucosp</id>
 			<name>UCOSP Repository</name>
-			<url>http://lts.eclipse.org/nexus/content/repositories/snapshots/</url>
+			<url>https://repo.eclipse.org/nexus/content/repositories/snapshots/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
