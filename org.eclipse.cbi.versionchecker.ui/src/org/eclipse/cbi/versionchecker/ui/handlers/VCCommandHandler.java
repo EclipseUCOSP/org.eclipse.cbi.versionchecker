@@ -8,6 +8,7 @@ import org.eclipse.core.commands.ExecutionException;
 
 public class VCCommandHandler extends AbstractHandler {
 
+	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		VCXmlParser xp = new VCXmlParser();
 		final Object[] data = xp.parse();
