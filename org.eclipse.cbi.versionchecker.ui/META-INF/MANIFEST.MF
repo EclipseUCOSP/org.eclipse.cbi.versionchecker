@@ -1,19 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: org.eclipse.cbi.versiontracker.ui
-Bundle-SymbolicName: org.eclipse.cbi.versiontracker.ui; singleton:=true
-Bundle-Version: 1.1.0.qualifier
-Bundle-Activator: org.eclipse.cbi.versiontracker.ui.Activator
-Require-Bundle: org.eclipse.ui;bundle-version="3.103.0",
- org.eclipse.core.runtime;bundle-version="3.8.0",
- org.eclipse.jgit;bundle-version="2.1.0",
- org.eclipse.jgit.iplog;bundle-version="2.1.0",
- org.eclipse.jgit.pgm;bundle-version="2.1.0",
- org.eclipse.jgit.ui;bundle-version="2.1.0"
-Export-Package: versionchecker,
- versionchecker.actions
-Bundle-ClassPath: lib/MvnP2Util-0.1-SNAPSHOT-jar-with-dependencies.jar,
- .,
+Bundle-Name: ui
+Bundle-SymbolicName: org.eclipse.cbi.versionchecker.ui; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.eclipse.cbi.versionchecker.ui.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ClassPath: lib/org.eclipse.jgit.jar,
+ /lib/gson.jar,
  .
-
-

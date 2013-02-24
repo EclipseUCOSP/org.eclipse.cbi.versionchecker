@@ -3,11 +3,11 @@
 <plugin>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution locationURI="menu:help?after=helpEnd">
-			<command commandId="versionchecker.commands.VCCommand" label="Version Checker...">
+			<command commandId="org.eclipse.cbi.versionchecker.ui.commands.VCCommand" label="Version Checker...">
 			</command>
 		</menuContribution>
 	</extension>
 	<extension point="org.eclipse.ui.commands">
-		<command id="versionchecker.commands.VCCommand" name="VC" defaultHandler="versionchecker.actions.VCCommandHandler" />
+		<command id="org.eclipse.cbi.versionchecker.ui.commands.VCCommand" name="VCCommand" defaultHandler="org.eclipse.cbi.versionchecker.ui.handlers.VCCommandHandler" />
 	</extension>
 </plugin>

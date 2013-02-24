@@ -1,4 +1,4 @@
-package versionchecker.actions;
+package org.eclipse.cbi.versionchecker.ui.actions;
 
 import javax.swing.*;
 import java.awt.*;

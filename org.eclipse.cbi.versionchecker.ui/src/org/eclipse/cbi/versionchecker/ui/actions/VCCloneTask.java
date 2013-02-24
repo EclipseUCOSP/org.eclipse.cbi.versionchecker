@@ -1,8 +1,8 @@
-package versionchecker.actions;
+package org.eclipse.cbi.versionchecker.ui.actions;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.sql.SQLException;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -10,9 +10,6 @@ import javax.swing.JOptionPane;
 
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
-import org.eclipse.jgit.lib.AnyObjectId;
-import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -28,19 +25,18 @@ public class VCCloneTask {
 	private String gitRepo;
 	private String gitBranch;
 	private String gitCommit;
-	private Boolean lastestFlag = false;
+	private Boolean latestFlag = false;
 
 	public VCCloneTask(String id, String version) {
 		this.id = id;
 		if (version == null) {
-			this.lastestFlag = true;
+			this.latestFlag = true;
 		} else {
 			this.version = version;
 		}
 		try {
-			this.makeDBCall();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			this.sendPostRequest();
+		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),
 					"VersionChecker", 1);
 			return;
@@ -54,18 +50,11 @@ public class VCCloneTask {
 
 		createAndShowGit();
 	}
-
-	/**
-	 * Query the database for the repo and branch.
-	 */
-	private void makeDBCall() throws SQLException {
-		VCDBCall call = new VCDBCall(VCDBCall.DBI_MYSQL);
-		if (this.lastestFlag) {
-			this.gitRepo = call.getLastestRepo(id);
-		} else {
-			this.gitRepo = (String) call.getCurrentRepo(id, version)[0];
-			this.gitBranch = (String) call.getCurrentRepo(id, version)[1];
-			this.gitCommit = (String) call.getCurrentRepo(id, version)[2];
+	
+	private void sendPostRequest() throws IOException {
+		VCPostRequest post = new VCPostRequest();
+		if (this.latestFlag) {
+			this.gitRepo = post.getLatestRepo(id);
 		}
 	}
 
@@ -108,7 +97,7 @@ public class VCCloneTask {
 					clone.call();
 					
 					// TODO: Revert to git commit
-					if (!this.lastestFlag) {
+					if (!this.latestFlag) {
 					}
 					
 

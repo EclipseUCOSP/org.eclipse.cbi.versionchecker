@@ -1,4 +1,4 @@
-package versionchecker.actions;
+package org.eclipse.cbi.versionchecker.ui.actions;
 
 public class VCArtifact implements Comparable{
 	private String id;
@@ -17,7 +17,6 @@ public class VCArtifact implements Comparable{
 		return this.version;
 	}
 
-	@Override
 	public int compareTo(Object arg0) {
 		return this.id.compareTo(((VCArtifact) arg0).id);
 	}
