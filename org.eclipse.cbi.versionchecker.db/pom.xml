@@ -98,7 +98,7 @@
 		<pluginRepository>
 			<id>eclipse</id>
 			<name>Eclipse Repository</name>
-			<url>https://repo.eclipse.org/content/groups/eclipse/</url>
+			<url>https://repo.eclipse.org/content/repositories/eclipse/</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>

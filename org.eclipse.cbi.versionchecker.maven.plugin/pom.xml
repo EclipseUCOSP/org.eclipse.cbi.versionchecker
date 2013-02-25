@@ -17,7 +17,7 @@
     <repository>
       <id>eclipse</id>
       <name>Eclipse Repository</name>
-      <url>https://repo.eclipse.org/content/groups/eclipse/</url>
+      <url>https://repo.eclipse.org/content/repositories/eclipse/</url>
     </repository>
     <repository>
       <id>jgit-repository</id>
