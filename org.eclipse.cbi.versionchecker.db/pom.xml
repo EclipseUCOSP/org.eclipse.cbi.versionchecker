@@ -83,12 +83,12 @@
 	</build>
 	<distributionManagement>
       <repository>
-        <id>cbi-releases</id>
+        <id>repo.eclipse.org</id>
         <name>Eclipse CBI Releases</name>
         <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
       </repository>
       <snapshotRepository>
-        <id>cbi-snapshots</id>
+        <id>repo.eclipse.org</id>
         <name>Eclipse CBI Snapshots</name>
         <url>https://repo.eclipse.org/content/repositories/cbi-snapshots/</url>
       </snapshotRepository>
