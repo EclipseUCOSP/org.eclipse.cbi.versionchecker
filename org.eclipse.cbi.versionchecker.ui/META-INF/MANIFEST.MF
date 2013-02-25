@@ -10,4 +10,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: lib/org.eclipse.jgit.jar,
  /lib/gson.jar,
+ /lib/jsch.jar,
  .

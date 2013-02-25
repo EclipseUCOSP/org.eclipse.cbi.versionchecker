@@ -41,9 +41,10 @@
             <id>copy-bundle-classpath-libs</id>
             <phase>validate</phase>		
             <goals>
-              <goal>copy</goal>
+              <goal>copy-dependencies</goal>
             </goals>
             <configuration>
+              <includeArtifactIds>org.eclipse.jgit,gson,jsch</includeArtifactIds>
               <outputDirectory>lib</outputDirectory>
               <overWriteReleases>true</overWriteReleases>
               <overWriteSnapshots>true</overWriteSnapshots>
@@ -57,7 +58,7 @@
                 <artifactItem>
     			  <groupId>com.google.code.gson</groupId>
     	          <artifactId>gson</artifactId>
-                </artifactItem>>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
