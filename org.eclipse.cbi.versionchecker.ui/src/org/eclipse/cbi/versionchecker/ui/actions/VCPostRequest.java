@@ -5,8 +5,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class VCPostRequest {
 	public String getLatestRepo(String name) throws IOException {
@@ -39,10 +44,12 @@ public class VCPostRequest {
 		
 		String jsonText = builder.toString();
 		
-		System.out.println(jsonText);
+		Type artifactListType = new TypeToken<List<VCResponseData>>(){}.getType();
 		
-		//Gson gson = new Gson();
-		
-		return null;
+		List<VCResponseData> artifacts = new Gson().fromJson(jsonText, artifactListType);
+		if (!artifacts.isEmpty())
+			return artifacts.get(0).getCurrent().getRepo();
+		else
+			return "";
 	}
 }
