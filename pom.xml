@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eclipse.cbi.versionchecker</groupId>
+  <artifactId>org.eclipse.cbi.versionchecker.parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>/org.eclipse.cbi.versionchecker.db</module>
+    <module>/org.eclipse.cbi.versionchecker.maven.plugin</module>
+    <module>/org.eclipse.cbi.versionchecker.ui</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>juno</id>
+      <layout>p2</layout>
+      <url>http://download.eclipse.org/releases/juno</url>
+    </repository>
+    <repository>
+      <id>jgit-repository</id>
+      <name>JGit Repository</name>
+      <url>http://download.eclipse.org/jgit/maven</url>
+    </repository>
+  </repositories>
+
+    <distributionManagement>
+      <repository>
+        <id>repo.eclipse.org</id>
+        <name>Eclipse CBI Releases</name>
+        <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
+      </repository>
+      <snapshotRepository>
+        <id>repo.eclipse.org</id>
+        <name>Eclipse CBI Snapshots</name>
+        <url>https://repo.eclipse.org/content/repositories/cbi-snapshots/</url>
+      </snapshotRepository>
+  </distributionManagement>
+
+  <properties>
+    <tycho-version>0.16.0</tycho-version>
+    <java.version>1.6</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-compiler-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project> 
