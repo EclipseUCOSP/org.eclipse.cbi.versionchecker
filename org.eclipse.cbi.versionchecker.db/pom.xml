@@ -2,14 +2,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
 						http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<properties>
-		<java.version>1.6</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
-
-	<groupId>org.eclipse.cbi.versionchecker</groupId>
+    <parent>
+        <artifactId>versionchecker-parent</artifactId>
+        <groupId>org.eclipse.cbi.versionchecker</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 	<artifactId>org.eclipse.cbi.versionchecker.db</artifactId>
 	<version>1.4.0-SNAPSHOT</version>
 	<dependencies>
@@ -81,30 +79,4 @@
 		<outputDirectory>${basedir}/target/classes</outputDirectory>
 		<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
 	</build>
-	<distributionManagement>
-      <repository>
-        <id>repo.eclipse.org</id>
-        <name>Eclipse CBI Releases</name>
-        <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
-      </repository>
-      <snapshotRepository>
-        <id>repo.eclipse.org</id>
-        <name>Eclipse CBI Snapshots</name>
-        <url>https://repo.eclipse.org/content/repositories/cbi-snapshots/</url>
-      </snapshotRepository>
-	</distributionManagement>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>eclipse</id>
-			<name>Eclipse Repository</name>
-			<url>https://repo.eclipse.org/content/repositories/eclipse/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 </project>

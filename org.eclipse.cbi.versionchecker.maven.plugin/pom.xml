@@ -1,30 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+     <artifactId>versionchecker-parent</artifactId>
+     <groupId>org.eclipse.cbi.versionchecker</groupId>
+     <version>1.0.0-SNAPSHOT</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.cbi.versionchecker</groupId>
   <artifactId>org.eclipse.cbi.versionchecker.maven.plugin</artifactId>
   <version>1.4.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <java.version>1.6</java.version>
-    <getUserInput></getUserInput>
-  </properties>
-
-  <repositories>
-    <repository>
-      <id>eclipse</id>
-      <name>Eclipse Repository</name>
-      <url>https://repo.eclipse.org/content/repositories/eclipse/</url>
-    </repository>
-    <repository>
-      <id>jgit-repository</id>
-      <name>JGit Repository</name>
-      <url>http://download.eclipse.org/jgit/maven</url>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>
@@ -102,18 +86,4 @@
      <version>1.5</version>
    </dependency> 
   </dependencies>
-
-
-  <distributionManagement>
-    <repository>
-      <id>repo.eclipse.org</id>
-      <name>Eclipse CBI Releases</name>
-      <url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>repo.eclipse.org</id>
-      <name>Eclipse CBI Snapshots</name>
-      <url>https://repo.eclipse.org/content/repositories/cbi-snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
 </project>

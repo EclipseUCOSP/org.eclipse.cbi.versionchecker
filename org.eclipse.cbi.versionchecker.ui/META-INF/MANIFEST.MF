@@ -7,7 +7,7 @@ Bundle-Activator: org.eclipse.cbi.versionchecker.ui.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/org.eclipse.jgit.jar,
  /lib/gson.jar,
  /lib/jsch.jar,
