@@ -6,7 +6,7 @@ Requirement:
 
 How to run this project:
 ------------------------
-1. 
+1.
 ```
 git clone https://github.com/EclipseUCOSP/org.eclipse.cbi.versionchecker.git
 ```
