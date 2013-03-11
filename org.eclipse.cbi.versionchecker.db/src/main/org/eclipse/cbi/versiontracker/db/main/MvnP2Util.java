@@ -19,7 +19,7 @@ public class MvnP2Util {
 		this(new MySQLDBI());
 	}
 
-	protected MvnP2Util(DBI dbi) {
+	public MvnP2Util(DBI dbi) {
 		this.dbi = dbi;
 	}
 
