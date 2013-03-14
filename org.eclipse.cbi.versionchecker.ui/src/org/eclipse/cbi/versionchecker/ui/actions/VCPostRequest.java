@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class VCPostRequest {
 	public String getLatestRepo(String name) throws IOException {
+		// TODO: move the hardcoded url
 		URL url = new URL("http://ec2-107-21-119-69.compute-1.amazonaws.com/cakephp/");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
@@ -43,13 +44,8 @@ public class VCPostRequest {
 		inStream.close();
 		
 		String jsonText = builder.toString();
-		
-		Type artifactListType = new TypeToken<List<VCResponseData>>(){}.getType();
-		
-		List<VCResponseData> artifacts = new Gson().fromJson(jsonText, artifactListType);
-		if (!artifacts.isEmpty())
-			return artifacts.get(0).getCurrent().getRepo();
-		else
-			return "";
+				
+		VCResponseData artifact = new Gson().fromJson(jsonText, VCResponseData.class);
+			return artifact.getCurrent().getRepo();
 	}
 }

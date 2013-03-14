@@ -10,8 +10,8 @@ import javax.swing.JOptionPane;
 
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.api.ResetCommand.ResetType;
+import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 /**
@@ -78,14 +78,8 @@ public class VCCloneTask {
 
 			if (ret == JFileChooser.APPROVE_OPTION) {
 				File loc = jfc.getSelectedFile();
-				FileRepositoryBuilder builder = new FileRepositoryBuilder();
-				Repository repository;
-
 				try {
-					repository = builder.setGitDir(loc).readEnvironment()
-							.findGitDir().build();
-					Git git = new Git(repository);
-					CloneCommand clone = git.cloneRepository();
+					CloneCommand clone = Git.cloneRepository();
 					clone.setBare(false);
 					
 					// TODO: Fix clone certain branch option
@@ -96,13 +90,15 @@ public class VCCloneTask {
 					clone.setCredentialsProvider(user);
 					clone.call();
 					
-					// TODO: Revert to git commit
 					if (!this.latestFlag) {
+						FileRepository localRepo = new FileRepository(loc + "/.git");
+						Git git = new Git(localRepo);
+						git.reset().setMode(ResetType.HARD).setRef(gitCommit).call();
 					}
 					
 
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Clone failed","VersionChecker", 1);
+					JOptionPane.showMessageDialog(null, "Clone failed: " + e.getMessage(), "VersionChecker", 1);
 					return;
 				}
 				
