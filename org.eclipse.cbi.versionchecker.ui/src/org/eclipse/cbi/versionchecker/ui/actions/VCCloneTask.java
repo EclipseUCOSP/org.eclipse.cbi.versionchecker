@@ -3,6 +3,7 @@ package org.eclipse.cbi.versionchecker.ui.actions;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -53,9 +54,17 @@ public class VCCloneTask {
 	
 	private void sendPostRequest() throws IOException {
 		VCPostRequest post = new VCPostRequest();
+		HashMap<String, String> hashmap;
 		if (this.latestFlag) {
-			this.gitRepo = post.getLatestRepo(id);
+			hashmap = post.getLatestRepo(id);
+			this.gitRepo = hashmap.get("repo");
+		} else {
+			hashmap = post.getCurrentRepo(id, version);
+			this.gitRepo = hashmap.get("repo");
+			this.gitBranch = hashmap.get("branch");
+			this.gitCommit = hashmap.get("commit");
 		}
+			
 	}
 
 	/**
