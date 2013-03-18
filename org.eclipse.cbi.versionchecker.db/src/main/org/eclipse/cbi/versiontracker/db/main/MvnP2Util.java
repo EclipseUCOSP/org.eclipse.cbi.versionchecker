@@ -137,32 +137,6 @@ public class MvnP2Util {
 		return mft;
 	}
 
-	/**
-	 * Create a map from a manifest.
-	 *
-	 * Temporary - until the DBI is updated to use manifests.
-	 */
-	/*
-	private static Map<String,String> createMap(VersionManifest mft) {
-		Map<String, String> map = new HashMap<String, String>();
-
-		String commit = mft.getGitCommit();
-		String repo = mft.getGitRepo();
-		String branch = mft.getGitBranch();
-		String project = mft.getProject();
-		String p2Version = mft.getP2Version();
-		String mavenVersion = mft.getMavenVersion();
-
-		if (commit != null) map.put(MavenP2Col.GIT_COMMIT.getColName(), commit);
-		if (branch != null) map.put(MavenP2Col.GIT_BRANCH.getColName(), branch);
-		if (repo != null) map.put(MavenP2Col.GIT_REPO.getColName(), repo);
-		if (project != null) map.put(MavenP2Col.PROJECT.getColName(), project);
-		if (p2Version != null) map.put(MavenP2Col.P2_VERSION.getColName(), p2Version);
-		if (mavenVersion != null) map.put(MavenP2Col.MAVEN_VERSION.getColName(), mavenVersion);
-
-		return map;
-	}*/
-
 
 	/**
 	 * Attempts to update a record using the map given, searching for matches in
