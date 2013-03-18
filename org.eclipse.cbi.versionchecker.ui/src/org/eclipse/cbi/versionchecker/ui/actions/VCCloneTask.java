@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
 import org.eclipse.jgit.storage.file.FileRepository;
@@ -58,6 +59,7 @@ public class VCCloneTask {
 		if (this.latestFlag) {
 			hashmap = post.getLatestRepo(id);
 			this.gitRepo = hashmap.get("repo");
+			this.gitBranch = hashmap.get("branch");
 		} else {
 			hashmap = post.getCurrentRepo(id, version);
 			this.gitRepo = hashmap.get("repo");
@@ -91,21 +93,24 @@ public class VCCloneTask {
 					CloneCommand clone = Git.cloneRepository();
 					clone.setBare(false);
 					
-					// TODO: Fix clone certain branch option
 					clone.setDirectory(loc).setURI(this.gitRepo).setCloneAllBranches(true);
-
+					
 					UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(
 							vcgw.getLogin(), vcgw.getPass());
 					clone.setCredentialsProvider(user);
 					clone.call();
 					
+					FileRepository localRepo = new FileRepository(loc + "/.git");
+					Git git = new Git(localRepo);
+					
+					git.checkout().setCreateBranch(true)
+						.setName(gitBranch)
+						.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM)
+						.setStartPoint("origin/" + gitBranch).call();
+					
 					if (!this.latestFlag) {
-						FileRepository localRepo = new FileRepository(loc + "/.git");
-						Git git = new Git(localRepo);
 						git.reset().setMode(ResetType.HARD).setRef(gitCommit).call();
 					}
-					
-
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Clone failed: " + e.getMessage(), "VersionChecker", 1);
 					return;
