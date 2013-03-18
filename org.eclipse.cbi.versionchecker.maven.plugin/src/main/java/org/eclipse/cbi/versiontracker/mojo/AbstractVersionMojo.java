@@ -22,6 +22,7 @@ import org.eclipse.jgit.lib.ObjectId;
 
 import org.eclipse.cbi.versiontracker.db.main.VersionManifest;
 import org.eclipse.cbi.versiontracker.db.main.MvnP2Util;
+import org.eclipse.cbi.versiontracker.db.db.MySQLDBI;
 
 /**
  * A common base class for version checker mojos.
@@ -49,6 +50,43 @@ public class AbstractVersionMojo extends AbstractMojo
 	 * @readonly
 	 */
 	MavenProject project;
+
+	/**
+	 * Connection details for the DBI.
+	 */
+
+	/**
+	 * Host for the DBI.
+	 * @parameter default-value="${cbi.versionchecker.db.host}"
+	 * @required
+	 */
+	private String dbHost;
+
+	/**
+	 * Username for the DBI.
+	 * @parameter default-value="${cbi.versionchecker.db.user}"
+	 * @required
+	 */
+	private String dbUser;
+
+	/**
+	 * Password for the DBI.
+	 * @parameter default-value="${cbi.versionchecker.db.password}"
+	 * @required
+	 */
+	private String dbPassword;
+
+	/**
+	 * Database name for the DBI.
+	 * @parameter default-value="${cbi.versionchecker.db.database}"
+	 * @required
+	 */
+	private String dbDatabase;
+
+  /**
+   * end DBI info
+   */
+
 
 	/**
 	 * Creates a version manifest.
@@ -193,7 +231,8 @@ public class AbstractVersionMojo extends AbstractMojo
 	{
 		VersionManifest manifest = createManifest();
 
-		MvnP2Util util = new MvnP2Util(); // could pass in a DBI if we wanted to...
+    String dbUrl = MySQLDBI.makeUrl(dbHost, dbDatabase);
+		MvnP2Util util = new MvnP2Util( new MySQLDBI(dbUrl, dbUser, dbPassword) ); // could pass in a DBI if we wanted to...
 
 		try {
 			util.add(manifest); // at this time, this method doesn't throw any exceptions... but if it did in the future, we'd want to catch them.
