@@ -142,6 +142,7 @@ public class MvnP2Util {
 	 *
 	 * Temporary - until the DBI is updated to use manifests.
 	 */
+	/*
 	private static Map<String,String> createMap(VersionManifest mft) {
 		Map<String, String> map = new HashMap<String, String>();
 
@@ -160,14 +161,13 @@ public class MvnP2Util {
 		if (mavenVersion != null) map.put(MavenP2Col.MAVEN_VERSION.getColName(), mavenVersion);
 
 		return map;
-	}
+	}*/
 
 
 	/**
 	 * Attempts to update a record using the map given, searching for matches in
 	 * for the hardcoded list of columns (as seen in filterMap). If any matches found, 
-	 * prompts the user to confirm an update, updating if confirmed and canceling 
-	 * the database call otherwise.
+	 * does not insert
 	 * @param map of db column name and input value
 	 * @return true if a matching record was found to update, false otherwise
 	 */
@@ -205,12 +205,14 @@ public class MvnP2Util {
 	private static Map<String, String> filterMap(Map<String, String> map, MavenP2Col filter){
 		Map<String, String> result = new HashMap<String, String>();
 		for (String key : map.keySet()){
-			if (key == MavenP2Col.GIT_REPO.getColName() ||
-					key == MavenP2Col.GIT_COMMIT.getColName() || 
-					key == MavenP2Col.GIT_BRANCH.getColName() ||
-					key == filter.getColName()){
+			if (key.equals(MavenP2Col.GIT_REPO.getColName()) ||
+					key.equals(MavenP2Col.GIT_COMMIT.getColName()) || 
+					key.equals(MavenP2Col.GIT_BRANCH.getColName()) ||
+					key.equals(MavenP2Col.PROJECT.getColName()) ||
+					key.equals(filter.getColName())) 
+			{
 				result.put(key, map.get(key));
-					}
+			}
 		}
 		return result;
 	}
