@@ -61,8 +61,10 @@ public class VCPostRequest {
 	public HashMap<String, String> getCurrentRepo(String name, String version) throws IOException {
 		HashMap<String, String> hashmap = new HashMap<String, String>();
 		
-		// TODO: move the hardcoded url
-		URL url = new URL("http://ec2-107-21-119-69.compute-1.amazonaws.com/cakephp/");
+		Properties prop = new Properties();
+		prop.load(this.getClass().getResourceAsStream("/config.properties"));
+
+		URL url = new URL(prop.getProperty("webserviceurl"));
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
 		// TODO: need to pass component name and version to the web service
