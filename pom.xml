@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>/org.eclipse.cbi.versionchecker.db</module>
-    <module>/org.eclipse.cbi.versionchecker.maven.plugin</module>
+    <module>/org.eclipse.cbi.versionchecker.maven.p</module>
     <module>/org.eclipse.cbi.versionchecker.ui</module>
   </modules>
 
