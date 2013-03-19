@@ -1,6 +1,6 @@
 package org.eclipse.cbi.versionchecker.ui.actions;
 
-public class VCArtifact implements Comparable{
+public class VCArtifact implements Comparable<Object>{
 	private String id;
 	private String version;
 	

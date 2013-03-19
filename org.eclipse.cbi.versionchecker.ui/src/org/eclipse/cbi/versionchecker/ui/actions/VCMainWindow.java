@@ -26,9 +26,9 @@ public class VCMainWindow {
 	private VCArtifactTable tablePanel;
 	private JPanel mainPanel;
 
-	public VCMainWindow(Object[] data) {
+	public VCMainWindow(VCArtifact[] data) {
 
-		ArrayList<VCArtifact> tmp = new ArrayList(Arrays.asList(data));
+		ArrayList<VCArtifact> tmp = new ArrayList<VCArtifact>(Arrays.asList(data));
 		Collections.sort(tmp);
 		this.oriData = tmp.toArray();
 		createAndShowGUI(this.oriData);

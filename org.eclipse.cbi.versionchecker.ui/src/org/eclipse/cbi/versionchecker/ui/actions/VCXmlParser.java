@@ -16,8 +16,8 @@ import java.io.File;
  */
 public class VCXmlParser {
 
-	public Object[] parse() {
-		Object[] toRet = null;
+	public VCArtifact[] parse() {
+		VCArtifact[] toRet = null;
 		try {
 			java.net.URL tmpUrl = Platform.getInstallLocation().getURL();
 
@@ -39,7 +39,7 @@ public class VCXmlParser {
 				}
 			}
 
-			toRet = new Object[artSize];
+			toRet = new VCArtifact[artSize];
 			int curIndex = 0;
 			for (int temp = 0; temp < artList.getLength(); temp++) {
 				Node nNode = artList.item(temp);
