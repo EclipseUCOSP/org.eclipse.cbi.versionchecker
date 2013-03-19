@@ -6,7 +6,7 @@ org.eclipse.cbi.versionchecker.maven.plugin/target/
 org.eclipse.cbi.versionchecker.maven.plugin/.project
 org.eclipse.cbi.versionchecker.maven.plugin/.classpath
 org.eclipse.cbi.versionchecker.ui/target/
-
+org.eclipse.cbi.versionchecker.maven.p/target/
 
 # Compiled source #
 ###################
