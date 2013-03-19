@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Properties;
 
 import com.google.gson.Gson;
 
@@ -15,8 +16,10 @@ public class VCPostRequest {
 	public HashMap<String, String> getLatestRepo(String name) throws IOException {
 		HashMap<String, String> hashmap = new HashMap<String, String>();
 		
-		// TODO: move the hardcoded url
-		URL url = new URL("http://ec2-107-21-119-69.compute-1.amazonaws.com/cakephp/");
+		Properties prop = new Properties();
+		prop.load(this.getClass().getResourceAsStream("/config.properties"));
+
+		URL url = new URL(prop.getProperty("webserviceurl"));
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
 		// TODO: need to pass component name to the web service
