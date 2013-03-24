@@ -2,12 +2,12 @@
 org.eclipse.cbi.versionchecker.db/target/
 org.eclipse.cbi.versionchecker.db/.project
 org.eclipse.cbi.versionchecker.db/.classpath
-org.eclipse.cbi.versionchecker.maven.plugin/target/
-org.eclipse.cbi.versionchecker.maven.plugin/.project
-org.eclipse.cbi.versionchecker.maven.plugin/.classpath
-org.eclipse.cbi.versionchecker.ui/target/
 org.eclipse.cbi.versionchecker.maven.p/target/
-
+org.eclipse.cbi.versionchecker.maven.p/.project
+org.eclipse.cbi.versionchecker.maven.p/.classpath
+org.eclipse.cbi.versionchecker.ui/target/
+org.eclipse.cbi.versionchecker.maven.p/bin/
+org.eclipse.cbi.versionchecker.maven.p/.settings/
 # Compiled source #
 ###################
 *.com

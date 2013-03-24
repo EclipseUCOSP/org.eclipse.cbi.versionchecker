@@ -92,7 +92,7 @@ public class AbstractVersionMojo extends AbstractMojo
 	 * Creates a version manifest.
 	 */
 	protected VersionManifest createManifest() throws MojoFailureException {
-		// Find the Git revision &c.
+		// Find the Git revision & commit.
 		// Note: I do not call readEnvironment on the builder, since undocumented
 		// environment variables are the bane of repeatable builds.
 		VersionManifest manifest = null;
@@ -184,7 +184,7 @@ public class AbstractVersionMojo extends AbstractMojo
 			String modulePath = repo.getWorkTree().toString() + "/" + gen.getModulesPath();
 			
 			//mojo running in git submodule?
-			if (modulePath.equals(currDir.toString())) {
+			if (currDir.toString().contains(modulePath)) {
 				manifest = new VersionManifest();
 				
 				FilenameFilter gitFilter = new FilenameFilter() {
