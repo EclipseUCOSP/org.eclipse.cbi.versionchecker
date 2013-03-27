@@ -19,5 +19,6 @@ How to run this project:
         mvn clean install
 
 4. Import the project into Eclipse as an "Existing Projects into Workspace".
-5. Click "Run". (click "Project->Clean" before "Run" is recommanded)
-6. Click "Help -> Version Checker" on the top menu to boot the plug-in.
+5. Click "Project->Clean"
+6. Click "Run" and select "Eclipse Application", if prompted.
+7. Click "Help -> Version Checker" on the top menu to boot the plug-in.
