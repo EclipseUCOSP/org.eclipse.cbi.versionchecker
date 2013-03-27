@@ -3,16 +3,26 @@ package org.eclipse.cbi.versionchecker.ui.actions;
 public class VCResponseData {
 
 	private String component;
-	private Current current;
+	private String state;
+	private String version;
+	private Repoinfo repoinfo;
 	public String getComponent() {
 		return this.component;
 	}
 	
-	public Current getCurrent() {
-		return this.current;
+	public String getState() {
+		return this.state;
 	}
 	
-	public static class Current {
+	public String getVersion() {
+		return this.version;
+	}
+	
+	public Repoinfo getRepoinfo() {
+		return this.repoinfo;
+	}
+	
+	public static class Repoinfo {
 		private String repo;
 		private String commit;
 		private String branch;
