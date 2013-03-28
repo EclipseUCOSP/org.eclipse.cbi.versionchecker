@@ -28,6 +28,7 @@ public class VCCloneTask {
 	private String version;
 	private Boolean latestFlag = false;
 	private VCResponseData artifact = null;
+	final private String title = "Version Checker";
 
 	public VCCloneTask(String id, String version) {
 		this.id = id;
@@ -40,14 +41,22 @@ public class VCCloneTask {
 			this.sendPostRequest();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),
-					"VersionChecker", 1);
+					title, 1);
 			return;
 		}
 		if (artifact == null || artifact.getState().equals("unavailable")) {
 			JOptionPane.showMessageDialog(null,
 					"No record for this component in database",
-					"VersionChecker", 1);
+					title, 1);
 			return;
+		} else if (artifact.getState().equals("alternative")) {
+			int n = JOptionPane.showConfirmDialog(null, 
+					id + ": " + System.getProperty("line.separator") + 
+						"The requested version " + version +" is not available. " + System.getProperty("line.separator") + 
+						"Do you want to clone an alternative version " + artifact.getVersion() + "?", 
+					title, JOptionPane.YES_NO_OPTION);
+			if (n == 1) // no!
+				return;
 		}
 
 		createAndShowGit();
