@@ -3,7 +3,6 @@ package org.eclipse.cbi.versionchecker.ui.actions;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -27,10 +26,8 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 public class VCCloneTask {
 	private String id;
 	private String version;
-	private String gitRepo;
-	private String gitBranch;
-	private String gitCommit;
 	private Boolean latestFlag = false;
+	private VCResponseData artifact = null;
 
 	public VCCloneTask(String id, String version) {
 		this.id = id;
@@ -46,7 +43,7 @@ public class VCCloneTask {
 					"VersionChecker", 1);
 			return;
 		}
-		if (this.gitRepo == "") {
+		if (artifact == null || artifact.getState().equals("unavailable")) {
 			JOptionPane.showMessageDialog(null,
 					"No record for this component in database",
 					"VersionChecker", 1);
@@ -58,16 +55,10 @@ public class VCCloneTask {
 	
 	private void sendPostRequest() throws IOException {
 		VCPostRequest post = new VCPostRequest();
-		HashMap<String, String> hashmap;
 		if (this.latestFlag) {
-			hashmap = post.getLatestRepo(id);
-			this.gitRepo = hashmap.get("repo");
-			this.gitBranch = hashmap.get("branch");
+			artifact = post.getLatestRepo(id);
 		} else {
-			hashmap = post.getCurrentRepo(id, version);
-			this.gitRepo = hashmap.get("repo");
-			this.gitBranch = hashmap.get("branch");
-			this.gitCommit = hashmap.get("commit");
+			artifact = post.getCurrentRepo(id, version);
 		}
 			
 	}
@@ -95,13 +86,15 @@ public class VCCloneTask {
 				FileRepository localRepo = new FileRepository(loc + "/.git");
 				Git git = new Git(localRepo);
 				
+				String branch = artifact.getRepoinfo().getBranch();
+				
 				git.checkout().setCreateBranch(true)
-					.setName(gitBranch)
+					.setName(branch)
 					.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM)
-					.setStartPoint("origin/" + gitBranch).call();
+					.setStartPoint("origin/" + branch).call();
 				
 				if (!this.latestFlag) {
-					git.reset().setMode(ResetType.HARD).setRef(gitCommit).call();
+					git.reset().setMode(ResetType.HARD).setRef(artifact.getRepoinfo().getCommit()).call();
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Clone failed: " + e.getMessage(), "VersionChecker", 1);
@@ -117,7 +110,7 @@ public class VCCloneTask {
 		CloneCommand clone = Git.cloneRepository();
 		clone.setBare(false);
 		
-		clone.setDirectory(loc).setURI(this.gitRepo).setCloneAllBranches(true);
+		clone.setDirectory(loc).setURI(artifact.getRepoinfo().getRepo()).setCloneAllBranches(true);
 		
 		try {
 			clone.call();

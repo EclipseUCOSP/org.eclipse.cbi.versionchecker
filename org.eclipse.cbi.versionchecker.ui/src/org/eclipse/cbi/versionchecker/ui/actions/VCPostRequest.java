@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -16,19 +15,17 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class VCPostRequest {
-	public HashMap<String, String> getLatestRepo(String name) throws IOException {
+	public VCResponseData getLatestRepo(String name) throws IOException {
 		String urlParameters =  "[{\"component\": \"" + name + "\"}]";
 		return sendPostRequest(urlParameters);
 	}
 	
-	public HashMap<String, String> getCurrentRepo(String name, String version) throws IOException {
+	public VCResponseData getCurrentRepo(String name, String version) throws IOException {
 		String urlParameters =  "[{\"component\": \"" + name + "\", \"version\": \"" + version + "\"}]";;
 		return sendPostRequest(urlParameters);
 	}
 	
-	private HashMap<String, String> sendPostRequest(String urlParameters) throws IOException {
-		HashMap<String, String> hashmap = new HashMap<String, String>();
-		
+	private VCResponseData sendPostRequest(String urlParameters) throws IOException {
 		Properties prop = new Properties();
 		prop.load(this.getClass().getResourceAsStream("/config.properties"));
 
@@ -57,22 +54,16 @@ public class VCPostRequest {
 		inStream.close();
 		
 		String jsonText = builder.toString();
-		System.out.println(jsonText);
 		
 		Type artifactListType = new TypeToken<List<VCResponseData>>(){}.getType();
 		List<VCResponseData> artifacts = new Gson().fromJson(jsonText, artifactListType);
-		hashmap.put("repo", "");
-		hashmap.put("branch", "");
-		hashmap.put("commit", "");	
-		if (!artifacts.isEmpty()) {
-			VCResponseData responseData = artifacts.get(0);
-			if (!responseData.getState().equals("unavailable")) {
-				hashmap.put("repo", responseData.getRepoinfo().getRepo());
-				hashmap.put("branch", responseData.getRepoinfo().getBranch());
-				hashmap.put("commit", responseData.getRepoinfo().getCommit());
-			}
-		}
 		
-		return hashmap;
+		if (artifacts.isEmpty())
+			return null;
+		// TODO: currently this only returns the first record and assumes
+		// it's the best choice for the user. To improve the ux, we need
+		// to add the functionality to allow user to choose their desired
+		// record from a list.
+		return artifacts.get(0);
 	}
 }
