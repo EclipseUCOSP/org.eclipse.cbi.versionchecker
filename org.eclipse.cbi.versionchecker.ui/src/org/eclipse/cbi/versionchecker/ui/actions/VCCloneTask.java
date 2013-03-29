@@ -24,11 +24,12 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
  * dialog, and git execution and error reporting.
  */
 public class VCCloneTask {
+	final private static String TITLE = "Version Checker";
+
 	private String id;
 	private String version;
 	private Boolean latestFlag = false;
 	private VCResponseData artifact = null;
-	final private String title = "Version Checker";
 
 	public VCCloneTask(String id, String version) {
 		this.id = id;
@@ -37,26 +38,27 @@ public class VCCloneTask {
 		} else {
 			this.version = version;
 		}
+		
 		try {
 			this.sendPostRequest();
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(),
-					title, 1);
+			JOptionPane.showMessageDialog(null, e.getMessage(), TITLE, 1);
 			return;
 		}
+		
 		if (artifact == null || artifact.getState().equals("unavailable")) {
-			JOptionPane.showMessageDialog(null,
-					"No record for this component in database",
-					title, 1);
+			JOptionPane.showMessageDialog(null, "No record for this component in database", TITLE, 1);
 			return;
 		} else if (artifact.getState().equals("alternative")) {
-			int n = JOptionPane.showConfirmDialog(null, 
-					id + ": " + System.getProperty("line.separator") + 
-						"The requested version " + version +" is not available. " + System.getProperty("line.separator") + 
-						"Do you want to clone an alternative version " + artifact.getVersion() + "?", 
-					title, JOptionPane.YES_NO_OPTION);
-			if (n == 1) // no!
+			String lineSeparator = System.getProperty("line.separator");
+			String message = String.format("%s: %sThe requested version %s is not available. %sDo you want to clone an alternative version %s?", 
+											id, lineSeparator, version, lineSeparator, artifact.getVersion());
+			
+			int n = JOptionPane.showConfirmDialog(null, message, TITLE, JOptionPane.YES_NO_OPTION);
+			if (n == 1) {
+				// no!
 				return;
+			}
 		}
 
 		createAndShowGit();
@@ -64,7 +66,7 @@ public class VCCloneTask {
 	
 	private void sendPostRequest() throws IOException {
 		VCPostRequest post = new VCPostRequest();
-		if (this.latestFlag) {
+		if (latestFlag) {
 			artifact = post.getLatestRepo(id);
 		} else {
 			artifact = post.getCurrentRepo(id, version);
@@ -93,17 +95,22 @@ public class VCCloneTask {
 				executeCloneCommand(f, loc);
 				
 				FileRepository localRepo = new FileRepository(loc + "/.git");
+				
+				String branch = artifact.getRepoinfo()
+										.getBranch();
+				
 				Git git = new Git(localRepo);
-				
-				String branch = artifact.getRepoinfo().getBranch();
-				
-				git.checkout().setCreateBranch(true)
+				git.checkout()
+					.setCreateBranch(true)
 					.setName(branch)
 					.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM)
 					.setStartPoint("origin/" + branch).call();
 				
 				if (!this.latestFlag) {
-					git.reset().setMode(ResetType.HARD).setRef(artifact.getRepoinfo().getCommit()).call();
+					git.reset()
+						.setMode(ResetType.HARD)
+						.setRef(artifact.getRepoinfo().getCommit())
+						.call();
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Clone failed: " + e.getMessage(), "VersionChecker", 1);
@@ -111,7 +118,6 @@ public class VCCloneTask {
 			}
 			
 			JOptionPane.showMessageDialog(null, "Clone successfully","VersionChecker", 1);
-
 		}
 	}
 
@@ -119,7 +125,9 @@ public class VCCloneTask {
 		CloneCommand clone = Git.cloneRepository();
 		clone.setBare(false);
 		
-		clone.setDirectory(loc).setURI(artifact.getRepoinfo().getRepo()).setCloneAllBranches(true);
+		clone.setDirectory(loc)
+				.setURI(artifact.getRepoinfo().getRepo())
+				.setCloneAllBranches(true);
 		
 		try {
 			clone.call();
@@ -128,10 +136,11 @@ public class VCCloneTask {
 			vcgw.show();
 
 			if (vcgw.status()) {
-				UsernamePasswordCredentialsProvider user = new UsernamePasswordCredentialsProvider(
-						vcgw.getLogin(), vcgw.getPass());
-				clone.setCredentialsProvider(user);
-				clone.call();
+				UsernamePasswordCredentialsProvider user = 
+					new UsernamePasswordCredentialsProvider(vcgw.getLogin(), vcgw.getPass());
+
+				clone.setCredentialsProvider(user)
+						.call();
 			}
 		}
 	}
