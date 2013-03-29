@@ -113,17 +113,19 @@ public class VCCloneTask {
 			try {
 				executeCloneCommand(f, loc);
 				
-				FileRepository localRepo = new FileRepository(loc + "/.git");
+				FileRepository localRepo = new FileRepository(loc + "/.git");				
+				Git git = new Git(localRepo);
 				
 				String branch = selectedArtifact.getRepoinfo()
 										.getBranch();
 				
-				Git git = new Git(localRepo);
-				git.checkout()
-					.setCreateBranch(true)
-					.setName(branch)
-					.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM)
-					.setStartPoint("origin/" + branch).call();
+				if (!branch.equals("master")) {
+					git.checkout()
+						.setCreateBranch(true)
+						.setName(branch)
+						.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM)
+						.setStartPoint("origin/" + branch).call();
+				}
 				
 				if (!this.latestFlag) {
 					git.reset()
