@@ -3,6 +3,7 @@ package org.eclipse.cbi.versionchecker.ui.actions;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -29,7 +30,8 @@ public class VCCloneTask {
 	private String id;
 	private String version;
 	private Boolean latestFlag = false;
-	private VCResponseData artifact = null;
+	private List<VCResponseData> artifacts = null;
+	private VCResponseData selectedArtifact = null;
 
 	public VCCloneTask(String id, String version) {
 		this.id = id;
@@ -46,19 +48,36 @@ public class VCCloneTask {
 			return;
 		}
 		
-		if (artifact == null || artifact.getState().equals("unavailable")) {
+		String lineSeparator = System.getProperty("line.separator");
+		if (artifacts == null || artifacts.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No record for this component in database", TITLE, 1);
 			return;
-		} else if (artifact.getState().equals("alternative")) {
-			String lineSeparator = System.getProperty("line.separator");
-			String message = String.format("%s: %sThe requested version %s is not available. %sDo you want to clone an alternative version %s?", 
-											id, lineSeparator, version, lineSeparator, artifact.getVersion());
-			
+		} else if (this.latestFlag) {
+			String message = String.format("Do you want to clone the latest version %s?", 
+											artifacts.get(0).getVersion());
 			int n = JOptionPane.showConfirmDialog(null, message, TITLE, JOptionPane.YES_NO_OPTION);
 			if (n == 1) {
 				// no!
 				return;
 			}
+			
+			selectedArtifact = artifacts.get(0);
+		} else {
+			String[] choices = new String[artifacts.size()];
+			for (int i = 0; i < artifacts.size(); i++)
+				choices[i] = artifacts.get(i).getVersion();
+			
+			String message = String.format("%s: %sThe requested version %s is not available. %sDo you want to clone an alternative version?", 
+											id, lineSeparator, version, lineSeparator);
+			
+			String input = (String) JOptionPane.showInputDialog(null, message, TITLE, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+			if (input == null) {
+				// cancel!
+				return;
+			}
+			for (int i = 0; i < artifacts.size(); i++)
+				if (choices[i] == input)
+					selectedArtifact = artifacts.get(i);
 		}
 
 		createAndShowGit();
@@ -67,9 +86,9 @@ public class VCCloneTask {
 	private void sendPostRequest() throws IOException {
 		VCPostRequest post = new VCPostRequest();
 		if (latestFlag) {
-			artifact = post.getLatestRepo(id);
+			artifacts = post.getLatestRepo(id);
 		} else {
-			artifact = post.getCurrentRepo(id, version);
+			artifacts = post.getCurrentRepo(id, version);
 		}
 			
 	}
@@ -96,7 +115,7 @@ public class VCCloneTask {
 				
 				FileRepository localRepo = new FileRepository(loc + "/.git");
 				
-				String branch = artifact.getRepoinfo()
+				String branch = selectedArtifact.getRepoinfo()
 										.getBranch();
 				
 				Git git = new Git(localRepo);
@@ -109,7 +128,7 @@ public class VCCloneTask {
 				if (!this.latestFlag) {
 					git.reset()
 						.setMode(ResetType.HARD)
-						.setRef(artifact.getRepoinfo().getCommit())
+						.setRef(selectedArtifact.getRepoinfo().getCommit())
 						.call();
 				}
 			} catch (Exception e) {
@@ -126,7 +145,7 @@ public class VCCloneTask {
 		clone.setBare(false);
 		
 		clone.setDirectory(loc)
-				.setURI(artifact.getRepoinfo().getRepo())
+				.setURI(selectedArtifact.getRepoinfo().getRepo())
 				.setCloneAllBranches(true);
 		
 		try {

@@ -15,17 +15,17 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class VCPostRequest {
-	public VCResponseData getLatestRepo(String name) throws IOException {
+	public List<VCResponseData> getLatestRepo(String name) throws IOException {
 		String urlParameters =  "[{\"component\": \"" + name + "\"}]";
 		return sendPostRequest(urlParameters);
 	}
 	
-	public VCResponseData getCurrentRepo(String name, String version) throws IOException {
+	public List<VCResponseData> getCurrentRepo(String name, String version) throws IOException {
 		String urlParameters =  "[{\"component\": \"" + name + "\", \"version\": \"" + version + "\"}]";;
 		return sendPostRequest(urlParameters);
 	}
 	
-	private VCResponseData sendPostRequest(String urlParameters) throws IOException {
+	private List<VCResponseData> sendPostRequest(String urlParameters) throws IOException {
 		Properties prop = new Properties();
 		prop.load(this.getClass().getResourceAsStream("/config.properties"));
 
@@ -58,12 +58,6 @@ public class VCPostRequest {
 		Type artifactListType = new TypeToken<List<VCResponseData>>(){}.getType();
 		List<VCResponseData> artifacts = new Gson().fromJson(jsonText, artifactListType);
 		
-		if (artifacts.isEmpty())
-			return null;
-		// TODO: currently this only returns the first record and assumes
-		// it's the best choice for the user. To improve the ux, we need
-		// to add the functionality to allow user to choose their desired
-		// record from a list.
-		return artifacts.get(0);
+		return artifacts;
 	}
 }
