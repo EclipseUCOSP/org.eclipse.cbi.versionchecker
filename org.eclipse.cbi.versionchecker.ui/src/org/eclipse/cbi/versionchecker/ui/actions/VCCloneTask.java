@@ -104,7 +104,7 @@ public class VCCloneTask {
 		f.setResizable(false);
 
 		JFileChooser jfc = new JFileChooser();
-		jfc.setDialogTitle("Select Destination Folder");
+		jfc.setDialogTitle("Select an Empty Folder as Destination");
 		jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int ret = jfc.showOpenDialog(f);
 
