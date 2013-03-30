@@ -127,12 +127,10 @@ public class VCCloneTask {
 						.setStartPoint("origin/" + branch).call();
 				}
 				
-				if (!this.latestFlag) {
-					git.reset()
-						.setMode(ResetType.HARD)
-						.setRef(selectedArtifact.getRepoinfo().getCommit())
-						.call();
-				}
+				git.reset()
+					.setMode(ResetType.HARD)
+					.setRef(selectedArtifact.getRepoinfo().getCommit())
+					.call();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Clone failed: " + e.getMessage(), "VersionChecker", 1);
 				return;
