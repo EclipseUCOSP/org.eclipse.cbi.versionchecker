@@ -48,6 +48,7 @@ public class VCCloneTask {
 			return;
 		}
 		
+		createAndShowGit();
 		String lineSeparator = System.getProperty("line.separator");
 		if (artifacts == null || artifacts.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No record for this component in database", TITLE, 1);
@@ -161,6 +162,7 @@ public class VCCloneTask {
 
 				clone.setCredentialsProvider(user)
 					.call();
+				JOptionPane.showMessageDialog(null, "Woot","VersionChecker", 1);
 			}
 		}
 	}
