@@ -117,7 +117,7 @@ public class VCCloneTask {
 				Git git = new Git(localRepo);
 				
 				String branch = selectedArtifact.getRepoinfo()
-										.getBranch();
+								.getBranch();
 				
 				if (!branch.equals("master")) {
 					git.checkout()
@@ -145,7 +145,8 @@ public class VCCloneTask {
 		clone.setBare(false);
 		
 		clone.setDirectory(loc)
-				.setURI(selectedArtifact.getRepoinfo().getRepo())
+				.setURI("https://github.com/DOeC/ep-code-checking-rules.git")
+//				.setURI("git@github.com:DOeC/ep-code-checking-rules.git")
 				.setCloneAllBranches(true);
 		
 		try {
@@ -159,7 +160,7 @@ public class VCCloneTask {
 					new UsernamePasswordCredentialsProvider(vcgw.getLogin(), vcgw.getPass());
 
 				clone.setCredentialsProvider(user)
-						.call();
+					.call();
 			}
 		}
 	}
