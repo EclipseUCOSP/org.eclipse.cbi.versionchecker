@@ -56,7 +56,7 @@ The plugin requires the following variables in order to run:
 * Username
 * Password
 
-There are two ways to configure this.
+There are three ways to configure this.
 
 In ~/.m2/settings.xml
 ---------------------
@@ -108,6 +108,13 @@ Modify your pom.xml to configure org.eclipse.cbi.versionchecker.maven.plugin wit
         <dbPassword>MYSQL_PASSWORD</dbPassword>
       </configuration>
     </plugin>
+
+With command line parameters
+----------
+
+As with all maven projects, you can also define the properties on the command line: 
+
+mvn clean package -Dcbi.versionchecker.db.host="HOST" -Dcbi.versionchecker.db.database="DATABASE" -Dcbi.versionchecker.db.user="USER" -Dcbi.versionchecker.db.password="PASSWORD"
 
 Configuration Options
 =====================
