@@ -3,6 +3,8 @@ Version Checker Eclipse Plugin
 Requirement:
 ------------------------
 1. Java 1.6 +
+2. Maven
+3. Eclipse with Eclipse SDK installed
 
 How to run this project:
 ------------------------
