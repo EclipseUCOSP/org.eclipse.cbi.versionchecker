@@ -22,7 +22,6 @@
   </dependencies>
   
   <build>
-    <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -116,7 +115,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <execute />
+                        <ignore />
                       </action>
                     </pluginExecution>
                     <pluginExecution>
@@ -131,7 +130,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <execute />
+                        <ignore />
                       </action>
                     </pluginExecution>
                   </pluginExecutions>
